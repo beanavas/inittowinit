@@ -1,0 +1,74 @@
+[
+  {
+    "platform": "GitHub",
+    "accessCode": "GT-ACC_GITHUB_USERS",
+    "approver": "Manager",
+    "description": "Required for repository access and source code collaboration",
+    "requestMethod": "SailPoint",
+    "category": "Development"
+  },
+  {
+    "platform": "Jira",
+    "accessCode": "JRA-ACC_STANDARD_USER",
+    "approver": "Manager",
+    "description": "Project tracking and issue management",
+    "requestMethod": "SailPoint",
+    "category": "Productivity"
+  },
+  {
+    "platform": "Confluence",
+    "accessCode": "CONF-ACC_TEAM_SPACE",
+    "approver": "Manager",
+    "description": "Team wiki and documentation platform",
+    "requestMethod": "SailPoint",
+    "category": "Productivity"
+  },
+  {
+    "platform": "AWS",
+    "accessCode": "AWS-ACC_DEV_READONLY",
+    "approver": "Security Team",
+    "description": "Amazon Web Services cloud platform access",
+    "requestMethod": "SailPoint",
+    "category": "Cloud"
+  },
+  {
+    "platform": "Azure",
+    "accessCode": "AZ-ACC_CONTRIBUTOR",
+    "approver": "Security Team",
+    "description": "Microsoft Azure cloud platform access",
+    "requestMethod": "SailPoint",
+    "category": "Cloud"
+  },
+  {
+    "platform": "Databricks",
+    "accessCode": "DBX-ACC_WORKSPACE_USER",
+    "approver": "Manager",
+    "description": "Unified analytics platform for big data and machine learning",
+    "requestMethod": "SailPoint",
+    "category": "Data"
+  },
+  {
+    "platform": "Tableau",
+    "accessCode": "TAB-ACC_VIEWER",
+    "approver": "Manager",
+    "description": "Business intelligence and data visualization",
+    "requestMethod": "SailPoint",
+    "category": "Data"
+  },
+  {
+    "platform": "Terraform",
+    "accessCode": "TF-ACC_OPERATOR",
+    "approver": "Security Team",
+    "description": "Infrastructure as code platform for cloud resource provisioning",
+    "requestMethod": "SailPoint",
+    "category": "Infrastructure"
+  },
+  {
+    "platform": "Miro",
+    "accessCode": "MRO-ACC_TEAM_MEMBER",
+    "approver": "Manager",
+    "description": "Online collaborative whiteboard platform",
+    "requestMethod": "SailPoint",
+    "category": "Productivity"
+  }
+]
