@@ -8,6 +8,7 @@ function storageKey(employeeId) {
 export function useCopilotChat(employeeId) {
   const [messages, setMessages] = useState([]);
   const [sending, setSending] = useState(false);
+  const [focusPlatform, setFocusPlatform] = useState(null);
 
   useEffect(() => {
     if (!employeeId) return;
@@ -28,8 +29,12 @@ export function useCopilotChat(employeeId) {
     async (text) => {
       if (!text.trim() || !employeeId) return;
       const userMsg = { id: crypto.randomUUID(), role: "user", content: text };
+      // Only thread the last few exchanges into the model — older turns are kept
+      // in the UI/localStorage but dropped from context so a topic from many
+      // messages ago can't keep pulling every new answer back toward it.
       const history = messages
         .filter((m) => !m.error)
+        .slice(-8)
         .map((m) => ({ role: m.role, content: m.content }));
 
       setMessages((prev) => [...prev, userMsg]);
@@ -40,6 +45,7 @@ export function useCopilotChat(employeeId) {
           ...prev,
           { id: crypto.randomUUID(), role: "assistant", content: res.answer, data: res.data },
         ]);
+        if (res.focusPlatform) setFocusPlatform(res.focusPlatform);
       } catch (err) {
         setMessages((prev) => [
           ...prev,
@@ -54,5 +60,5 @@ export function useCopilotChat(employeeId) {
 
   const clear = useCallback(() => setMessages([]), []);
 
-  return { messages, sending, sendMessage, clear };
+  return { messages, sending, sendMessage, clear, focusPlatform };
 }

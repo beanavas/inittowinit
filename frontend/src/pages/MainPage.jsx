@@ -18,7 +18,6 @@ const FACTORS = [
 
 export default function MainPage() {
   const { employeeId, setEmployeeId, users, currentUser, backendOnline } = useApp();
-  const [platforms, setPlatforms] = useState([]);
   const [technology, setTechnology] = useState("");
   const [access, setAccess] = useState(null);
   const [graph, setGraph] = useState(null);
@@ -29,15 +28,31 @@ export default function MainPage() {
   const [query, setQuery] = useState("");
   const chat = useCopilotChat(employeeId);
 
-  useEffect(() => {
+  const resetToDefaultTechnology = (id) => {
+    if (!id) return;
     api
-      .listPlatforms()
-      .then((list) => {
-        setPlatforms(list);
-        setTechnology((prev) => prev || list[0]?.platform || "");
+      .getRecommendations(id, false)
+      .then((r) => {
+        if (r.recommendations[0]) {
+          setTechnology(r.recommendations[0].platform);
+        } else {
+          return api.listPlatforms().then((list) => setTechnology(list[0]?.platform || ""));
+        }
       })
       .catch(() => {});
-  }, []);
+  };
+
+  // Default the graph to this person's top recommendation until the console
+  // (chat/search) points it at something more specific.
+  useEffect(() => {
+    resetToDefaultTechnology(employeeId);
+  }, [employeeId]);
+
+  // The console drives the graph: whichever platform comes up in a chat answer
+  // becomes the focus, overriding the default above.
+  useEffect(() => {
+    if (chat.focusPlatform) setTechnology(chat.focusPlatform);
+  }, [chat.focusPlatform]);
 
   useEffect(() => {
     if (!employeeId) return;
@@ -111,18 +126,7 @@ export default function MainPage() {
               </option>
             ))}
           </select>
-          <select className="picker-select" value={technology} onChange={(e) => setTechnology(e.target.value)}>
-            {platforms.map((p) => (
-              <option key={p.platform} value={p.platform}>
-                {p.platform}
-              </option>
-            ))}
-          </select>
         </div>
-
-        <button className="topbar-btn" onClick={() => setAssistantOpen(true)}>
-          Chat with Claude
-        </button>
       </div>
 
       <div className="main-body">
@@ -140,7 +144,7 @@ export default function MainPage() {
             </div>
             <p className="card-subtitle">
               Who's connected to {currentUser?.name || "the selected person"} and how they relate to{" "}
-              {technology || "this tool"}.
+              {technology || "this tool"}. Ask Claude about a different tool above to update this view.
             </p>
 
             {error && <div className="error-banner">{error}</div>}
@@ -170,12 +174,32 @@ export default function MainPage() {
         )}
       </div>
 
+      {!assistantOpen && (
+        <button className="assistant-fab" onClick={() => setAssistantOpen(true)} aria-label="Open Claude Assistant">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-4.3 3.6a.5.5 0 0 1-.7-.4V17H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinejoin="round"
+            />
+            <circle cx="8.5" cy="10.5" r="1" fill="currentColor" />
+            <circle cx="12" cy="10.5" r="1" fill="currentColor" />
+            <circle cx="15.5" cy="10.5" r="1" fill="currentColor" />
+          </svg>
+        </button>
+      )}
+
       <AssistantDrawer
         open={assistantOpen}
         onClose={() => setAssistantOpen(false)}
         messages={chat.messages}
         sending={chat.sending}
         onSend={chat.sendMessage}
+        onClear={() => {
+          chat.clear();
+          resetToDefaultTechnology(employeeId);
+        }}
       />
     </div>
   );

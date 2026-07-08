@@ -232,24 +232,28 @@ a {
   cursor: default;
 }
 
-.topbar-btn {
+.assistant-fab {
+  position: fixed;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: var(--navy);
+  color: #ffffff;
   display: flex;
   align-items: center;
-  gap: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: transparent;
-  border-radius: var(--radius-sm);
-  padding: 9px 16px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #ffffff;
-  white-space: nowrap;
-  flex-shrink: 0;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  z-index: 40;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
-.topbar-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.5);
+.assistant-fab:hover {
+  background: var(--blue);
+  transform: translateY(-50%) scale(1.05);
 }
 
 /* ---------- Cards & generic components ---------- */
@@ -893,6 +897,13 @@ a {
 
 .copilot-drawer-header button:hover {
   color: #ffffff;
+}
+
+.drawer-text-btn {
+  font-size: 12.5px !important;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .copilot-drawer-body {
