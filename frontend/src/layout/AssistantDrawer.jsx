@@ -19,7 +19,7 @@ function DataDisclosure({ data }) {
   );
 }
 
-export default function AssistantDrawer({ open, onClose, messages, sending, onSend }) {
+export default function AssistantDrawer({ open, onClose, messages, sending, onSend, onClear }) {
   const [draft, setDraft] = useState("");
   const bodyRef = useRef(null);
 
@@ -42,9 +42,16 @@ export default function AssistantDrawer({ open, onClose, messages, sending, onSe
       <div className="copilot-drawer">
         <div className="copilot-drawer-header">
           <h3>Claude Assistant</h3>
-          <button onClick={onClose} aria-label="Close">
-            ✕
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            {messages.length > 0 && (
+              <button className="drawer-text-btn" onClick={onClear}>
+                New chat
+              </button>
+            )}
+            <button onClick={onClose} aria-label="Close">
+              ✕
+            </button>
+          </div>
         </div>
         <div className="copilot-drawer-body" ref={bodyRef}>
           {messages.length === 0 && (
