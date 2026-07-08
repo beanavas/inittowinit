@@ -254,7 +254,7 @@ export default function AccessGraph({ graph }) {
             className="static-graph-svg"
             viewBox={`0 0 ${VIEWBOX.width} ${VIEWBOX.height}`}
             role="img"
-            aria-label={`${graph.technology} access sponsor graph`}
+            aria-label={`${graph.technology} access support graph`}
           >
             <defs>
               <marker id="reports-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">

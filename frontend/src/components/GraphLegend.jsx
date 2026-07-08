@@ -20,7 +20,7 @@ export default function GraphLegend() {
       <div className="legend-item">
         <span className="legend-dot strong">★</span>
         <span>
-          <strong>Strong Sponsor</strong>
+          <strong>Top Access Guide</strong>
           <small>High relevance</small>
         </span>
       </div>
