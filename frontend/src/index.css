@@ -232,28 +232,24 @@ a {
   cursor: default;
 }
 
-.assistant-fab {
-  position: fixed;
-  top: 50%;
-  right: 24px;
-  transform: translateY(-50%);
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: none;
-  background: var(--navy);
-  color: #ffffff;
+.topbar-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-lg);
-  z-index: 40;
-  transition: background 0.15s ease, transform 0.15s ease;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.assistant-fab:hover {
-  background: var(--blue);
-  transform: translateY(-50%) scale(1.05);
+.topbar-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 /* ---------- Cards & generic components ---------- */
@@ -401,6 +397,192 @@ a {
 }
 
 /* ---------- Access Report panel ---------- */
+
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+
+.view-toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-radius: calc(var(--radius-sm) - 2px);
+  transition: all 0.12s ease;
+  white-space: nowrap;
+}
+
+.view-toggle-btn.active {
+  background: var(--surface);
+  color: var(--navy);
+  box-shadow: var(--shadow-sm);
+}
+
+.view-toggle-btn:hover:not(.active) { color: var(--text); }
+
+.profile-fields {
+  margin: 8px 0 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.profile-field-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+}
+
+.profile-field-row:last-child { border-bottom: none; }
+
+.profile-field-label {
+  width: 90px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.profile-field-value {
+  color: var(--text);
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 8px 0 6px;
+}
+
+.membership-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.membership-item:last-child { border-bottom: none; }
+
+.membership-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.membership-platform {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.membership-code {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.team-stats-section { margin-bottom: 8px; }
+
+.adoption-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 12px;
+}
+
+.adoption-platform {
+  width: 80px;
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--navy);
+  font-size: 11.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adoption-bar-wrap {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.adoption-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--blue);
+  transition: width 0.3s ease;
+}
+
+.adoption-pct {
+  width: 32px;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.team-member-row {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.team-member-row:last-child { border-bottom: none; }
+
+.team-member-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.team-member-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.team-member-access {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding-left: 38px;
+}
+
+.access-chip { font-size: 10.5px; padding: 2px 8px; }
+
+.no-access-label {
+  font-size: 11.5px;
+  color: var(--text-faint);
+  padding-left: 38px;
+}
 
 .access-report-panel {
   width: 320px;
@@ -897,13 +1079,6 @@ a {
 
 .copilot-drawer-header button:hover {
   color: #ffffff;
-}
-
-.drawer-text-btn {
-  font-size: 12.5px !important;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
 .copilot-drawer-body {

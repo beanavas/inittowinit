@@ -25,13 +25,12 @@ export const api = {
 
   getAccess: (employeeId) => request(`/api/access/${employeeId}`),
 
-  getRecommendations: (employeeId, includeAi = true) =>
-    request(`/api/recommendations/${employeeId}?include_ai=${includeAi}`),
-
   listPlatforms: () => request("/api/admin/platforms"),
 
   getAccessGraph: (employeeId, technology) =>
     request(`/api/access-graph/${employeeId}?technology=${encodeURIComponent(technology)}`),
+
+  getTeamHeatmap: (team) => request(`/api/org-graph/team/${encodeURIComponent(team)}`),
 
   askAssistant: ({ employeeId, prompt, action, history }) =>
     request("/api/assistant/query", {
