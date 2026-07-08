@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routers import access, access_graph, admin, dashboard, org_graph, recommendations, request_packets, users
+from app.routers import access, access_graph, admin, assistant, dashboard, org_graph, recommendations, request_packets, users
 
 app = FastAPI(
     title=settings.app_name,
