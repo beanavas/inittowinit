@@ -15,7 +15,12 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
 
     # CORS
-    allowed_origins: List[str] = ["http://localhost:3000", "http://localhost:5173"]
+    allowed_origins: List[str] = [
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+    ]
 
     model_config = {"env_file": ".env"}
 

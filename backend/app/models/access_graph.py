@@ -5,9 +5,9 @@ from pydantic import BaseModel
 
 
 class GraphEdgeType(str, Enum):
-    REPORTS_TO = "reports_to"
-    COLLABORATES_WITH = "collaborates_with"
-    ACCESS_PATH = "access_path"
+    TEAM = "team"
+    TOOL = "tool"
+    WORKS_WITH = "works_with"
 
 
 class GraphAccessStatus(str, Enum):

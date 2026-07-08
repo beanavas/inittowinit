@@ -1,12 +1,18 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
+
+
+class ChatTurn(BaseModel):
+    role: str  # "user" or "assistant"
+    content: str
 
 
 class AssistantQueryRequest(BaseModel):
     employeeId: str
     prompt: Optional[str] = None
     action: Optional[str] = None  # one of: recommendations, access, org_graph
+    history: List[ChatTurn] = []
 
 
 class AssistantQueryResponse(BaseModel):

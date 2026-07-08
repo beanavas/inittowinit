@@ -19,7 +19,8 @@ def query_assistant(data: AssistantQueryRequest):
     if data.action:
         result = assistant_service.run_fixed_action(data.action, data.employeeId)
     elif data.prompt:
-        result = assistant_service.run_nl_query(data.employeeId, data.prompt)
+        history = [turn.model_dump() for turn in data.history]
+        result = assistant_service.run_nl_query(data.employeeId, data.prompt, history)
     else:
         raise HTTPException(status_code=400, detail="Provide either 'action' or 'prompt'")
 

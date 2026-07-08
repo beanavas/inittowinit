@@ -1,5 +1,4 @@
-from collections import deque
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from app.models.access import AccessStatus
 from app.models.access_graph import (
@@ -29,43 +28,6 @@ def load_approval_history() -> List[ApprovalHistorySignal]:
 
 def load_availability() -> Dict[str, float]:
     return read_json("availability.json")
-
-
-def build_relationship_graph(users: List[User], collaborations: List[CollaborationSignal]) -> Dict[str, Set[str]]:
-    graph: Dict[str, Set[str]] = {u.employeeId: set() for u in users}
-    by_name = {u.name: u for u in users}
-
-    for user in users:
-        manager = by_name.get(user.manager)
-        if manager:
-            graph[user.employeeId].add(manager.employeeId)
-            graph[manager.employeeId].add(user.employeeId)
-
-    for collab in collaborations:
-        graph.setdefault(collab.sourceEmployeeId, set()).add(collab.targetEmployeeId)
-        graph.setdefault(collab.targetEmployeeId, set()).add(collab.sourceEmployeeId)
-
-    return graph
-
-
-def calculate_hop_distances(
-    requester_id: str,
-    users: List[User],
-    collaborations: List[CollaborationSignal],
-) -> Dict[str, int]:
-    graph = build_relationship_graph(users, collaborations)
-    distances = {requester_id: 0}
-    queue = deque([requester_id])
-
-    while queue:
-        current = queue.popleft()
-        for neighbor in graph.get(current, set()):
-            if neighbor not in distances:
-                distances[neighbor] = distances[current] + 1
-                queue.append(neighbor)
-
-    fallback_distance = max(distances.values(), default=0) + 1
-    return {u.employeeId: distances.get(u.employeeId, fallback_distance) for u in users}
 
 
 def get_usage_signal(employee_id: str, technology: str, usage: List[UsageSignal]) -> Optional[UsageSignal]:

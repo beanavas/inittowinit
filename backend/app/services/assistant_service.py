@@ -139,16 +139,24 @@ def _execute_tool(name: str, tool_input: Dict[str, Any], default_employee_id: st
     return {"error": f"Unknown tool '{name}'"}
 
 
-def run_nl_query(employee_id: str, prompt: str) -> Dict[str, Any]:
+def run_nl_query(
+    employee_id: str, prompt: str, history: Optional[List[Dict[str, str]]] = None
+) -> Dict[str, Any]:
     """Answer a free-form question by letting Claude call read-only internal tools, then
-    return both a natural-language answer and the structured data gathered along the way."""
+    return both a natural-language answer and the structured data gathered along the way.
+
+    `history` is prior turns as plain {"role": "user"|"assistant", "content": str} pairs —
+    it gives the model conversational memory, but each turn still gets a fresh tool-use loop."""
     if _client is None:
         return {
             "answer": "The AI assistant isn't configured yet — set ANTHROPIC_API_KEY in the backend .env.",
             "data": {},
         }
 
-    messages: List[Dict[str, Any]] = [{"role": "user", "content": prompt}]
+    messages: List[Dict[str, Any]] = [
+        {"role": turn["role"], "content": turn["content"]} for turn in (history or [])
+    ]
+    messages.append({"role": "user", "content": prompt})
     collected_data: Dict[str, Any] = {}
 
     for _ in range(MAX_TOOL_ITERATIONS):

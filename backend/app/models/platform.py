@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -10,6 +10,7 @@ class Platform(BaseModel):
     description: str
     requestMethod: str
     category: Optional[str] = None
+    prerequisites: List[str] = []
 
 
 class PlatformCreate(BaseModel):
@@ -19,6 +20,7 @@ class PlatformCreate(BaseModel):
     description: str
     requestMethod: str
     category: Optional[str] = None
+    prerequisites: List[str] = []
 
 
 class PlatformUpdate(BaseModel):
@@ -27,3 +29,4 @@ class PlatformUpdate(BaseModel):
     description: Optional[str] = None
     requestMethod: Optional[str] = None
     category: Optional[str] = None
+    prerequisites: Optional[List[str]] = None

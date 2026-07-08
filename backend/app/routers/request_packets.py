@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, HTTPException
 
-from app.models.request_packet import AccessRequest, RequestPacket, RequestPacketInput
+from app.models.request_packet import AccessRequest, RequestDecision, RequestPacket, RequestPacketInput
 from app.services import request_packet_service
 
 router = APIRouter()
@@ -41,3 +41,12 @@ def submit_request(data: RequestPacketInput):
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.patch("/{request_id}/decision", response_model=AccessRequest)
+def decide_request(request_id: str, data: RequestDecision):
+    """Approve or deny a pending request. Updates the requester's access status accordingly."""
+    try:
+        return request_packet_service.decide_request(request_id, data.decision)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))

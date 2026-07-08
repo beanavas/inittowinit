@@ -70,5 +70,14 @@
     "description": "Online collaborative whiteboard platform",
     "requestMethod": "SailPoint",
     "category": "Productivity"
+  },
+  {
+    "platform": "Claude Code",
+    "accessCode": "AI-ACC_CLAUDE_CODE",
+    "approver": "Manager",
+    "description": "AI pair-programming assistant for development workflows",
+    "requestMethod": "DevConnect Portal",
+    "category": "AI Tools",
+    "prerequisites": ["AI Working Group Intake Form", "Secure Use Training"]
   }
 ]
