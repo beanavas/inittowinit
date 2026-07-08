@@ -1,0 +1,23 @@
+[
+  {
+    "requesterEmployeeId": "E001",
+    "sponsorEmployeeId": "E004",
+    "platform": "GitHub",
+    "outcome": "Approved",
+    "recencyDays": 21
+  },
+  {
+    "requesterEmployeeId": "E001",
+    "sponsorEmployeeId": "E003",
+    "platform": "AWS",
+    "outcome": "Approved",
+    "recencyDays": 45
+  },
+  {
+    "requesterEmployeeId": "E005",
+    "sponsorEmployeeId": "E008",
+    "platform": "Databricks",
+    "outcome": "Approved",
+    "recencyDays": 12
+  }
+]

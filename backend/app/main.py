@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routers import access, admin, dashboard, org_graph, recommendations, request_packets, users
+from app.routers import access, access_graph, admin, dashboard, org_graph, recommendations, request_packets, users
 
 app = FastAPI(
     title=settings.app_name,
@@ -22,6 +22,7 @@ app.add_middleware(
 
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
 app.include_router(access.router, prefix="/api/access", tags=["Access"])
+app.include_router(access_graph.router, prefix="/api/access-graph", tags=["Access Graph"])
 app.include_router(recommendations.router, prefix="/api/recommendations", tags=["Recommendations"])
 app.include_router(org_graph.router, prefix="/api/org-graph", tags=["Org Graph"])
 app.include_router(request_packets.router, prefix="/api/request-packets", tags=["Request Packets"])
