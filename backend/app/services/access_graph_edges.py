@@ -28,6 +28,12 @@ EDGE_VISUALS = {
     GraphEdgeType.WORKS_WITH: WORKS_WITH_VISUAL,
 }
 
+EDGE_REASONS = {
+    GraphEdgeType.TEAM: "Same team or immediate working group.",
+    GraphEdgeType.TOOL: "Both people have access to, pending access for, or usage history with the requested technology.",
+    GraphEdgeType.WORKS_WITH: "Direct collaboration signal from shared projects, meetings, or files.",
+}
+
 
 def _uses_technology(employee_id: str, technology: str, usage: List[UsageSignal]) -> bool:
     """True if the employee has any access (provisioned/pending) or logged usage for this tool."""
@@ -144,6 +150,7 @@ def build_relationship_edges(
                 data=AccessGraphEdgeData(
                     edgeType=edge_type,
                     label=EDGE_LABELS[edge_type],
+                    reason=EDGE_REASONS[edge_type],
                     visual=EDGE_VISUALS[edge_type],
                 ),
             )

@@ -112,3 +112,6 @@ class AccessGraphResponse(BaseModel):
     edges: List[AccessGraphEdge]
     sponsorRanking: List[SponsorCandidate]
     accessPath: List[str]
+    maxHop: int
+    visibleHopLimit: int
+    hiddenNodeCountByHop: Dict[int, int]

@@ -22,7 +22,7 @@ from app.services.access_graph_scoring import (
 
 # Only show people reachable within this many hops via team/tool/collaboration —
 # "aggregate the closest connections" rather than the whole company.
-NODE_HOP_LIMIT = 2
+NODE_HOP_LIMIT = 3
 
 
 def _heat_color(score: float) -> str:
@@ -58,6 +58,12 @@ def build_access_graph(employee_id: str, technology: str) -> AccessGraphResponse
 
     relationship_graph = build_relationship_graph(all_users, technology, usage, collaborations)
     hop_distances = calculate_hop_distances(employee_id, relationship_graph)
+    max_hop = max(hop_distances.values(), default=0)
+    hidden_node_count_by_hop: Dict[int, int] = {}
+    for user in all_users:
+        hop = hop_distances.get(user.employeeId, 99)
+        if hop > NODE_HOP_LIMIT:
+            hidden_node_count_by_hop[hop] = hidden_node_count_by_hop.get(hop, 0) + 1
 
     users = [u for u in all_users if hop_distances.get(u.employeeId, 99) <= NODE_HOP_LIMIT]
 
@@ -111,4 +117,7 @@ def build_access_graph(employee_id: str, technology: str) -> AccessGraphResponse
         edges=edges,
         sponsorRanking=sponsor_ranking,
         accessPath=access_path,
+        maxHop=max_hop,
+        visibleHopLimit=NODE_HOP_LIMIT,
+        hiddenNodeCountByHop=hidden_node_count_by_hop,
     )
