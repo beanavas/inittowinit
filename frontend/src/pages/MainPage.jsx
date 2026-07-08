@@ -147,24 +147,27 @@ export default function MainPage() {
             {loadingGraph && <div className="loading-line">Mapping the org network...</div>}
             {graph && <AccessGraph graph={graph} />}
             {graph && <GraphLegend />}
-
-            {graph && (
-              <>
-                <div className="card-title">Top Sponsor Suggestions</div>
-                <SponsorList sponsors={graph.sponsorRanking} />
-                <div className="factor-grid">
-                  {FACTORS.map((f) => (
-                    <div className="factor-card" key={f.key}>
-                      <div className="factor-card-title">{f.title}</div>
-                      <p>{f.desc}</p>
-                      <div className="factor-impact">{f.impact}</div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
           </div>
         </div>
+
+        {graph && (
+          <div className="sponsor-panel">
+            <div className="card">
+              <div className="card-title">Top Sponsor Suggestions</div>
+              <p className="card-subtitle">Ranked by relevance to your {technology} request.</p>
+              <SponsorList sponsors={graph.sponsorRanking} />
+              <div className="factor-grid">
+                {FACTORS.map((f) => (
+                  <div className="factor-card" key={f.key}>
+                    <div className="factor-card-title">{f.title}</div>
+                    <p>{f.desc}</p>
+                    <div className="factor-impact">{f.impact}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <AssistantDrawer

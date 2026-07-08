@@ -98,7 +98,9 @@ def build_access_graph(employee_id: str, technology: str) -> AccessGraphResponse
             )
         )
 
-    edges = build_relationship_edges(users, technology, usage, collaborations, employee_id)
+    edges = build_relationship_edges(
+        users, technology, usage, collaborations, employee_id, hop_distances, relationship_graph
+    )
     top_sponsor = sponsor_ranking[0] if sponsor_ranking else None
     access_path = [employee_id, top_sponsor.employeeId] if top_sponsor else [employee_id]
 

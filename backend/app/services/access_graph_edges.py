@@ -91,39 +91,61 @@ def calculate_hop_distances(requester_id: str, graph: Dict[str, Set[str]]) -> Di
     return {node: distances.get(node, fallback_distance) for node in graph}
 
 
+_EDGE_PRIORITY = {GraphEdgeType.TOOL: 0, GraphEdgeType.TEAM: 1, GraphEdgeType.WORKS_WITH: 2}
+
+
 def build_relationship_edges(
     users: List[User],
     technology: str,
     usage: List[UsageSignal],
     collaborations: List[CollaborationSignal],
     requester_id: str,
+    hop_distances: Dict[str, int],
+    graph: Dict[str, Set[str]],
 ) -> List[AccessGraphEdge]:
     """
-    Visual edges for the graph. Team and collaboration edges are drawn between any
-    pair — those are genuinely peer-to-peer relationships. Tool edges are restricted
-    to the requester's own connections; otherwise everyone who uses a popular tool
-    (e.g. GitHub) would form a dense clique with everyone else who uses it, which
-    drowns out the actually useful signal of "who can help me, specifically."
+    Draw a single shortest-path tree rooted at the requester instead of every
+    qualifying pairwise relation — a shared team or a popular tool would otherwise
+    turn into a dense clique. Each person gets exactly one edge, to whichever
+    already-closer connection is the most relevant reason they're reachable
+    (tool usage > team > collaboration), so the graph reads as "how do I get to
+    this person" rather than "everyone who is related to everyone."
     """
+    by_id = {u.employeeId: u for u in users}
     edges: List[AccessGraphEdge] = []
-    for i, a in enumerate(users):
-        for b in users[i + 1 :]:
-            edge_type = classify_edge(a, b, technology, usage, collaborations)
-            if not edge_type:
+
+    for user in users:
+        if user.employeeId == requester_id:
+            continue
+        distance = hop_distances.get(user.employeeId)
+        if not distance:
+            continue
+
+        candidates = []
+        for neighbor_id in graph.get(user.employeeId, set()):
+            neighbor = by_id.get(neighbor_id)
+            if not neighbor or hop_distances.get(neighbor_id) != distance - 1:
                 continue
-            if edge_type == GraphEdgeType.TOOL and requester_id not in (a.employeeId, b.employeeId):
-                continue
-            edges.append(
-                AccessGraphEdge(
-                    id=f"{edge_type.value}-{a.employeeId}-{b.employeeId}",
-                    source=a.employeeId,
-                    target=b.employeeId,
-                    type="straight",
-                    data=AccessGraphEdgeData(
-                        edgeType=edge_type,
-                        label=EDGE_LABELS[edge_type],
-                        visual=EDGE_VISUALS[edge_type],
-                    ),
-                )
+            edge_type = classify_edge(user, neighbor, technology, usage, collaborations)
+            if edge_type:
+                candidates.append((edge_type, neighbor))
+        if not candidates:
+            continue
+
+        candidates.sort(key=lambda c: (_EDGE_PRIORITY[c[0]], c[1].employeeId))
+        edge_type, parent = candidates[0]
+
+        edges.append(
+            AccessGraphEdge(
+                id=f"{edge_type.value}-{parent.employeeId}-{user.employeeId}",
+                source=parent.employeeId,
+                target=user.employeeId,
+                type="straight",
+                data=AccessGraphEdgeData(
+                    edgeType=edge_type,
+                    label=EDGE_LABELS[edge_type],
+                    visual=EDGE_VISUALS[edge_type],
+                ),
             )
+        )
     return edges

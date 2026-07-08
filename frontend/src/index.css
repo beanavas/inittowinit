@@ -445,6 +445,14 @@ a {
   overflow-y: auto;
 }
 
+/* ---------- Sponsor panel (right of graph) ---------- */
+
+.sponsor-panel {
+  width: 340px;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
 .access-graph-wrap {
   height: 520px;
   border-radius: var(--radius-md);
@@ -663,8 +671,8 @@ a {
 
 .factor-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 10px;
   margin: 16px 0;
 }
 
