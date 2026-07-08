@@ -1,0 +1,50 @@
+[
+  {
+    "sourceEmployeeId": "E001",
+    "targetEmployeeId": "E002",
+    "strength": 0.92,
+    "reason": "Shared Custom Harvest repositories and sprint work"
+  },
+  {
+    "sourceEmployeeId": "E001",
+    "targetEmployeeId": "E003",
+    "strength": 0.84,
+    "reason": "Frequent pair programming and code reviews"
+  },
+  {
+    "sourceEmployeeId": "E001",
+    "targetEmployeeId": "E009",
+    "strength": 0.76,
+    "reason": "Same product squad and planning meetings"
+  },
+  {
+    "sourceEmployeeId": "E002",
+    "targetEmployeeId": "E003",
+    "strength": 0.81,
+    "reason": "Shared backend services"
+  },
+  {
+    "sourceEmployeeId": "E003",
+    "targetEmployeeId": "E007",
+    "strength": 0.67,
+    "reason": "Deployment and cloud support handoffs"
+  },
+  {
+    "sourceEmployeeId": "E004",
+    "targetEmployeeId": "E007",
+    "strength": 0.71,
+    "reason": "Infrastructure roadmap collaboration"
+  },
+  {
+    "sourceEmployeeId": "E005",
+    "targetEmployeeId": "E006",
+    "strength": 0.88,
+    "reason": "Shared analytics pipelines"
+  },
+  {
+    "sourceEmployeeId": "E005",
+    "targetEmployeeId": "E007",
+    "strength": 0.58,
+    "reason": "Cloud data platform operations"
+  }
+]
