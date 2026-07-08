@@ -1,5 +1,3 @@
-import { Handle, Position } from "reactflow";
-
 function initials(name) {
   return name
     .split(" ")
@@ -11,28 +9,35 @@ function initials(name) {
 
 export default function EmployeeNode({ data }) {
   const ringColor = data.isCurrentUser ? "#007bc3" : data.visual?.ringColor || "#94a3b3";
+  const heatColor = data.visual?.heatColor || "#94a3b3";
+  const score = Number(data.relevanceScore || 0);
+  const scoreOpacity = data.isCurrentUser ? 1 : Math.max(0.18, Math.min(score / 100, 0.95));
 
   return (
-    <div className="employee-node">
-      <Handle type="target" position={Position.Top} style={{ opacity: 0 }} />
-      <Handle type="source" position={Position.Bottom} style={{ opacity: 0 }} />
-
+    <div className={`employee-node${data.isCurrentUser ? " current" : ""}${data.isStrongSponsor ? " strong" : ""}`}>
       <div
-        className={`employee-avatar${data.isCurrentUser ? " current" : ""}${
-          data.isStrongSponsor ? " strong" : ""
-        }`}
-        style={{ borderColor: ringColor }}
+        className={`employee-avatar${data.isCurrentUser ? " current" : ""}${data.isStrongSponsor ? " strong" : ""}`}
+        style={{
+          borderColor: ringColor,
+          background: data.isCurrentUser
+            ? "#ffffff"
+            : `color-mix(in srgb, ${heatColor} ${Math.round(scoreOpacity * 28)}%, #ffffff)`,
+          boxShadow: data.isStrongSponsor
+            ? `0 0 0 4px rgba(217, 151, 0, 0.18), 0 8px 22px rgba(0, 31, 69, 0.16)`
+            : undefined,
+        }}
       >
+        {data.isStrongSponsor && !data.isCurrentUser && <span className="strong-sponsor-star">★</span>}
         {initials(data.name)}
       </div>
       <div className="employee-node-name">{data.isCurrentUser ? "You" : data.name}</div>
       <div className="employee-node-role">{data.role}</div>
-      <div className="badge employee-node-status" style={{ background: `${ringColor}1f`, color: ringColor }}>
+      <div className="employee-node-score" style={{ color: heatColor }}>
+        {data.isCurrentUser ? "Requester" : `${data.relevanceScore} match`}
+      </div>
+      <div className="employee-node-chip" style={{ borderColor: `${ringColor}66`, color: ringColor }}>
         {data.accessStatus}
       </div>
-      {data.isStrongSponsor && !data.isCurrentUser && (
-        <div className="badge badge-primary employee-node-status">Strong Sponsor</div>
-      )}
     </div>
   );
 }
