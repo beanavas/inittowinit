@@ -1093,6 +1093,80 @@ a {
   border-bottom-left-radius: 4px;
 }
 
+.assistant-rich {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.assistant-paragraph {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.assistant-paragraph strong {
+  color: var(--navy);
+}
+
+.assistant-steps {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.assistant-steps li {
+  line-height: 1.45;
+}
+
+.assistant-table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #fff;
+}
+
+.assistant-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.assistant-table thead {
+  background: var(--blue-soft);
+}
+
+.assistant-table th,
+.assistant-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.assistant-table th {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--navy);
+}
+
+.assistant-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.assistant-table code {
+  background: #f1f5f9;
+  border: 1px solid #dbe3ec;
+  color: #183650;
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+
 .chat-bubble.error {
   align-self: flex-start;
   background: var(--danger-soft);
