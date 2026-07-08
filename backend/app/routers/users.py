@@ -15,7 +15,10 @@ def list_users():
 
 @router.post("", response_model=User, status_code=201)
 def create_user(data: UserCreate):
-    return user_service.create_user(data)
+    try:
+        return user_service.create_user(data)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
 
 
 @router.get("/team/{team}", response_model=List[User])
