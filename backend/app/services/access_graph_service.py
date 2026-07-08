@@ -8,39 +8,42 @@ from app.models.access_graph import (
 )
 from app.services import user_service
 from app.services.access_graph_edges import (
-    build_access_path_edges,
-    build_collaboration_edges,
-    build_reports_to_edges,
+    build_relationship_edges,
+    build_relationship_graph,
+    calculate_hop_distances,
 )
 from app.services.access_graph_layout import calculate_hop_ring_layout
 from app.services.access_graph_scoring import (
-    calculate_hop_distances,
     get_access_status,
     load_collaborations,
     load_usage_signals,
     rank_sponsors,
 )
 
+# Only show people reachable within this many hops via team/tool/collaboration —
+# "aggregate the closest connections" rather than the whole company.
+NODE_HOP_LIMIT = 2
+
 
 def _heat_color(score: float) -> str:
     if score >= 80:
-        return "#b45309"
+        return "#001f45"
     if score >= 65:
-        return "#d97706"
+        return "#007bc3"
     if score >= 45:
-        return "#f59e0b"
+        return "#4d9fd1"
     if score >= 20:
-        return "#94a3b8"
-    return "#cbd5e1"
+        return "#94a3b3"
+    return "#d9e2ea"
 
 
 def _ring_color(status: GraphAccessStatus) -> str:
     return {
-        GraphAccessStatus.USES_DAILY: "#16a34a",
-        GraphAccessStatus.USES_WEEKLY: "#65a30d",
-        GraphAccessStatus.HAS_ACCESS: "#2563eb",
-        GraphAccessStatus.PENDING: "#ca8a04",
-        GraphAccessStatus.NO_ACCESS: "#94a3b8",
+        GraphAccessStatus.USES_DAILY: "#1e7b45",
+        GraphAccessStatus.USES_WEEKLY: "#4a9d6c",
+        GraphAccessStatus.HAS_ACCESS: "#007bc3",
+        GraphAccessStatus.PENDING: "#a15c00",
+        GraphAccessStatus.NO_ACCESS: "#94a3b3",
     }[status]
 
 
@@ -49,10 +52,15 @@ def build_access_graph(employee_id: str, technology: str) -> AccessGraphResponse
     if not requester:
         raise ValueError(f"User '{employee_id}' not found")
 
-    users = user_service.get_all_users()
+    all_users = user_service.get_all_users()
     collaborations = load_collaborations()
     usage = load_usage_signals()
-    hop_distances = calculate_hop_distances(employee_id, users, collaborations)
+
+    relationship_graph = build_relationship_graph(all_users, technology, usage, collaborations)
+    hop_distances = calculate_hop_distances(employee_id, relationship_graph)
+
+    users = [u for u in all_users if hop_distances.get(u.employeeId, 99) <= NODE_HOP_LIMIT]
+
     positions = calculate_hop_ring_layout(users, hop_distances, employee_id)
     sponsor_ranking = rank_sponsors(requester, users, technology, hop_distances, collaborations)
     ranking_by_id: Dict[str, object] = {s.employeeId: s for s in sponsor_ranking}
@@ -82,21 +90,19 @@ def build_access_graph(employee_id: str, technology: str) -> AccessGraphResponse
                     isStrongSponsor=is_strong,
                     hopDistance=hop_distances[user.employeeId],
                     visual={
-                        "heatColor": "#111827" if user.employeeId == employee_id else _heat_color(relevance),
+                        "heatColor": "#001f45" if user.employeeId == employee_id else _heat_color(relevance),
                         "ringColor": _ring_color(status),
-                        "badge": "star" if is_strong else "",
+                        "badge": "strong" if is_strong else "",
                     },
                 ),
             )
         )
 
+    edges = build_relationship_edges(
+        users, technology, usage, collaborations, employee_id, hop_distances, relationship_graph
+    )
     top_sponsor = sponsor_ranking[0] if sponsor_ranking else None
-    edges = build_reports_to_edges(users) + build_collaboration_edges(collaborations)
-    access_path = [employee_id]
-    if top_sponsor:
-        access_edges = build_access_path_edges(requester, users, top_sponsor)
-        edges += access_edges
-        access_path = [edge.source for edge in access_edges] + [access_edges[-1].target]
+    access_path = [employee_id, top_sponsor.employeeId] if top_sponsor else [employee_id]
 
     return AccessGraphResponse(
         requesterEmployeeId=employee_id,

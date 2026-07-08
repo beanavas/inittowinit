@@ -27,3 +27,7 @@ class RequestPacketInput(BaseModel):
     employeeId: str
     platform: str
     customJustification: Optional[str] = None
+
+
+class RequestDecision(BaseModel):
+    decision: Literal["Approved", "Denied"]

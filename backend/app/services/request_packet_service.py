@@ -69,3 +69,25 @@ def submit_request(employee_id: str, platform: str, justification: str) -> Acces
     update_access_status(employee_id, platform, AccessStatus.PENDING)
 
     return AccessRequest(**new_request)
+
+
+def decide_request(request_id: str, decision: str) -> AccessRequest:
+    """Approve or deny a pending request, updating both requests.json and access.json."""
+    if decision not in ("Approved", "Denied"):
+        raise ValueError("decision must be 'Approved' or 'Denied'")
+
+    raw = read_json("requests.json")
+    entry = next((r for r in raw if r["requestId"] == request_id), None)
+    if not entry:
+        raise ValueError(f"Request '{request_id}' not found")
+
+    entry["status"] = decision
+    write_json("requests.json", raw)
+
+    update_access_status(
+        entry["employeeId"],
+        entry["platform"],
+        AccessStatus.PROVISIONED if decision == "Approved" else AccessStatus.DENIED,
+    )
+
+    return AccessRequest(**entry)
