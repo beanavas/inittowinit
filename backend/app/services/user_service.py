@@ -27,12 +27,9 @@ def get_users_by_role(role: str) -> List[User]:
 def create_user(data: UserCreate) -> User:
     raw = read_json("users.json")
     existing_ids = {u["employeeId"] for u in raw}
-    n = len(raw) + 1
-    new_id = f"E{n:03d}"
-    while new_id in existing_ids:
-        n += 1
-        new_id = f"E{n:03d}"
-    new_user = {"employeeId": new_id, **data.model_dump()}
+    if data.employeeId in existing_ids:
+        raise ValueError(f"User '{data.employeeId}' already exists")
+    new_user = data.model_dump()
     raw.append(new_user)
     write_json("users.json", raw)
     return User(**new_user)

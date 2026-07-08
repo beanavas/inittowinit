@@ -48,7 +48,7 @@ async def _call_anthropic(prompt: str) -> str:
                 "content-type": "application/json",
             },
             json={
-                "model": "claude-3-5-haiku-20241022",
+                "model": "claude-haiku-4-5",
                 "max_tokens": 1024,
                 "messages": [{"role": "user", "content": prompt}],
             },

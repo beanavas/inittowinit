@@ -28,6 +28,7 @@ app.include_router(org_graph.router, prefix="/api/org-graph", tags=["Org Graph"]
 app.include_router(request_packets.router, prefix="/api/request-packets", tags=["Request Packets"])
 app.include_router(admin.router, prefix="/api/admin", tags=["Admin"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["Dashboard"])
+app.include_router(assistant.router, prefix="/api/assistant", tags=["Assistant"])
 
 
 @app.get("/", tags=["Health"])
