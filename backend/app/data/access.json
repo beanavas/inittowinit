@@ -1,0 +1,77 @@
+[
+  {
+    "employeeId": "E001",
+    "access": [
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "GitHub", "status": "Pending" }
+    ]
+  },
+  {
+    "employeeId": "E002",
+    "access": [
+      { "platform": "GitHub", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Confluence", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "E003",
+    "access": [
+      { "platform": "GitHub", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "AWS", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "E004",
+    "access": [
+      { "platform": "GitHub", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "AWS", "status": "Provisioned" },
+      { "platform": "Azure", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "E005",
+    "access": [
+      { "platform": "Azure", "status": "Provisioned" },
+      { "platform": "Databricks", "status": "Provisioned" },
+      { "platform": "GitHub", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "E006",
+    "access": [
+      { "platform": "Tableau", "status": "Provisioned" },
+      { "platform": "Databricks", "status": "Pending" }
+    ]
+  },
+  {
+    "employeeId": "E007",
+    "access": [
+      { "platform": "GitHub", "status": "Provisioned" },
+      { "platform": "AWS", "status": "Provisioned" },
+      { "platform": "Azure", "status": "Provisioned" },
+      { "platform": "Terraform", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "E008",
+    "access": [
+      { "platform": "GitHub", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "AWS", "status": "Provisioned" },
+      { "platform": "Azure", "status": "Provisioned" },
+      { "platform": "Tableau", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "E009",
+    "access": [
+      { "platform": "Jira", "status": "Provisioned" }
+    ]
+  }
+]

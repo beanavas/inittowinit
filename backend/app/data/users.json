@@ -1,0 +1,74 @@
+[
+  {
+    "employeeId": "E001",
+    "name": "Sarah Miller",
+    "role": "Software Engineer",
+    "department": "Investment Technology",
+    "manager": "Thomas Johnson",
+    "team": "Custom Harvest"
+  },
+  {
+    "employeeId": "E002",
+    "name": "Mike Chen",
+    "role": "Software Engineer",
+    "department": "Investment Technology",
+    "manager": "Thomas Johnson",
+    "team": "Custom Harvest"
+  },
+  {
+    "employeeId": "E003",
+    "name": "Emily Davis",
+    "role": "Software Engineer",
+    "department": "Investment Technology",
+    "manager": "Thomas Johnson",
+    "team": "Custom Harvest"
+  },
+  {
+    "employeeId": "E004",
+    "name": "Thomas Johnson",
+    "role": "Engineering Manager",
+    "department": "Investment Technology",
+    "manager": "Lisa Park",
+    "team": "Custom Harvest"
+  },
+  {
+    "employeeId": "E005",
+    "name": "Alex Rodriguez",
+    "role": "Data Engineer",
+    "department": "Data Platform",
+    "manager": "Lisa Park",
+    "team": "Data Insights"
+  },
+  {
+    "employeeId": "E006",
+    "name": "Jessica Kim",
+    "role": "Data Analyst",
+    "department": "Data Platform",
+    "manager": "Lisa Park",
+    "team": "Data Insights"
+  },
+  {
+    "employeeId": "E007",
+    "name": "Ryan Thompson",
+    "role": "DevOps Engineer",
+    "department": "Infrastructure",
+    "manager": "Thomas Johnson",
+    "team": "Platform Engineering"
+  },
+  {
+    "employeeId": "E008",
+    "name": "Lisa Park",
+    "role": "Engineering Manager",
+    "department": "Data Platform",
+    "manager": "CEO",
+    "team": "Leadership"
+  },
+  {
+    "employeeId": "E009",
+    "name": "Jordan Lee",
+    "role": "Software Engineer",
+    "department": "Investment Technology",
+    "manager": "Thomas Johnson",
+    "team": "Custom Harvest"
+  }
+]

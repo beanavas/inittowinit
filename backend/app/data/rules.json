@@ -1,0 +1,11 @@
+{
+  "roleRules": {
+    "Software Engineer": ["GitHub", "Jira", "Confluence"],
+    "Data Engineer": ["Azure", "Databricks", "GitHub"],
+    "Data Analyst": ["Tableau", "Databricks", "Jira"],
+    "DevOps Engineer": ["GitHub", "AWS", "Azure", "Terraform"],
+    "Engineering Manager": ["GitHub", "Jira", "Confluence", "AWS"],
+    "Product Manager": ["Jira", "Confluence", "Miro"],
+    "Designer": ["Miro", "Confluence", "Jira"]
+  }
+}
