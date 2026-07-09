@@ -16,7 +16,72 @@ const PROFILE_FIELDS = [
   { label: "Team",       key: "team" },
 ];
 
-export default function AccessReportPanel({ user, access, loading, error, platforms = [] }) {
+function formatUsage(value) {
+  if (!value) return "Unknown";
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function SelectedEmployeeDetails({ employee }) {
+  if (!employee) {
+    return (
+      <div className="empty-state selected-employee-empty">
+        Select a node in the graph to inspect that employee's access signals.
+      </div>
+    );
+  }
+
+  const accessGroups = employee.memberships || [];
+
+  return (
+    <div className="selected-employee-detail">
+      <div className="graph-detail-kicker">
+        {employee.isCurrentUser ? "Requester" : "Selected employee"}
+      </div>
+      <div className="graph-detail-title">{employee.name}</div>
+      <div className="graph-detail-subtitle">
+        {employee.title || employee.role} | {employee.team}
+      </div>
+
+      <div className="graph-detail-row">
+        <span>Access</span>
+        <strong>{employee.accessStatus}</strong>
+      </div>
+      <div className="graph-detail-row">
+        <span>Usage</span>
+        <strong>{formatUsage(employee.usageIntensity)}</strong>
+      </div>
+      <div className="graph-detail-row">
+        <span>Match</span>
+        <strong>{employee.isCurrentUser ? "Requester" : `${employee.relevanceScore}%`}</strong>
+      </div>
+      <div className="graph-detail-row">
+        <span>Hop distance</span>
+        <strong>{employee.hopDistance === 0 ? "You" : `${employee.hopDistance} hop${employee.hopDistance === 1 ? "" : "s"}`}</strong>
+      </div>
+      <div className="graph-detail-row">
+        <span>Department</span>
+        <strong>{employee.department}</strong>
+      </div>
+      {employee.mail && (
+        <div className="graph-detail-row">
+          <span>Email</span>
+          <strong>{employee.mail}</strong>
+        </div>
+      )}
+
+      {accessGroups.length > 0 && (
+        <div className="graph-detail-reasons selected-access-groups">
+          <div>
+            Access groups: {accessGroups.slice(0, 4).join(", ")}
+            {accessGroups.length > 4 ? `, +${accessGroups.length - 4} more` : ""}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function AccessReportPanel({ user, access, loading, error, platforms = [], selectedEmployee }) {
   const [view, setView]                 = useState("mine");
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [teamDataByTeam, setTeamDataByTeam] = useState({});
@@ -42,6 +107,10 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
       .catch((e) => setTeamError(e.message))
       .finally(() => setTeamLoading(false));
   };
+
+  useEffect(() => {
+    if (selectedEmployee) setView("selected");
+  }, [selectedEmployee]);
 
   const handleTeamClick = () => {
     setView("team");
@@ -76,6 +145,12 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
               onClick={handleTeamClick}
             >
               Team Access
+            </button>
+            <button
+              className={`view-toggle-btn${view === "selected" ? " active" : ""}`}
+              onClick={() => setView("selected")}
+            >
+              Selected Employee
             </button>
           </div>
         )}
@@ -187,6 +262,11 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
             </>
           )}
         </>
+      )}
+
+      {/* SELECTED EMPLOYEE */}
+      {view === "selected" && (
+        <SelectedEmployeeDetails employee={selectedEmployee} />
       )}
     </div>
   );
