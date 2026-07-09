@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 
 
 class GraphEdgeType(str, Enum):
+    REPORTS_TO = "reports_to"
     TEAM = "team"
     TOOL = "tool"
     WORKS_WITH = "works_with"

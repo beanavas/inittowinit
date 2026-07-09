@@ -1,15 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import EmployeeNode from "./EmployeeNode";
 
-const VIEWBOX = { width: 760, height: 620 };
+const VIEWBOX = { width: 820, height: 740 };
 const CENTER = { x: VIEWBOX.width / 2, y: VIEWBOX.height / 2 };
 const MIN_ZOOM = 0.7;
 const MAX_ZOOM = 2.2;
+const TWO_PI = Math.PI * 2;
 
 function ringRadius(hop) {
-  if (hop <= 1) return 175;
-  if (hop === 2) return 290;
-  return 310;
+  if (hop <= 1) return 122;
+  if (hop === 2) return 195;
+  if (hop === 3) return 258;
+  if (hop === 4) return 306;
+  return 338;
 }
 
 function normalizeEdgeType(edge) {
@@ -46,18 +49,6 @@ function edgeStyle(edgeType) {
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
-}
-
-function nodeScreenPosition(node) {
-  if (node.data.isCurrentUser) return CENTER;
-
-  const angle = Math.atan2(node.position.y, node.position.x || 0.001);
-  const radius = ringRadius(node.data.hopDistance || 1);
-
-  return {
-    x: CENTER.x + Math.cos(angle) * radius,
-    y: CENTER.y + Math.sin(angle) * radius,
-  };
 }
 
 function accessPathEdges(graph) {
@@ -165,6 +156,79 @@ function edgePath(line, visualType) {
   };
 }
 
+function hasAccessGroupInfo(node) {
+  return node.data.isCurrentUser || (node.data.memberships?.length || 0) > 0;
+}
+
+function originalAngle(node) {
+  return Math.atan2(node.position?.y || 0, node.position?.x || 0.001);
+}
+
+function nodeSortValue(node, sponsorById) {
+  const sponsor = sponsorById[node.id];
+  const sponsorBoost = sponsor?.isStrongSponsor || node.data.isStrongSponsor ? -1000 : 0;
+  const relevance = Number(node.data.relevanceScore || 0);
+  return sponsorBoost - relevance;
+}
+
+function calculateScreenLayout(rawNodes, sponsorById, accessPath) {
+  const current = rawNodes.find((node) => node.data.isCurrentUser);
+  const topSponsorId = accessPath?.[1];
+  const byHop = rawNodes.reduce((groups, node) => {
+    if (node.data.isCurrentUser) return groups;
+    const hop = node.data.hopDistance || 1;
+    if (!groups.has(hop)) groups.set(hop, []);
+    groups.get(hop).push(node);
+    return groups;
+  }, new Map());
+
+  const positioned = [];
+  if (current) {
+    positioned.push({
+      ...current,
+      screenPosition: CENTER,
+      angle: 0,
+      labelPlacement: "bottom",
+    });
+  }
+
+  [...byHop.entries()]
+    .sort(([a], [b]) => a - b)
+    .forEach(([hop, hopNodes]) => {
+      const sorted = [...hopNodes].sort((a, b) => {
+        const priority = nodeSortValue(a, sponsorById) - nodeSortValue(b, sponsorById);
+        if (priority !== 0) return priority;
+        return originalAngle(a) - originalAngle(b);
+      });
+
+      const count = sorted.length;
+      const step = TWO_PI / Math.max(count, 1);
+      const ringOffset = -Math.PI / 2 + (hop - 1) * 0.34 + (count % 2 === 0 ? step / 2 : 0);
+      const topSponsorIndex = sorted.findIndex((node) => node.id === topSponsorId);
+      const sponsorRotation = topSponsorIndex >= 0
+        ? -Math.PI / 2 - (ringOffset + topSponsorIndex * step)
+        : 0;
+
+      sorted.forEach((node, index) => {
+        const angle = ringOffset + sponsorRotation + index * step;
+        const crowdedRingOffset = count > 8 && index % 2 === 1 ? 14 : 0;
+        const radius = ringRadius(hop) + crowdedRingOffset;
+
+        positioned.push({
+          ...node,
+          screenPosition: {
+            x: CENTER.x + Math.cos(angle) * radius,
+            y: CENTER.y + Math.sin(angle) * radius,
+          },
+          angle,
+          labelPlacement: Math.sin(angle) < -0.18 ? "top" : "bottom",
+        });
+      });
+    });
+
+  return positioned;
+}
+
 export default function AccessGraph({ graph, onNodeSelect }) {
   const [hopFilter, setHopFilter] = useState("all");
   const [selectedId, setSelectedId] = useState(graph.requesterEmployeeId);
@@ -184,27 +248,30 @@ export default function AccessGraph({ graph, onNodeSelect }) {
     [graph.sponsorRanking]
   );
 
-  const maxHop = useMemo(
-    () => Math.max(1, ...graph.nodes.map((node) => node.data.hopDistance || 0)),
+  const eligibleNodes = useMemo(
+    () => graph.nodes.filter(hasAccessGroupInfo),
     [graph.nodes]
+  );
+
+  const maxHop = useMemo(
+    () => Math.max(1, ...eligibleNodes.map((node) => node.data.hopDistance || 0)),
+    [eligibleNodes]
   );
 
   const visibleHop = hopFilter === "all" ? maxHop : Number(hopFilter);
 
   const { nodes, edges, rings, layoutById, hiddenCount } = useMemo(() => {
-    const visibleRawNodes = graph.nodes.filter(
+    const visibleRawNodes = eligibleNodes.filter(
       (node) => node.data.isCurrentUser || node.data.hopDistance <= visibleHop
     );
 
     const visibleIds = new Set(visibleRawNodes.map((node) => node.id));
 
-    const positionedNodes = visibleRawNodes.map((node) => ({
+    const positionedNodes = calculateScreenLayout(visibleRawNodes, sponsorById, graph.accessPath).map((node) => ({
       ...node,
-      screenPosition: nodeScreenPosition(node),
       sponsor: sponsorById[node.id],
-      avatarRadius: node.data.isCurrentUser ? 29 : 22,
+      avatarRadius: node.data.isCurrentUser ? 27 : 20,
       hopDistance: node.data.hopDistance || 0,
-      labelPlacement: nodeScreenPosition(node).y < CENTER.y - 30 ? "top" : "bottom",
     }));
 
     const byId = Object.fromEntries(
@@ -239,9 +306,9 @@ export default function AccessGraph({ graph, onNodeSelect }) {
       edges: allEdges,
       rings: hopRings,
       layoutById: byId,
-      hiddenCount: graph.nodes.length - visibleRawNodes.length,
+      hiddenCount: eligibleNodes.length - visibleRawNodes.length,
     };
-  }, [graph, sponsorById, visibleHop]);
+  }, [eligibleNodes, graph, sponsorById, visibleHop]);
 
   const selectedNode = nodes.find((node) => node.id === selectedId) || nodes.find((node) => node.data.isCurrentUser);
 

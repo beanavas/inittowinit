@@ -60,7 +60,6 @@
   {
     "employeeId": "E008",
     "access": [
-      { "platform": "GitHub", "status": "Provisioned" },
       { "platform": "Jira", "status": "Provisioned" },
       { "platform": "Confluence", "status": "Provisioned" },
       { "platform": "AWS", "status": "Provisioned" },
@@ -117,6 +116,118 @@
       { "platform": "GitHub", "status": "Provisioned" },
       { "platform": "Confluence", "status": "Provisioned" },
       { "platform": "Jira", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-100",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Azure", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-101",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Terraform", "status": "Pending" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-102",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Databricks", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-103",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Azure", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-104",
+    "access": [
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Confluence", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-105",
+    "access": [
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Confluence", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-106",
+    "access": [
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "AWS", "status": "Provisioned" },
+      { "platform": "Terraform", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-107",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Databricks", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-108",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Databricks", "status": "Provisioned" },
+      { "platform": "Tableau", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-109",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Azure", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-110",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Azure", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-111",
+    "access": [
+      { "platform": "GitHub", "status": "Provisioned" },
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-112",
+    "access": [
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Terraform", "status": "Provisioned" },
+      { "platform": "AWS", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-113",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Azure", "status": "Pending" }
+    ]
+  },
+  {
+    "employeeId": "DEMO-114",
+    "access": [
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "Confluence", "status": "Provisioned" }
     ]
   }
 ]
