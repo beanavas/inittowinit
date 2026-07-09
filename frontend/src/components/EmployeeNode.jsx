@@ -33,13 +33,6 @@ export default function EmployeeNode({ data, labelPlacement = "bottom" }) {
         {initials(data.name)}
       </div>
       <div className="employee-node-name">{data.isCurrentUser ? "You" : data.name}</div>
-      <div className="employee-node-role">{data.role}</div>
-      <div className="employee-node-score" style={{ color: heatColor }}>
-        {data.isCurrentUser ? "Requester" : `${data.relevanceScore} match`}
-      </div>
-      <div className="employee-node-chip" style={{ borderColor: `${ringColor}66`, color: ringColor }}>
-        {data.accessStatus}
-      </div>
     </div>
   );
 }
