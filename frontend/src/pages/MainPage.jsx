@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { api } from "../api";
+import { BASE_URL, api } from "../api";
 import { useApp } from "../context/AppContext";
 import { useCopilotChat } from "../hooks/useCopilotChat";
 import AssistantDrawer from "../layout/AssistantDrawer";
@@ -120,8 +120,7 @@ export default function MainPage() {
     <div className="app-shell-single">
       {!backendOnline && (
         <div className="offline-banner">
-          Can't reach the backend at {import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"} — make
-          sure the FastAPI server is running.
+          Can't reach the backend at {BASE_URL} — make sure the FastAPI server is running.
         </div>
       )}
 

@@ -1,58 +1,23 @@
 [
   {
-    "requesterEmployeeId": "E001",
-    "sponsorEmployeeId": "E004",
+    "requesterEmployeeId": "INT-002",
+    "sponsorEmployeeId": "COL-001",
     "platform": "GitHub",
-    "outcome": "Approved",
-    "recencyDays": 21
-  },
-  {
-    "requesterEmployeeId": "E001",
-    "sponsorEmployeeId": "E003",
-    "platform": "AWS",
-    "outcome": "Approved",
-    "recencyDays": 45
-  },
-  {
-    "requesterEmployeeId": "E005",
-    "sponsorEmployeeId": "E008",
-    "platform": "Databricks",
     "outcome": "Approved",
     "recencyDays": 12
   },
   {
-    "requesterEmployeeId": "INT-001",
-    "sponsorEmployeeId": "INT-002",
-    "platform": "Confluence",
+    "requesterEmployeeId": "INT-002",
+    "sponsorEmployeeId": "COL-005",
+    "platform": "Power Apps",
     "outcome": "Approved",
     "recencyDays": 18
   },
   {
-    "requesterEmployeeId": "INT-001",
-    "sponsorEmployeeId": "DEMO-104",
-    "platform": "Jira",
-    "outcome": "Approved",
-    "recencyDays": 32
-  },
-  {
-    "requesterEmployeeId": "INT-001",
-    "sponsorEmployeeId": "DEMO-111",
-    "platform": "GitHub",
+    "requesterEmployeeId": "INT-002",
+    "sponsorEmployeeId": "COL-008",
+    "platform": "Microsoft Fabric",
     "outcome": "Approved",
     "recencyDays": 9
-  },
-  {
-    "requesterEmployeeId": "INT-003",
-    "sponsorEmployeeId": "DEMO-107",
-    "platform": "Databricks",
-    "outcome": "Approved",
-    "recencyDays": 27
-  },
-  {
-    "requesterEmployeeId": "INT-006",
-    "sponsorEmployeeId": "DEMO-106",
-    "platform": "Terraform",
-    "outcome": "Approved",
-    "recencyDays": 41
   }
 ]
