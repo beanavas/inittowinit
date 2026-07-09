@@ -713,6 +713,24 @@ a {
   margin: 10px 0 12px;
 }
 
+.access-graph-wrap:fullscreen,
+.access-graph-wrap.graph-fullscreen {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 248, 251, 0.98)),
+    radial-gradient(circle at 50% 50%, rgba(0, 123, 195, 0.1), transparent 44%);
+}
+
+.access-graph-wrap.graph-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
 .graph-toolbar {
   position: relative;
   z-index: 8;
@@ -776,6 +794,27 @@ a {
   border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--navy);
+  white-space: nowrap;
+}
+
+.graph-toolbar-right .graph-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 28px;
+  min-width: 30px;
+  padding: 0;
+}
+
+.graph-icon-button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .static-access-graph {
@@ -789,13 +828,20 @@ a {
   user-select: none;
 }
 
+.access-graph-wrap:fullscreen .static-access-graph,
+.access-graph-wrap.graph-fullscreen .static-access-graph {
+  height: calc(100vh - 48px);
+  min-height: 0;
+}
+
 .static-access-graph:active {
   cursor: grabbing;
 }
 
 .static-graph-world {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  top: 50%;
   transform-origin: center center;
   transition: transform 120ms ease-out;
 }

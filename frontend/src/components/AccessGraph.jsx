@@ -176,6 +176,10 @@ export default function AccessGraph({ graph, onNodeSelect }) {
   const [selectedId, setSelectedId] = useState(graph.requesterEmployeeId);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [worldSize, setWorldSize] = useState({ width: VIEWBOX.width, height: VIEWBOX.height });
+  const graphWrapRef = useRef(null);
+  const graphViewportRef = useRef(null);
   const dragRef = useRef(null);
 
   useEffect(() => {
@@ -184,6 +188,35 @@ export default function AccessGraph({ graph, onNodeSelect }) {
     setPan({ x: 0, y: 0 });
     setHopFilter("all");
   }, [graph.requesterEmployeeId, graph.technology]);
+
+  useEffect(() => {
+    function handleFullscreenChange() {
+      setIsFullscreen(document.fullscreenElement === graphWrapRef.current);
+    }
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
+  useEffect(() => {
+    const viewport = graphViewportRef.current;
+    if (!viewport) return undefined;
+
+    function fitWorld() {
+      const { width, height } = viewport.getBoundingClientRect();
+      if (!width || !height) return;
+      const scale = Math.min(width / VIEWBOX.width, height / VIEWBOX.height);
+      setWorldSize({
+        width: VIEWBOX.width * scale,
+        height: VIEWBOX.height * scale,
+      });
+    }
+
+    fitWorld();
+    const resizeObserver = new ResizeObserver(fitWorld);
+    resizeObserver.observe(viewport);
+    return () => resizeObserver.disconnect();
+  }, []);
 
   const sponsorById = useMemo(
     () => Object.fromEntries(graph.sponsorRanking.map((sponsor) => [sponsor.employeeId, sponsor])),
@@ -259,6 +292,21 @@ export default function AccessGraph({ graph, onNodeSelect }) {
     setPan({ x: 0, y: 0 });
   }
 
+  async function toggleFullscreen() {
+    const wrap = graphWrapRef.current;
+    if (!wrap) return;
+
+    try {
+      if (document.fullscreenElement === wrap) {
+        await document.exitFullscreen();
+      } else {
+        await wrap.requestFullscreen();
+      }
+    } catch {
+      setIsFullscreen((current) => !current);
+    }
+  }
+
   function handleWheel(event) {
     event.preventDefault();
     const delta = event.deltaY > 0 ? -0.08 : 0.08;
@@ -294,7 +342,7 @@ export default function AccessGraph({ graph, onNodeSelect }) {
   const hopOptions = Array.from({ length: maxHop }, (_, index) => index + 1);
 
   return (
-    <div className="access-graph-wrap">
+    <div className={`access-graph-wrap${isFullscreen ? " graph-fullscreen" : ""}`} ref={graphWrapRef}>
       <div className="graph-toolbar">
         <div className="graph-toolbar-left">
           <span className="graph-toolbar-label">Visible hops</span>
@@ -322,11 +370,35 @@ export default function AccessGraph({ graph, onNodeSelect }) {
         <div className="graph-toolbar-right">
           <span>{Math.round(zoom * 100)}%</span>
           <button type="button" onClick={resetView}>Reset view</button>
+          <button
+            className="graph-icon-button"
+            type="button"
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          >
+            {isFullscreen ? (
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M9 4v5H4" />
+                <path d="M15 4v5h5" />
+                <path d="M9 20v-5H4" />
+                <path d="M15 20v-5h5" />
+              </svg>
+            ) : (
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4 9V4h5" />
+                <path d="M20 9V4h-5" />
+                <path d="M4 15v5h5" />
+                <path d="M20 15v5h-5" />
+              </svg>
+            )}
+          </button>
         </div>
       </div>
 
       <div
         className="static-access-graph"
+        ref={graphViewportRef}
         onWheel={handleWheel}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -335,7 +407,11 @@ export default function AccessGraph({ graph, onNodeSelect }) {
       >
         <div
           className="static-graph-world"
-          style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})` }}
+          style={{
+            width: `${worldSize.width}px`,
+            height: `${worldSize.height}px`,
+            transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          }}
         >
           <svg
             className="static-graph-svg"
