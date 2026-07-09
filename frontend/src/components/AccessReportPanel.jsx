@@ -25,7 +25,7 @@ function formatUsage(value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function SelectedEmployeeDetails({ employee }) {
+function SelectedEmployeeDetails({ employee, users = [] }) {
   const [showAllGroups, setShowAllGroups] = useState(false);
 
   if (!employee) {
@@ -37,6 +37,8 @@ function SelectedEmployeeDetails({ employee }) {
   }
 
   const accessGroups = employee.memberships || [];
+  const directoryEmployee = users.find((user) => user.employeeId === employee.employeeId);
+  const manager = employee.manager || directoryEmployee?.manager || "Unknown";
   const visibleGroups = showAllGroups ? accessGroups : accessGroups.slice(0, 6);
   const hiddenCount = accessGroups.length - visibleGroups.length;
   const fields = [
@@ -48,6 +50,7 @@ function SelectedEmployeeDetails({ employee }) {
       value: employee.hopDistance === 0 ? "You" : `${employee.hopDistance} hop${employee.hopDistance === 1 ? "" : "s"}`,
     },
     { label: "Department", value: employee.department },
+    { label: "Manager", value: manager },
   ];
   if (employee.mail) fields.push({ label: "Email", value: employee.mail });
 
@@ -98,7 +101,7 @@ function SelectedEmployeeDetails({ employee }) {
   );
 }
 
-export default function AccessReportPanel({ user, access, loading, error, platforms = [], selectedEmployee }) {
+export default function AccessReportPanel({ user, access, loading, error, platforms = [], selectedEmployee, users = [] }) {
   const [view, setView]                 = useState("mine");
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [teamDataByTeam, setTeamDataByTeam] = useState({});
@@ -281,7 +284,7 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
 
       {/* SELECTED EMPLOYEE */}
       {view === "selected" && (
-        <SelectedEmployeeDetails employee={selectedEmployee} key={selectedEmployee?.employeeId} />
+        <SelectedEmployeeDetails employee={selectedEmployee} key={selectedEmployee?.employeeId} users={users} />
       )}
     </div>
   );

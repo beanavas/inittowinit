@@ -17,22 +17,14 @@ function ringRadius(hop) {
 
 function normalizeEdgeType(edge) {
   const edgeType = edge.data?.edgeType;
-  if (edgeType === "access_path") return "access_path";
-  if (edgeType === "reports_to" || edgeType === "team") return "reports_to";
-  if (edgeType === "collaborates_with" || edgeType === "works_with" || edgeType === "tool") {
+  if (edgeType === "reports_to") return "reports_to";
+  if (edgeType === "collaborates_with" || edgeType === "works_with") {
     return "collaborates_with";
   }
-  return "collaborates_with";
+  return null;
 }
 
 function edgeStyle(edgeType) {
-  if (edgeType === "access_path") {
-    return {
-      className: "static-edge static-edge-access-path",
-      markerEnd: "url(#access-arrow)",
-      label: "Access Path",
-    };
-  }
   if (edgeType === "reports_to") {
     return {
       className: "static-edge static-edge-reports",
@@ -42,25 +34,13 @@ function edgeStyle(edgeType) {
   }
   return {
     className: "static-edge static-edge-collaborates",
-    markerEnd: "url(#collaborates-arrow)",
+    markerEnd: null,
     label: null,
   };
 }
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
-}
-
-function accessPathEdges(graph) {
-  if (!graph.accessPath || graph.accessPath.length < 2) return [];
-  if (graph.edges.some((edge) => edge.data?.edgeType === "access_path")) return [];
-
-  return graph.accessPath.slice(0, -1).map((source, index) => ({
-    id: `access-path-${source}-${graph.accessPath[index + 1]}`,
-    source,
-    target: graph.accessPath[index + 1],
-    data: { edgeType: "access_path" },
-  }));
 }
 
 function edgeLine(edge, layoutById) {
@@ -74,8 +54,8 @@ function edgeLine(edge, layoutById) {
   const dx = target.x - source.x;
   const dy = target.y - source.y;
   const length = Math.hypot(dx, dy) || 1;
-  const sourcePad = sourceNode.avatarRadius + (edge.data?.edgeType === "access_path" ? 5 : 3);
-  const targetPad = targetNode.avatarRadius + (edge.data?.edgeType === "access_path" ? 5 : 3);
+  const sourcePad = sourceNode.avatarRadius + 3;
+  const targetPad = targetNode.avatarRadius + 3;
 
   return {
     x1: source.x + (dx / length) * sourcePad,
@@ -265,14 +245,32 @@ export default function AccessGraph({ graph, onNodeSelect, defaultHopFilter = "a
         label: hop === 1 ? "1 hop" : `${hop} hops`,
       }));
 
-    const allEdges = [...graph.edges, ...accessPathEdges(graph)]
+    const relationshipEdges = graph.edges
       .filter((edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target))
       .map((edge) => ({
         ...edge,
         visualType: normalizeEdgeType(edge),
       }))
+      .filter((edge) => edge.visualType);
+
+    const directPairs = new Set(
+      relationshipEdges.map((edge) => [edge.source, edge.target].sort().join("::"))
+    );
+    const directHopEdges = visibleRawNodes
+      .filter((node) => node.id !== graph.requesterEmployeeId)
+      .filter((node) => node.data.hopDistance === 1)
+      .filter((node) => !directPairs.has([graph.requesterEmployeeId, node.id].sort().join("::")))
+      .map((node) => ({
+        id: `direct-hop-${graph.requesterEmployeeId}-${node.id}`,
+        source: graph.requesterEmployeeId,
+        target: node.id,
+        data: { edgeType: "direct_hop" },
+        visualType: "collaborates_with",
+      }));
+
+    const allEdges = [...relationshipEdges, ...directHopEdges]
       .sort((a, b) => {
-        const order = { collaborates_with: 0, reports_to: 1, access_path: 2 };
+        const order = { collaborates_with: 0, reports_to: 1 };
         return order[a.visualType] - order[b.visualType];
       });
 
@@ -423,12 +421,6 @@ export default function AccessGraph({ graph, onNodeSelect, defaultHopFilter = "a
               <marker id="reports-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" />
               </marker>
-              <marker id="collaborates-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" />
-              </marker>
-              <marker id="access-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" />
-              </marker>
             </defs>
 
             {rings.map((ring) => (
@@ -455,6 +447,7 @@ export default function AccessGraph({ graph, onNodeSelect, defaultHopFilter = "a
                     className={visual.className}
                     d={path.d}
                     markerEnd={visual.markerEnd}
+                    vectorEffect="non-scaling-stroke"
                   />
                   {visual.label && (
                     <text className="static-edge-label" x={path.labelPoint.x} y={path.labelPoint.y}>

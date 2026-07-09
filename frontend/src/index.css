@@ -906,17 +906,9 @@ a {
 
 .static-edge-collaborates {
   stroke: #7f8a97;
-  stroke-width: 1.55;
+  stroke-width: 2;
   stroke-dasharray: 8 7;
-  opacity: 0.62;
-}
-
-.static-edge-access-path {
-  stroke: #d99700;
-  stroke-width: 3.5;
-  filter: drop-shadow(0 3px 5px rgba(217, 151, 0, 0.22));
-  stroke-dasharray: 12 6;
-  animation: accessPathPulse 1.25s linear infinite;
+  opacity: 0.9;
 }
 
 .static-edge-label {
@@ -930,20 +922,6 @@ a {
 
 #reports-arrow path {
   fill: #7b8794;
-}
-
-#collaborates-arrow path {
-  fill: #7f8a97;
-}
-
-#access-arrow path {
-  fill: #d99700;
-}
-
-@keyframes accessPathPulse {
-  to {
-    stroke-dashoffset: -18;
-  }
 }
 
 .employee-node {
