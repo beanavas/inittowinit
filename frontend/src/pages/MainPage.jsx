@@ -30,14 +30,34 @@ export default function MainPage() {
   const chat = useCopilotChat(employeeId);
 
   useEffect(() => {
+    api.listPlatforms().then(setPlatforms).catch(() => {});
+  }, []);
+
+  const resetToDefaultTechnology = (id) => {
+    if (!id) return;
     api
-      .listPlatforms()
-      .then((list) => {
-        setPlatforms(list);
-        setTechnology((prev) => prev || list[0]?.platform || "");
+      .getRecommendations(id, false)
+      .then((r) => {
+        if (r.recommendations[0]) {
+          setTechnology(r.recommendations[0].platform);
+        } else {
+          return api.listPlatforms().then((list) => setTechnology(list[0]?.platform || ""));
+        }
       })
       .catch(() => {});
-  }, []);
+  };
+
+  // Default the graph to this person's top recommendation until the console
+  // (chat/search) points it at something more specific.
+  useEffect(() => {
+    resetToDefaultTechnology(employeeId);
+  }, [employeeId]);
+
+  // The console drives the graph: whichever platform comes up in a chat answer
+  // becomes the focus, overriding the default above.
+  useEffect(() => {
+    if (chat.focusPlatform) setTechnology(chat.focusPlatform);
+  }, [chat.focusPlatform]);
 
   useEffect(() => {
     if (!employeeId) return;
@@ -67,6 +87,13 @@ export default function MainPage() {
     chat.sendMessage(query.trim());
     setAssistantOpen(true);
     setQuery("");
+  };
+
+  const askSponsorForHelp = (sponsor) => {
+    chat.sendMessage(
+      `Can you help me draft a message asking ${sponsor.name} (${sponsor.role}) to sponsor my access request for ${technology}?`
+    );
+    setAssistantOpen(true);
   };
 
   return (
@@ -111,18 +138,7 @@ export default function MainPage() {
               </option>
             ))}
           </select>
-          <select className="picker-select" value={technology} onChange={(e) => setTechnology(e.target.value)}>
-            {platforms.map((p) => (
-              <option key={p.platform} value={p.platform}>
-                {p.platform}
-              </option>
-            ))}
-          </select>
         </div>
-
-        <button className="topbar-btn" onClick={() => setAssistantOpen(true)}>
-          Chat with Claude
-        </button>
       </div>
 
       <div className="main-body">
@@ -141,7 +157,7 @@ export default function MainPage() {
             </div>
             <p className="card-subtitle">
               Who's connected to {currentUser?.name || "the selected person"} and how they relate to{" "}
-              {technology || "this tool"}.
+              {technology || "this tool"}. Ask Claude about a different tool above to update this view.
             </p>
 
             {error && <div className="error-banner">{error}</div>}
@@ -154,9 +170,17 @@ export default function MainPage() {
         {graph && (
           <div className="sponsor-panel">
             <div className="card">
-              <div className="card-title">Top Sponsor Suggestions</div>
+              <div className="card-title">
+                Top Sponsor Suggestions
+                <span
+                  className="how-scored-link"
+                  title="Ranked using org proximity, tool usage, relationship, approval history, and availability — see the breakdown below."
+                >
+                  How scored? ⓘ
+                </span>
+              </div>
               <p className="card-subtitle">Ranked by relevance to your {technology} request.</p>
-              <SponsorList sponsors={graph.sponsorRanking} />
+              <SponsorList sponsors={graph.sponsorRanking} onAskForHelp={askSponsorForHelp} />
               <div className="factor-grid">
                 {FACTORS.map((f) => (
                   <div className="factor-card" key={f.key}>
@@ -171,12 +195,32 @@ export default function MainPage() {
         )}
       </div>
 
+      {!assistantOpen && (
+        <button className="assistant-fab" onClick={() => setAssistantOpen(true)} aria-label="Open Claude Assistant">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-4.3 3.6a.5.5 0 0 1-.7-.4V17H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinejoin="round"
+            />
+            <circle cx="8.5" cy="10.5" r="1" fill="currentColor" />
+            <circle cx="12" cy="10.5" r="1" fill="currentColor" />
+            <circle cx="15.5" cy="10.5" r="1" fill="currentColor" />
+          </svg>
+        </button>
+      )}
+
       <AssistantDrawer
         open={assistantOpen}
         onClose={() => setAssistantOpen(false)}
         messages={chat.messages}
         sending={chat.sending}
         onSend={chat.sendMessage}
+        onClear={() => {
+          chat.clear();
+          resetToDefaultTechnology(employeeId);
+        }}
       />
     </div>
   );
