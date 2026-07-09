@@ -1,6 +1,7 @@
 const EDGE_ITEMS = [
   { label: "Reports To", detail: "Org hierarchy", swatchClass: "legend-line reports" },
   { label: "Collaborates With", detail: "Works together", swatchClass: "legend-line collaborates" },
+  { label: "Access Path", detail: "Highest score", swatchClass: "legend-line access-path" },
 ];
 
 export default function GraphLegend() {

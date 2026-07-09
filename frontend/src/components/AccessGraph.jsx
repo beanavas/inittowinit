@@ -25,6 +25,13 @@ function normalizeEdgeType(edge) {
 }
 
 function edgeStyle(edgeType) {
+  if (edgeType === "best_match") {
+    return {
+      className: "static-edge static-edge-best-match",
+      markerEnd: "url(#best-match-arrow)",
+      label: null,
+    };
+  }
   if (edgeType === "reports_to") {
     return {
       className: "static-edge static-edge-reports",
@@ -268,9 +275,22 @@ export default function AccessGraph({ graph, onNodeSelect, defaultHopFilter = "a
         visualType: "collaborates_with",
       }));
 
-    const allEdges = [...relationshipEdges, ...directHopEdges]
+    const topVisibleSponsor = graph.sponsorRanking.find((sponsor) => (
+      sponsor.employeeId !== graph.requesterEmployeeId && visibleIds.has(sponsor.employeeId)
+    ));
+    const bestMatchEdge = topVisibleSponsor
+      ? [{
+          id: `best-match-${graph.requesterEmployeeId}-${topVisibleSponsor.employeeId}`,
+          source: graph.requesterEmployeeId,
+          target: topVisibleSponsor.employeeId,
+          data: { edgeType: "best_match" },
+          visualType: "best_match",
+        }]
+      : [];
+
+    const allEdges = [...relationshipEdges, ...directHopEdges, ...bestMatchEdge]
       .sort((a, b) => {
-        const order = { collaborates_with: 0, reports_to: 1 };
+        const order = { collaborates_with: 0, reports_to: 1, best_match: 2 };
         return order[a.visualType] - order[b.visualType];
       });
 
@@ -419,6 +439,9 @@ export default function AccessGraph({ graph, onNodeSelect, defaultHopFilter = "a
           >
             <defs>
               <marker id="reports-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
+              <marker id="best-match-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" />
               </marker>
             </defs>

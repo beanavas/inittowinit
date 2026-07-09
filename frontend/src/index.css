@@ -911,6 +911,12 @@ a {
   opacity: 0.9;
 }
 
+.static-edge-best-match {
+  stroke: #d99700;
+  stroke-width: 1.65;
+  opacity: 0.95;
+}
+
 .static-edge-label {
   fill: #8a5c00;
   font-size: 12px;
@@ -922,6 +928,10 @@ a {
 
 #reports-arrow path {
   fill: #7b8794;
+}
+
+#best-match-arrow path {
+  fill: #d99700;
 }
 
 .employee-node {
@@ -1140,7 +1150,7 @@ a {
 .legend-line.access-path {
   color: #d99700;
   border-color: #d99700;
-  border-top-width: 4px;
+  border-top-width: 2px;
 }
 
 .legend-dot {
