@@ -60,7 +60,7 @@ def classify_edge(
     """
     if _uses_technology(a.employeeId, technology, usage) and _uses_technology(b.employeeId, technology, usage):
         return GraphEdgeType.TOOL
-    if a.team == b.team:
+    if a.teams() & b.teams():
         return GraphEdgeType.TEAM
     if _collaborates(a.employeeId, b.employeeId, collaborations):
         return GraphEdgeType.WORKS_WITH

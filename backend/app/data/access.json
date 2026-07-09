@@ -118,5 +118,12 @@
       { "platform": "Confluence", "status": "Provisioned" },
       { "platform": "Jira", "status": "Provisioned" }
     ]
+  },
+  {
+    "employeeId": "INT-007",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "GitHub", "status": "Pending" }
+    ]
   }
 ]

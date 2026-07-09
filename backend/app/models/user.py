@@ -15,6 +15,7 @@ class User(BaseModel):
     department: NonEmptyStr
     manager: NonEmptyStr
     team: NonEmptyStr
+    additionalTeams: List[str] = Field(default_factory=list)
     description: Optional[str] = Field(default=None, alias="Description")
     fullName: Optional[str] = Field(default=None, alias="Full Name")
     homeDrive: Optional[str] = Field(default=None, alias="Home Drive")
@@ -24,6 +25,9 @@ class User(BaseModel):
     memberships: List[str] = Field(default_factory=list, alias="Memberships")
     title: Optional[str] = Field(default=None, alias="Title")
     user: Optional[str] = Field(default=None, alias="User")
+
+    def teams(self) -> set:
+        return {self.team, *self.additionalTeams}
 
 
 class UserCreate(BaseModel):
@@ -35,6 +39,7 @@ class UserCreate(BaseModel):
     department: NonEmptyStr
     manager: NonEmptyStr
     team: NonEmptyStr
+    additionalTeams: List[str] = Field(default_factory=list)
     description: Optional[str] = Field(default=None, alias="Description")
     fullName: Optional[str] = Field(default=None, alias="Full Name")
     homeDrive: Optional[str] = Field(default=None, alias="Home Drive")
@@ -54,6 +59,7 @@ class UserUpdate(BaseModel):
     department: Optional[str] = None
     manager: Optional[str] = None
     team: Optional[str] = None
+    additionalTeams: Optional[List[str]] = None
     description: Optional[str] = Field(default=None, alias="Description")
     fullName: Optional[str] = Field(default=None, alias="Full Name")
     homeDrive: Optional[str] = Field(default=None, alias="Home Drive")

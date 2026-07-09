@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../api";
 
 const STATUS_CONFIG = {
@@ -17,24 +17,45 @@ const PROFILE_FIELDS = [
 ];
 
 export default function AccessReportPanel({ user, access, loading, error, platforms = [] }) {
-  const [view, setView]               = useState("mine");
-  const [teamData, setTeamData]       = useState(null);
-  const [teamLoading, setTeamLoading] = useState(false);
-  const [teamError, setTeamError]     = useState(null);
+  const [view, setView]                 = useState("mine");
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [teamDataByTeam, setTeamDataByTeam] = useState({});
+  const [teamLoading, setTeamLoading]   = useState(false);
+  const [teamError, setTeamError]       = useState(null);
 
   const platformMap = Object.fromEntries(platforms.map((p) => [p.platform, p]));
+  const userTeams = user ? [...new Set([user.team, ...(user.additionalTeams || [])])] : [];
+
+  // Switching the selected employee invalidates any cached team data / selection.
+  useEffect(() => {
+    setSelectedTeam(null);
+    setTeamDataByTeam({});
+    setTeamError(null);
+  }, [user?.employeeId]);
+
+  const fetchTeam = (team) => {
+    if (!team || teamDataByTeam[team]) return;
+    setTeamLoading(true);
+    api
+      .getTeamHeatmap(team)
+      .then((d) => { setTeamDataByTeam((prev) => ({ ...prev, [team]: d })); setTeamError(null); })
+      .catch((e) => setTeamError(e.message))
+      .finally(() => setTeamLoading(false));
+  };
 
   const handleTeamClick = () => {
     setView("team");
-    if (!teamData && user?.team) {
-      setTeamLoading(true);
-      api
-        .getTeamHeatmap(user.team)
-        .then((d) => { setTeamData(d); setTeamError(null); })
-        .catch((e) => setTeamError(e.message))
-        .finally(() => setTeamLoading(false));
-    }
+    const team = selectedTeam || userTeams[0];
+    if (!selectedTeam) setSelectedTeam(team);
+    fetchTeam(team);
   };
+
+  const handleTeamSelect = (team) => {
+    setSelectedTeam(team);
+    fetchTeam(team);
+  };
+
+  const teamData = selectedTeam ? teamDataByTeam[selectedTeam] : null;
 
   return (
     <div className="card access-report-panel">
@@ -106,6 +127,20 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
       {/* TEAM ACCESS */}
       {view === "team" && (
         <>
+          {userTeams.length > 1 && (
+            <div className="view-toggle team-switch">
+              {userTeams.map((team) => (
+                <button
+                  key={team}
+                  className={`view-toggle-btn${selectedTeam === team ? " active" : ""}`}
+                  onClick={() => handleTeamSelect(team)}
+                >
+                  {team}
+                </button>
+              ))}
+            </div>
+          )}
+
           {teamError && <div className="error-banner">{teamError}</div>}
           {teamLoading && <div className="loading-line">Loading team data...</div>}
 

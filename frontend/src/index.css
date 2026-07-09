@@ -430,6 +430,10 @@ a {
 
 .view-toggle-btn:hover:not(.active) { color: var(--text); }
 
+.team-switch {
+  margin-bottom: 12px;
+}
+
 .profile-fields {
   margin: 8px 0 14px;
   border: 1px solid var(--border);
