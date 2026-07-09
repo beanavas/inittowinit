@@ -627,6 +627,15 @@ a {
   gap: 6px;
 }
 
+.access-groups-toggle {
+  border: none;
+  cursor: pointer;
+}
+
+.access-groups-toggle:hover {
+  background: var(--border);
+}
+
 .access-report-profile {
   display: flex;
   gap: 12px;

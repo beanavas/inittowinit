@@ -26,6 +26,8 @@ function formatUsage(value) {
 }
 
 function SelectedEmployeeDetails({ employee }) {
+  const [showAllGroups, setShowAllGroups] = useState(false);
+
   if (!employee) {
     return (
       <div className="empty-state selected-employee-empty">
@@ -35,6 +37,8 @@ function SelectedEmployeeDetails({ employee }) {
   }
 
   const accessGroups = employee.memberships || [];
+  const visibleGroups = showAllGroups ? accessGroups : accessGroups.slice(0, 6);
+  const hiddenCount = accessGroups.length - visibleGroups.length;
   const fields = [
     { label: "Access", value: employee.accessStatus },
     { label: "Usage", value: formatUsage(employee.usageIntensity) },
@@ -74,11 +78,18 @@ function SelectedEmployeeDetails({ employee }) {
         <>
           <div className="section-label">Access Groups ({accessGroups.length})</div>
           <div className="access-groups-wrap">
-            {accessGroups.slice(0, 6).map((g) => (
+            {visibleGroups.map((g) => (
               <span className="badge badge-neutral" key={g}>{g}</span>
             ))}
-            {accessGroups.length > 6 && (
-              <span className="badge badge-neutral">+{accessGroups.length - 6} more</span>
+            {hiddenCount > 0 && (
+              <button className="badge badge-neutral access-groups-toggle" onClick={() => setShowAllGroups(true)}>
+                +{hiddenCount} more
+              </button>
+            )}
+            {showAllGroups && accessGroups.length > 6 && (
+              <button className="badge badge-neutral access-groups-toggle" onClick={() => setShowAllGroups(false)}>
+                Show less
+              </button>
             )}
           </div>
         </>
@@ -270,7 +281,7 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
 
       {/* SELECTED EMPLOYEE */}
       {view === "selected" && (
-        <SelectedEmployeeDetails employee={selectedEmployee} />
+        <SelectedEmployeeDetails employee={selectedEmployee} key={selectedEmployee?.employeeId} />
       )}
     </div>
   );
