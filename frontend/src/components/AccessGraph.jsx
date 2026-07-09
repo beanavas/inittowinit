@@ -7,8 +7,8 @@ const MIN_ZOOM = 0.7;
 const MAX_ZOOM = 2.2;
 
 function ringRadius(hop) {
-  if (hop <= 1) return 185;
-  if (hop === 2) return 268;
+  if (hop <= 1) return 175;
+  if (hop === 2) return 290;
   return 310;
 }
 
