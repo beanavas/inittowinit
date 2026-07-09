@@ -24,17 +24,25 @@
       "DEMO-ACC_Intern_Platform_Users",
       "DEMO-ACC_Pluralsight_Users",
       "DEMO-ACC_Hoxhunt_Users",
-      "DEMO-ACC_GITHUB_USERS",
-      "DEMO-ACC_POWER_APPS_USERS",
-      "DEMO-ACC_FABRIC_USERS",
-      "DEMO-ACC_JIRA_USERS",
-      "DEMO-ACC_CONFLUENCE_Users",
-      "DEMO-ACC_AWS_USERS",
-      "DEMO-ACC_AZURE_USERS",
-      "DEMO-ACC_DATABRICKS_USERS",
-      "DEMO-ACC_TABLEAU_USERS",
-      "DEMO-ACC_TERRAFORM_USERS",
-      "DEMO-ACC_MIRO_USERS"
+      "GT-ACC_GITHUB_USERS",
+      "GT-ACC_GITHUB_GENESIS_DEV",
+      "GT-ACC_GITHUB_GENESIS_PROD",
+      "GT-ACC_GITHUB_GENESIS_INTERFACE",
+      "AI-ACC_CLAUDE_CODE",
+      "AI-ACC_CLAUDE_DEV",
+      "AI-ACC_CLAUDE_INTERFACE",
+      "MS-ACC_POWER_APPS_USERS",
+      "MS-ACC_POWER_APPS_MAKER",
+      "MS-ACC_POWER_APPS_ADMIN",
+      "MS-ACC_FABRIC_USERS",
+      "JRA-ACC_STANDARD_USER",
+      "CONF-ACC_TEAM_SPACE",
+      "AWS-ACC_DEV_READONLY",
+      "AZ-ACC_CONTRIBUTOR",
+      "DBX-ACC_WORKSPACE_USER",
+      "TAB-ACC_VIEWER",
+      "TF-ACC_OPERATOR",
+      "MRO-ACC_TEAM_MEMBER"
     ],
     "Title": "Intern - Technology",
     "User": "beatriz"
@@ -59,12 +67,14 @@
       "DEMO-ACC_Manager_Portal",
       "DEMO-ACC_Request_Reviewers",
       "DEMO-ACC_Approval_Audit_Viewers",
-      "DEMO-ACC_GITHUB_APPROVERS",
-      "DEMO-ACC_POWER_APPS_MAKERS",
-      "DEMO-ACC_FABRIC_ADMINS",
-      "DEMO-ACC_JIRA_PROJECT_ADMIN",
-      "DEMO-ACC_CONFLUENCE_SPACE_ADMIN",
-      "DEMO-ACC_AWS_ADMINS"
+      "GT-ACC_GITHUB_USERS",
+      "GT-ACC_GITHUB_GENESIS_DEV",
+      "GT-ACC_GITHUB_GENESIS_INTERFACE",
+      "MS-ACC_POWER_APPS_USERS",
+      "MS-ACC_FABRIC_USERS",
+      "JRA-ACC_STANDARD_USER",
+      "CONF-ACC_TEAM_SPACE",
+      "AWS-ACC_DEV_READONLY"
     ],
     "Title": "Engineering Manager",
     "User": "sundar",
@@ -94,11 +104,11 @@
       "DEMO-ACC_Approval_Audit_Viewers",
       "DEMO-ACC_Director_Portal",
       "DEMO-ACC_Access_Governance",
-      "DEMO-ACC_GITHUB_APPROVERS",
-      "DEMO-ACC_POWER_APPS_MAKERS",
-      "DEMO-ACC_FABRIC_ADMINS",
-      "DEMO-ACC_JIRA_PROJECT_ADMIN",
-      "DEMO-ACC_CONFLUENCE_SPACE_ADMIN"
+      "GT-ACC_GITHUB_USERS",
+      "MS-ACC_POWER_APPS_USERS",
+      "MS-ACC_FABRIC_USERS",
+      "JRA-ACC_STANDARD_USER",
+      "CONF-ACC_TEAM_SPACE"
     ],
     "Title": "Director - Technology",
     "User": "raj"
@@ -178,14 +188,15 @@
       "DEMO-ACC_Intern_Platform_Users",
       "DEMO-ACC_Pluralsight_Users",
       "DEMO-ACC_Hoxhunt_Users",
-      "DEMO-ACC_GITHUB_USERS",
-      "DEMO-ACC_POWER_APPS_USERS",
-      "DEMO-ACC_JIRA_USERS",
-      "DEMO-ACC_CONFLUENCE_Users",
-      "DEMO-ACC_AZURE_USERS",
-      "DEMO-ACC_TERRAFORM_USERS",
-      "DEMO-ACC_MIRO_USERS",
-      "DEMO-ACC_CLAUDE_CODE_USERS"
+      "GT-ACC_GITHUB_USERS",
+      "MS-ACC_POWER_APPS_USERS",
+      "JRA-ACC_STANDARD_USER",
+      "CONF-ACC_TEAM_SPACE",
+      "AZ-ACC_CONTRIBUTOR",
+      "TF-ACC_OPERATOR",
+      "MRO-ACC_TEAM_MEMBER",
+      "AI-ACC_CLAUDE_CODE",
+      "GT-ACC_GITHUB_GENESIS_INTERFACE"
     ],
     "Title": "Intern - Technology",
     "User": "leah"
@@ -207,12 +218,12 @@
       "DEMO-ACC_Company_Portal",
       "DEMO-ACC_PKI_General_Users",
       "DEMO-ACC_InternetFilter",
-      "DEMO-ACC_GITHUB_USERS",
-      "DEMO-ACC_JIRA_USERS",
-      "DEMO-ACC_AWS_USERS",
-      "DEMO-ACC_TERRAFORM_USERS",
-      "DEMO-ACC_CLAUDE_CODE_USERS",
-      "DEMO-ACC_MIRO_USERS"
+      "GT-ACC_GITHUB_USERS",
+      "JRA-ACC_STANDARD_USER",
+      "AWS-ACC_DEV_READONLY",
+      "TF-ACC_OPERATOR",
+      "AI-ACC_CLAUDE_CODE",
+      "MRO-ACC_TEAM_MEMBER"
     ],
     "Title": "Software Engineer",
     "User": "abirami",
@@ -241,11 +252,11 @@
       "DEMO-ACC_Intern_Platform_Users",
       "DEMO-ACC_Pluralsight_Users",
       "DEMO-ACC_Hoxhunt_Users",
-      "DEMO-ACC_GITHUB_USERS",
-      "DEMO-ACC_JIRA_USERS",
-      "DEMO-ACC_AZURE_USERS",
-      "DEMO-ACC_TERRAFORM_USERS",
-      "DEMO-ACC_CLAUDE_CODE_USERS"
+      "GT-ACC_GITHUB_USERS",
+      "JRA-ACC_STANDARD_USER",
+      "AZ-ACC_CONTRIBUTOR",
+      "TF-ACC_OPERATOR",
+      "AI-ACC_CLAUDE_CODE"
     ],
     "Title": "Intern - Technology",
     "User": "miles"
@@ -271,12 +282,12 @@
       "DEMO-ACC_Intern_Platform_Users",
       "DEMO-ACC_Pluralsight_Users",
       "DEMO-ACC_Hoxhunt_Users",
-      "DEMO-ACC_GITHUB_USERS",
-      "DEMO-ACC_POWER_APPS_USERS",
-      "DEMO-ACC_JIRA_USERS",
-      "DEMO-ACC_AWS_USERS",
-      "DEMO-ACC_TERRAFORM_USERS",
-      "DEMO-ACC_CLAUDE_CODE_USERS"
+      "GT-ACC_GITHUB_USERS",
+      "MS-ACC_POWER_APPS_USERS",
+      "JRA-ACC_STANDARD_USER",
+      "AWS-ACC_DEV_READONLY",
+      "TF-ACC_OPERATOR",
+      "AI-ACC_CLAUDE_CODE"
     ],
     "Title": "Intern - Technology",
     "User": "liam",
@@ -301,10 +312,10 @@
       "DEMO-ACC_Company_Portal",
       "DEMO-ACC_PKI_General_Users",
       "DEMO-ACC_InternetFilter",
-      "DEMO-ACC_POWER_APPS_USERS",
-      "DEMO-ACC_AWS_USERS",
-      "DEMO-ACC_TABLEAU_USERS",
-      "DEMO-ACC_MIRO_USERS"
+      "MS-ACC_POWER_APPS_USERS",
+      "AWS-ACC_DEV_READONLY",
+      "TAB-ACC_VIEWER",
+      "MRO-ACC_TEAM_MEMBER"
     ],
     "Title": "Business Systems Analyst",
     "User": "sasha"
@@ -330,9 +341,9 @@
       "DEMO-ACC_Intern_Platform_Users",
       "DEMO-ACC_Pluralsight_Users",
       "DEMO-ACC_Hoxhunt_Users",
-      "DEMO-ACC_POWER_APPS_USERS",
-      "DEMO-ACC_CONFLUENCE_Users",
-      "DEMO-ACC_MIRO_USERS"
+      "MS-ACC_POWER_APPS_USERS",
+      "CONF-ACC_TEAM_SPACE",
+      "MRO-ACC_TEAM_MEMBER"
     ],
     "Title": "Intern - Technology",
     "User": "andria"
@@ -354,8 +365,8 @@
       "DEMO-ACC_Company_Portal",
       "DEMO-ACC_PKI_General_Users",
       "DEMO-ACC_InternetFilter",
-      "DEMO-ACC_POWER_APPS_USERS",
-      "DEMO-ACC_TABLEAU_USERS"
+      "MS-ACC_POWER_APPS_USERS",
+      "TAB-ACC_VIEWER"
     ],
     "Title": "QA Analyst",
     "User": "emily"
@@ -377,11 +388,11 @@
       "DEMO-ACC_Company_Portal",
       "DEMO-ACC_PKI_General_Users",
       "DEMO-ACC_InternetFilter",
-      "DEMO-ACC_FABRIC_USERS",
-      "DEMO-ACC_CONFLUENCE_Users",
-      "DEMO-ACC_AZURE_USERS",
-      "DEMO-ACC_DATABRICKS_USERS",
-      "DEMO-ACC_TABLEAU_USERS"
+      "MS-ACC_FABRIC_USERS",
+      "CONF-ACC_TEAM_SPACE",
+      "AZ-ACC_CONTRIBUTOR",
+      "DBX-ACC_WORKSPACE_USER",
+      "TAB-ACC_VIEWER"
     ],
     "Title": "Data Engineer",
     "User": "srini"
@@ -407,11 +418,11 @@
       "DEMO-ACC_Intern_Platform_Users",
       "DEMO-ACC_Pluralsight_Users",
       "DEMO-ACC_Hoxhunt_Users",
-      "DEMO-ACC_FABRIC_USERS",
-      "DEMO-ACC_CONFLUENCE_Users",
-      "DEMO-ACC_AZURE_USERS",
-      "DEMO-ACC_DATABRICKS_USERS",
-      "DEMO-ACC_TABLEAU_USERS"
+      "MS-ACC_FABRIC_USERS",
+      "CONF-ACC_TEAM_SPACE",
+      "AZ-ACC_CONTRIBUTOR",
+      "DBX-ACC_WORKSPACE_USER",
+      "TAB-ACC_VIEWER"
     ],
     "Title": "Intern - Technology",
     "User": "noah"
@@ -437,8 +448,8 @@
       "DEMO-ACC_Intern_Platform_Users",
       "DEMO-ACC_Pluralsight_Users",
       "DEMO-ACC_Hoxhunt_Users",
-      "DEMO-ACC_GITHUB_USERS",
-      "DEMO-ACC_POWER_APPS_USERS"
+      "GT-ACC_GITHUB_USERS",
+      "MS-ACC_POWER_APPS_USERS"
     ],
     "Title": "Intern - Technology",
     "User": "elizabeth"
@@ -464,7 +475,7 @@
       "DEMO-ACC_Intern_Platform_Users",
       "DEMO-ACC_Pluralsight_Users",
       "DEMO-ACC_Hoxhunt_Users",
-      "DEMO-ACC_GITHUB_USERS"
+      "GT-ACC_GITHUB_USERS"
     ],
     "Title": "Intern - Technology",
     "User": "isabella"
@@ -490,8 +501,8 @@
       "DEMO-ACC_Intern_Platform_Users",
       "DEMO-ACC_Pluralsight_Users",
       "DEMO-ACC_Hoxhunt_Users",
-      "DEMO-ACC_GITHUB_USERS",
-      "DEMO-ACC_FABRIC_USERS"
+      "GT-ACC_GITHUB_USERS",
+      "MS-ACC_FABRIC_USERS"
     ],
     "Title": "Intern - Technology",
     "User": "rafael"

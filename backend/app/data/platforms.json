@@ -15,7 +15,7 @@
       },
       {
         "name": "Genesis Production Deploy",
-        "accessCode": "GT-ACC_GITHUB_GENESIS_PROD",
+        "accessCode": "GT-ACC_GITHUB_GENESIS_INTERFACE",
         "description": "Production deployment and release permissions for Genesis repositories",
         "approver": "Security Team"
       }
@@ -45,6 +45,12 @@
     "requestMethod": "SailPoint",
     "category": "Cloud",
     "accessTiers": [
+      {
+        "name": "AWS Dev Editor",
+        "accessCode": "AWS-ACC_DEV_EDIT",
+        "description": "Read/write access to AWS development resources, on top of base read-only access",
+        "approver": "Manager"
+      },
       {
         "name": "AWS Dev Sandbox",
         "accessCode": "AWS-ACC_DEV_SANDBOX",
@@ -105,7 +111,21 @@
     "approver": "Manager",
     "description": "Low-code app and workflow automation platform",
     "requestMethod": "SailPoint",
-    "category": "Microsoft 365"
+    "category": "Microsoft 365",
+    "accessTiers": [
+      {
+        "name": "Power Apps Maker",
+        "accessCode": "MS-ACC_POWER_APPS_MAKER",
+        "description": "Build and edit custom apps and flows, on top of base Power Apps access",
+        "approver": "Manager"
+      },
+      {
+        "name": "Power Apps Admin",
+        "accessCode": "MS-ACC_POWER_APPS_ADMIN",
+        "description": "Administer environments, connectors, and data policies",
+        "approver": "Security Team"
+      }
+    ]
   },
   {
     "platform": "Microsoft Fabric",
@@ -135,6 +155,40 @@
         "accessCode": "AI-ACC_CLAUDE_PROD",
         "description": "Access to integrate Claude Code into production CI/CD pipelines",
         "approver": "Security Team"
+      }
+    ]
+  },
+  {
+    "platform": "General",
+    "accessCode": "DEMO-ACC_Company_Portal",
+    "approver": "Manager",
+    "description": "Baseline company-wide access granted to every employee",
+    "requestMethod": "SailPoint",
+    "category": "General",
+    "accessTiers": [
+      {
+        "name": "Remote Auth",
+        "accessCode": "DEMO-ACC_Remote_Auth",
+        "description": "Authentication for remote login to company systems",
+        "approver": "Manager"
+      },
+      {
+        "name": "Remote Access",
+        "accessCode": "DEMO-ACC_Remote_Access",
+        "description": "VPN and remote network access to internal resources",
+        "approver": "Manager"
+      },
+      {
+        "name": "Office WiFi",
+        "accessCode": "DEMO-ACC_Office_WiFi",
+        "description": "Wireless network access within office locations",
+        "approver": "Manager"
+      },
+      {
+        "name": "Campus Announcements",
+        "accessCode": "DEMO-ACC_Campus_Announcements",
+        "description": "Subscription to campus-wide announcement channels",
+        "approver": "Manager"
       }
     ]
   }
