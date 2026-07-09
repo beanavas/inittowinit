@@ -30,8 +30,39 @@ SYSTEM_PROMPT = (
     "your answer to that platform via list_platforms — do not keep describing or defaulting back "
     "to a platform from earlier messages or from the employee's existing pending/provisioned "
     "access unless the current question is actually about that platform. "
-    "Keep answers short and specific; reference platform names and numbers from the tool results."
+    "Keep answers short and specific; reference platform names and numbers from the tool results.\n\n"
+    "When the question is about getting or requesting access to a specific platform, call "
+    "list_platforms and structure your answer exactly like this:\n"
+    "1. One short sentence of context.\n"
+    "2. A line '**Access Code:** `<accessCode>` via <requestMethod>'.\n"
+    "3. A line '**Steps:**' followed by a numbered list of the concrete actions to take "
+    "(submit the request through the request method, note the approver, mention any "
+    "prerequisites, then wait for provisioning).\n"
+    "Do not invent an access code — use the exact value from list_platforms. Skip this "
+    "structure for questions that aren't about requesting a specific platform (e.g. org "
+    "structure or status questions) and just answer in prose. Never add your own source "
+    "citation — that is appended separately."
 )
+
+TOOL_SOURCE_LABELS = {
+    "get_user_profile": "Employee directory",
+    "get_user_access": "Access records",
+    "get_recommendations": "Recommendation engine",
+    "get_org_graph": "Org structure",
+    "get_team_heatmap": "Team adoption stats",
+    "list_platforms": "Platform catalog",
+    "get_role_rules": "Role access rules",
+    "list_access_requests": "Access request history",
+}
+
+
+def _source_citation(tool_names: List[str]) -> Optional[str]:
+    seen = []
+    for name in tool_names:
+        label = TOOL_SOURCE_LABELS.get(name)
+        if label and label not in seen:
+            seen.append(label)
+    return ", ".join(seen) if seen else None
 
 TOOLS = [
     {
@@ -188,7 +219,12 @@ def run_nl_query(
         if response.stop_reason != "tool_use":
             answer = "".join(block.text for block in response.content if block.type == "text")
             focus_platform = _detect_platform(prompt) or _detect_platform(answer)
-            return {"answer": answer, "data": collected_data, "focusPlatform": focus_platform}
+            return {
+                "answer": answer,
+                "data": collected_data,
+                "focusPlatform": focus_platform,
+                "source": _source_citation(list(collected_data.keys())),
+            }
 
         messages.append({"role": "assistant", "content": response.content})
 
@@ -221,6 +257,7 @@ def run_nl_query(
         "answer": "I wasn't able to finish looking that up — try a more specific question.",
         "data": collected_data,
         "focusPlatform": _detect_platform(prompt),
+        "source": _source_citation(list(collected_data.keys())),
     }
 
 
@@ -238,7 +275,7 @@ def run_fixed_action(action: str, employee_id: str) -> Dict[str, Any]:
             if count
             else "No new platform recommendations right now — you're all set."
         )
-        return {"answer": answer, "data": {"get_recommendations": data}}
+        return {"answer": answer, "data": {"get_recommendations": data}, "source": _source_citation(["get_recommendations"])}
 
     if action == "access":
         data = access_service.get_user_access(employee_id).model_dump()
@@ -246,7 +283,7 @@ def run_fixed_action(action: str, employee_id: str) -> Dict[str, Any]:
         answer = (
             f"You have access to: {', '.join(provisioned)}." if provisioned else "You have no provisioned access yet."
         )
-        return {"answer": answer, "data": {"get_user_access": data}}
+        return {"answer": answer, "data": {"get_user_access": data}, "source": _source_citation(["get_user_access"])}
 
     if action == "org_graph":
         user = user_service.get_user(employee_id)
@@ -257,6 +294,6 @@ def run_fixed_action(action: str, employee_id: str) -> Dict[str, Any]:
             return {"answer": f"Manager '{user.manager}' not found", "data": {}}
         data = result.model_dump()
         answer = f"{data['manager']} has {len(data['employees'])} direct report(s)."
-        return {"answer": answer, "data": {"get_org_graph": data}}
+        return {"answer": answer, "data": {"get_org_graph": data}, "source": _source_citation(["get_org_graph"])}
 
     return {"answer": f"Unknown action '{action}'", "data": {}}

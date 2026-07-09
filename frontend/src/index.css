@@ -1465,7 +1465,7 @@ a {
   border-bottom: none;
 }
 
-.assistant-table code {
+.assistant-rich code {
   background: #f1f5f9;
   border: 1px solid #dbe3ec;
   color: #183650;
@@ -1473,6 +1473,14 @@ a {
   padding: 1px 6px;
   font-size: 11px;
   font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+.chat-citation {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 10.5px;
+  color: var(--text-faint);
 }
 
 .chat-bubble.error {
@@ -1592,22 +1600,23 @@ a {
 .copilot-drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 31, 69, 0.4);
+  background: transparent;
   z-index: 45;
 }
 
 .copilot-drawer {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 420px;
-  max-width: 92vw;
+  bottom: 92px;
+  right: 24px;
+  width: min(360px, 90vw);
+  height: min(70vh, 620px);
+  border-radius: 20px;
   background: var(--surface);
   box-shadow: var(--shadow-lg);
   z-index: 50;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .copilot-drawer-header {

@@ -84,10 +84,13 @@ function parseBlocks(content) {
 }
 
 function renderInline(text) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).filter(Boolean);
   return parts.map((part, idx) => {
     if (/^\*\*[^*]+\*\*$/.test(part)) {
       return <strong key={idx}>{part.slice(2, -2)}</strong>;
+    }
+    if (/^`[^`]+`$/.test(part)) {
+      return <code key={idx}>{part.slice(1, -1)}</code>;
     }
     return <span key={idx}>{part}</span>;
   });
@@ -163,6 +166,11 @@ function AssistantMessageContent({ content }) {
   );
 }
 
+function SourceCitation({ source }) {
+  if (!source) return null;
+  return <div className="chat-citation">Source: {source}</div>;
+}
+
 function DataDisclosure({ data }) {
   const [open, setOpen] = useState(false);
   if (!data || Object.keys(data).length === 0) return null;
@@ -233,6 +241,7 @@ export default function AssistantDrawer({ open, onClose, messages, sending, onSe
                   m.content
                 )}
                 {m.role === "assistant" && !m.error && <DataDisclosure data={m.data} />}
+                {m.role === "assistant" && !m.error && <SourceCitation source={m.source} />}
               </div>
             ))}
             {sending && (
