@@ -12,23 +12,27 @@ from app.models.access_graph import (
 from app.models.user import User
 from app.services.access_graph_scoring import get_access_status
 
+REPORTS_TO_VISUAL = {"stroke": "#7b8794", "strokeWidth": "2", "lineStyle": "solid", "markerEnd": "arrow"}
 TEAM_VISUAL = {"stroke": "#007bc3", "strokeWidth": "2", "lineStyle": "solid"}
 TOOL_VISUAL = {"stroke": "#001f45", "strokeWidth": "2", "lineStyle": "dashed", "markerEnd": "arrow"}
 WORKS_WITH_VISUAL = {"stroke": "#94a3b3", "strokeWidth": "1.5", "lineStyle": "dashed"}
 
 EDGE_LABELS = {
+    GraphEdgeType.REPORTS_TO: "Reports to",
     GraphEdgeType.TEAM: "Team",
     GraphEdgeType.TOOL: "Common tool",
     GraphEdgeType.WORKS_WITH: "Works with",
 }
 
 EDGE_VISUALS = {
+    GraphEdgeType.REPORTS_TO: REPORTS_TO_VISUAL,
     GraphEdgeType.TEAM: TEAM_VISUAL,
     GraphEdgeType.TOOL: TOOL_VISUAL,
     GraphEdgeType.WORKS_WITH: WORKS_WITH_VISUAL,
 }
 
 EDGE_REASONS = {
+    GraphEdgeType.REPORTS_TO: "Formal manager/reporting relationship in the org chart.",
     GraphEdgeType.TEAM: "Same team or immediate working group.",
     GraphEdgeType.TOOL: "Both people have access to, pending access for, or usage history with the requested technology.",
     GraphEdgeType.WORKS_WITH: "Direct collaboration signal from shared projects, meetings, or files.",
@@ -45,6 +49,10 @@ def _collaborates(a_id: str, b_id: str, collaborations: List[CollaborationSignal
     return any({c.sourceEmployeeId, c.targetEmployeeId} == {a_id, b_id} for c in collaborations)
 
 
+def _reports_to(a: User, b: User) -> bool:
+    return a.manager == b.name or b.manager == a.name
+
+
 def classify_edge(
     a: User,
     b: User,
@@ -58,6 +66,8 @@ def classify_edge(
     relevant to "who can help me get this"), then shared team, then direct
     collaboration history.
     """
+    if _reports_to(a, b):
+        return GraphEdgeType.REPORTS_TO
     if _uses_technology(a.employeeId, technology, usage) and _uses_technology(b.employeeId, technology, usage):
         return GraphEdgeType.TOOL
     if a.teams() & b.teams():
@@ -97,7 +107,12 @@ def calculate_hop_distances(requester_id: str, graph: Dict[str, Set[str]]) -> Di
     return {node: distances.get(node, fallback_distance) for node in graph}
 
 
-_EDGE_PRIORITY = {GraphEdgeType.TOOL: 0, GraphEdgeType.TEAM: 1, GraphEdgeType.WORKS_WITH: 2}
+_EDGE_PRIORITY = {
+    GraphEdgeType.REPORTS_TO: 0,
+    GraphEdgeType.TOOL: 1,
+    GraphEdgeType.TEAM: 2,
+    GraphEdgeType.WORKS_WITH: 3,
+}
 
 
 def build_relationship_edges(

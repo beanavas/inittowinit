@@ -22,7 +22,7 @@ from app.services.access_graph_scoring import (
 
 # Only show people reachable within this many hops via team/tool/collaboration —
 # "aggregate the closest connections" rather than the whole company.
-NODE_HOP_LIMIT = 3
+NODE_HOP_LIMIT = 5
 
 
 def _heat_color(score: float) -> str:
