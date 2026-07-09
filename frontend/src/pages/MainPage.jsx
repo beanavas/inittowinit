@@ -27,6 +27,7 @@ export default function MainPage() {
   const [error, setError] = useState(null);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [selectedGraphEmployee, setSelectedGraphEmployee] = useState(null);
   const chat = useCopilotChat(employeeId);
 
   const sortedUsers = useMemo(
@@ -82,6 +83,7 @@ export default function MainPage() {
 
   useEffect(() => {
     if (!employeeId || !technology) return;
+    setSelectedGraphEmployee(null);
     setLoadingGraph(true);
     api
       .getAccessGraph(employeeId, technology)
@@ -159,6 +161,7 @@ export default function MainPage() {
           loading={loadingAccess}
           error={!access ? error : null}
           platforms={platforms}
+          selectedEmployee={selectedGraphEmployee}
         />
 
         <div className="graph-panel">
@@ -173,7 +176,7 @@ export default function MainPage() {
 
             {error && <div className="error-banner">{error}</div>}
             {loadingGraph && <div className="loading-line">Mapping the org network...</div>}
-            {graph && <AccessGraph graph={graph} />}
+            {graph && <AccessGraph graph={graph} onNodeSelect={(node) => setSelectedGraphEmployee(node.data)} />}
             {graph && <GraphLegend />}
           </div>
         </div>
