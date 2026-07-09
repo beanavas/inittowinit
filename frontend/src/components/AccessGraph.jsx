@@ -165,7 +165,7 @@ function edgePath(line, visualType) {
   };
 }
 
-export default function AccessGraph({ graph }) {
+export default function AccessGraph({ graph, onNodeSelect }) {
   const [hopFilter, setHopFilter] = useState("all");
   const [selectedId, setSelectedId] = useState(graph.requesterEmployeeId);
   const [zoom, setZoom] = useState(1);
@@ -244,10 +244,6 @@ export default function AccessGraph({ graph }) {
   }, [graph, sponsorById, visibleHop]);
 
   const selectedNode = nodes.find((node) => node.id === selectedId) || nodes.find((node) => node.data.isCurrentUser);
-  const selectedSponsor = selectedNode?.sponsor || sponsorById[selectedNode?.id];
-  const selectedScoreBreakdown = selectedNode?.data.scoreBreakdown
-    ? Object.entries(selectedNode.data.scoreBreakdown)
-    : [];
 
   function resetView() {
     setZoom(1);
@@ -397,6 +393,7 @@ export default function AccessGraph({ graph }) {
                 onClick={(event) => {
                   event.stopPropagation();
                   setSelectedId(node.id);
+                  onNodeSelect?.(node);
                 }}
               >
                 <EmployeeNode data={node.data} labelPlacement={node.labelPlacement} />
@@ -404,77 +401,6 @@ export default function AccessGraph({ graph }) {
             ))}
           </div>
         </div>
-
-        {selectedNode && (
-          <aside
-            className="graph-detail-panel"
-            onPointerDown={(event) => event.stopPropagation()}
-            aria-live="polite"
-          >
-            <div className="graph-detail-kicker">
-              {selectedNode.data.isCurrentUser ? "Requester" : "Selected employee"}
-            </div>
-            <div className="graph-detail-title">{selectedNode.data.name}</div>
-            <div className="graph-detail-subtitle">
-              {selectedNode.data.title || selectedNode.data.role} | {selectedNode.data.team}
-            </div>
-
-            <div className="graph-detail-row">
-              <span>Access</span>
-              <strong>{selectedNode.data.accessStatus}</strong>
-            </div>
-            <div className="graph-detail-row">
-              <span>Usage</span>
-              <strong>{selectedNode.data.usageIntensity}</strong>
-            </div>
-            <div className="graph-detail-row">
-              <span>Match</span>
-              <strong>{selectedNode.data.isCurrentUser ? "Requester" : `${selectedNode.data.relevanceScore}%`}</strong>
-            </div>
-            <div className="graph-detail-row">
-              <span>Hop distance</span>
-              <strong>{selectedNode.data.hopDistance === 0 ? "You" : `${selectedNode.data.hopDistance} hop${selectedNode.data.hopDistance === 1 ? "" : "s"}`}</strong>
-            </div>
-            <div className="graph-detail-row">
-              <span>Department</span>
-              <strong>{selectedNode.data.department}</strong>
-            </div>
-            {selectedNode.data.mail && (
-              <div className="graph-detail-row">
-                <span>Email</span>
-                <strong>{selectedNode.data.mail}</strong>
-              </div>
-            )}
-
-            {selectedScoreBreakdown.length > 0 && (
-              <div className="score-breakdown-mini">
-                {selectedScoreBreakdown.map(([key, value]) => (
-                  <div key={key}>
-                    <span>{key.replace(/([A-Z])/g, " $1")}</span>
-                    <meter min="0" max="1" value={value} />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {selectedSponsor?.reasons?.length > 0 && (
-              <div className="graph-detail-reasons">
-                {selectedSponsor.reasons.slice(0, 3).map((reason) => (
-                  <div key={reason}>{reason}</div>
-                ))}
-              </div>
-            )}
-
-            {selectedNode.data.memberships?.length > 0 && (
-              <div className="graph-detail-reasons">
-                <div>
-                  Access groups: {selectedNode.data.memberships.slice(0, 4).join(", ")}
-                  {selectedNode.data.memberships.length > 4 ? `, +${selectedNode.data.memberships.length - 4} more` : ""}
-                </div>
-              </div>
-            )}
-          </aside>
-        )}
       </div>
     </div>
   );
