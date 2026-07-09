@@ -72,6 +72,22 @@
     "category": "Productivity"
   },
   {
+    "platform": "Power Apps",
+    "accessCode": "MS-ACC_POWER_APPS_USERS",
+    "approver": "Manager",
+    "description": "Low-code app and workflow automation platform",
+    "requestMethod": "SailPoint",
+    "category": "Microsoft 365"
+  },
+  {
+    "platform": "Microsoft Fabric",
+    "accessCode": "MS-ACC_FABRIC_USERS",
+    "approver": "Manager",
+    "description": "Unified analytics platform for data engineering, warehousing, and BI",
+    "requestMethod": "SailPoint",
+    "category": "Data"
+  },
+  {
     "platform": "Claude Code",
     "accessCode": "AI-ACC_CLAUDE_CODE",
     "approver": "Manager",
