@@ -840,7 +840,8 @@ a {
 
 .static-graph-world {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  top: 50%;
   transform-origin: center center;
   transition: transform 120ms ease-out;
 }

@@ -177,7 +177,9 @@ export default function AccessGraph({ graph, onNodeSelect }) {
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [worldSize, setWorldSize] = useState({ width: VIEWBOX.width, height: VIEWBOX.height });
   const graphWrapRef = useRef(null);
+  const graphViewportRef = useRef(null);
   const dragRef = useRef(null);
 
   useEffect(() => {
@@ -194,6 +196,26 @@ export default function AccessGraph({ graph, onNodeSelect }) {
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
+  useEffect(() => {
+    const viewport = graphViewportRef.current;
+    if (!viewport) return undefined;
+
+    function fitWorld() {
+      const { width, height } = viewport.getBoundingClientRect();
+      if (!width || !height) return;
+      const scale = Math.min(width / VIEWBOX.width, height / VIEWBOX.height);
+      setWorldSize({
+        width: VIEWBOX.width * scale,
+        height: VIEWBOX.height * scale,
+      });
+    }
+
+    fitWorld();
+    const resizeObserver = new ResizeObserver(fitWorld);
+    resizeObserver.observe(viewport);
+    return () => resizeObserver.disconnect();
   }, []);
 
   const sponsorById = useMemo(
@@ -376,6 +398,7 @@ export default function AccessGraph({ graph, onNodeSelect }) {
 
       <div
         className="static-access-graph"
+        ref={graphViewportRef}
         onWheel={handleWheel}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -384,7 +407,11 @@ export default function AccessGraph({ graph, onNodeSelect }) {
       >
         <div
           className="static-graph-world"
-          style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})` }}
+          style={{
+            width: `${worldSize.width}px`,
+            height: `${worldSize.height}px`,
+            transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          }}
         >
           <svg
             className="static-graph-svg"
