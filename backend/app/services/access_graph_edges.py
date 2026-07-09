@@ -16,6 +16,7 @@ REPORTS_TO_VISUAL = {"stroke": "#7b8794", "strokeWidth": "2", "lineStyle": "soli
 TEAM_VISUAL = {"stroke": "#007bc3", "strokeWidth": "2", "lineStyle": "solid"}
 TOOL_VISUAL = {"stroke": "#001f45", "strokeWidth": "2", "lineStyle": "dashed", "markerEnd": "arrow"}
 WORKS_WITH_VISUAL = {"stroke": "#94a3b3", "strokeWidth": "1.5", "lineStyle": "dashed"}
+COLLABORATION_STRENGTH_THRESHOLD = 0.7
 
 EDGE_LABELS = {
     GraphEdgeType.REPORTS_TO: "Reports to",
@@ -46,7 +47,11 @@ def _uses_technology(employee_id: str, technology: str, usage: List[UsageSignal]
 
 
 def _collaborates(a_id: str, b_id: str, collaborations: List[CollaborationSignal]) -> bool:
-    return any({c.sourceEmployeeId, c.targetEmployeeId} == {a_id, b_id} for c in collaborations)
+    return any(
+        {c.sourceEmployeeId, c.targetEmployeeId} == {a_id, b_id}
+        and c.strength >= COLLABORATION_STRENGTH_THRESHOLD
+        for c in collaborations
+    )
 
 
 def _reports_to(a: User, b: User) -> bool:
@@ -68,11 +73,11 @@ def classify_edge(
     """
     if _reports_to(a, b):
         return GraphEdgeType.REPORTS_TO
-    if _uses_technology(a.employeeId, technology, usage) and _uses_technology(b.employeeId, technology, usage):
-        return GraphEdgeType.TOOL
-    if a.teams() & b.teams():
-        return GraphEdgeType.TEAM
-    if _collaborates(a.employeeId, b.employeeId, collaborations):
+    if (
+        _collaborates(a.employeeId, b.employeeId, collaborations)
+        and _uses_technology(a.employeeId, technology, usage)
+        and _uses_technology(b.employeeId, technology, usage)
+    ):
         return GraphEdgeType.WORKS_WITH
     return None
 
@@ -103,15 +108,14 @@ def calculate_hop_distances(requester_id: str, graph: Dict[str, Set[str]]) -> Di
                 distances[neighbor] = distances[current] + 1
                 queue.append(neighbor)
 
-    fallback_distance = max(distances.values(), default=0) + 1
-    return {node: distances.get(node, fallback_distance) for node in graph}
+    return distances
 
 
 _EDGE_PRIORITY = {
     GraphEdgeType.REPORTS_TO: 0,
-    GraphEdgeType.TOOL: 1,
-    GraphEdgeType.TEAM: 2,
-    GraphEdgeType.WORKS_WITH: 3,
+    GraphEdgeType.WORKS_WITH: 1,
+    GraphEdgeType.TOOL: 2,
+    GraphEdgeType.TEAM: 3,
 }
 
 

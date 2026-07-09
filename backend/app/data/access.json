@@ -1,240 +1,82 @@
 [
   {
-    "employeeId": "E001",
-    "access": [
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "GitHub", "status": "Pending" }
-    ]
-  },
-  {
-    "employeeId": "E002",
+    "employeeId": "INT-002",
     "access": [
       { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Confluence", "status": "Provisioned" }
+      { "platform": "Power Apps", "status": "Provisioned" },
+      { "platform": "Microsoft Fabric", "status": "Provisioned" }
     ]
   },
   {
-    "employeeId": "E003",
+    "employeeId": "MGR-001",
     "access": [
       { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "AWS", "status": "Provisioned" }
+      { "platform": "Power Apps", "status": "Provisioned" },
+      { "platform": "Microsoft Fabric", "status": "Provisioned" }
     ]
   },
   {
-    "employeeId": "E004",
+    "employeeId": "DIR-001",
     "access": [
       { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "AWS", "status": "Provisioned" },
-      { "platform": "Azure", "status": "Provisioned" }
+      { "platform": "Power Apps", "status": "Provisioned" },
+      { "platform": "Microsoft Fabric", "status": "Provisioned" }
     ]
   },
   {
-    "employeeId": "E005",
+    "employeeId": "COL-001",
     "access": [
-      { "platform": "Azure", "status": "Provisioned" },
-      { "platform": "Databricks", "status": "Provisioned" },
+      { "platform": "GitHub", "status": "Provisioned" },
+      { "platform": "Power Apps", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "COL-002",
+    "access": [
       { "platform": "GitHub", "status": "Provisioned" }
     ]
   },
   {
-    "employeeId": "E006",
+    "employeeId": "COL-003",
     "access": [
-      { "platform": "Tableau", "status": "Provisioned" },
-      { "platform": "Databricks", "status": "Pending" }
+      { "platform": "GitHub", "status": "Provisioned" }
     ]
   },
   {
-    "employeeId": "E007",
+    "employeeId": "COL-004",
     "access": [
       { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "AWS", "status": "Provisioned" },
-      { "platform": "Azure", "status": "Provisioned" },
-      { "platform": "Terraform", "status": "Provisioned" }
+      { "platform": "Power Apps", "status": "Provisioned" }
     ]
   },
   {
-    "employeeId": "E008",
+    "employeeId": "COL-005",
     "access": [
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "AWS", "status": "Provisioned" },
-      { "platform": "Azure", "status": "Provisioned" },
-      { "platform": "Tableau", "status": "Provisioned" }
+      { "platform": "Power Apps", "status": "Provisioned" }
     ]
   },
   {
-    "employeeId": "E009",
+    "employeeId": "COL-006",
     "access": [
-      { "platform": "Jira", "status": "Provisioned" }
+      { "platform": "Power Apps", "status": "Provisioned" }
     ]
   },
   {
-    "employeeId": "INT-001",
+    "employeeId": "COL-007",
     "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "GitHub", "status": "Pending" }
+      { "platform": "Power Apps", "status": "Provisioned" }
     ]
   },
   {
-    "employeeId": "INT-002",
+    "employeeId": "COL-008",
     "access": [
-      { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" }
+      { "platform": "Microsoft Fabric", "status": "Provisioned" }
     ]
   },
   {
-    "employeeId": "INT-003",
+    "employeeId": "COL-009",
     "access": [
-      { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "INT-004",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "INT-005",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "GitHub", "status": "Pending" }
-    ]
-  },
-  {
-    "employeeId": "INT-006",
-    "access": [
-      { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "INT-007",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "GitHub", "status": "Pending" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-100",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Azure", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-101",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Terraform", "status": "Pending" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-102",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Databricks", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-103",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Azure", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-104",
-    "access": [
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Confluence", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-105",
-    "access": [
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Confluence", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-106",
-    "access": [
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "AWS", "status": "Provisioned" },
-      { "platform": "Terraform", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-107",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Databricks", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-108",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Databricks", "status": "Provisioned" },
-      { "platform": "Tableau", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-109",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Azure", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-110",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Azure", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-111",
-    "access": [
-      { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Jira", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-112",
-    "access": [
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Terraform", "status": "Provisioned" },
-      { "platform": "AWS", "status": "Provisioned" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-113",
-    "access": [
-      { "platform": "Confluence", "status": "Provisioned" },
-      { "platform": "Azure", "status": "Pending" }
-    ]
-  },
-  {
-    "employeeId": "DEMO-114",
-    "access": [
-      { "platform": "Jira", "status": "Provisioned" },
-      { "platform": "Confluence", "status": "Provisioned" }
+      { "platform": "Microsoft Fabric", "status": "Provisioned" }
     ]
   }
 ]

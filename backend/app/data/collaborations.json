@@ -1,182 +1,62 @@
 [
   {
-    "sourceEmployeeId": "E001",
-    "targetEmployeeId": "E002",
-    "strength": 0.92,
-    "reason": "Shared Custom Harvest repositories and sprint work"
+    "sourceEmployeeId": "INT-002",
+    "targetEmployeeId": "COL-001",
+    "strength": 0.93,
+    "reason": "Frequent GitHub and Power Apps pairing with Beatriz"
   },
   {
-    "sourceEmployeeId": "E001",
-    "targetEmployeeId": "E003",
-    "strength": 0.84,
-    "reason": "Frequent pair programming and code reviews"
-  },
-  {
-    "sourceEmployeeId": "E001",
-    "targetEmployeeId": "E009",
-    "strength": 0.76,
-    "reason": "Same product squad and planning meetings"
-  },
-  {
-    "sourceEmployeeId": "E002",
-    "targetEmployeeId": "E003",
-    "strength": 0.81,
-    "reason": "Shared backend services"
-  },
-  {
-    "sourceEmployeeId": "E003",
-    "targetEmployeeId": "E007",
-    "strength": 0.67,
-    "reason": "Deployment and cloud support handoffs"
-  },
-  {
-    "sourceEmployeeId": "E004",
-    "targetEmployeeId": "E007",
-    "strength": 0.71,
-    "reason": "Infrastructure roadmap collaboration"
-  },
-  {
-    "sourceEmployeeId": "E005",
-    "targetEmployeeId": "E006",
+    "sourceEmployeeId": "INT-002",
+    "targetEmployeeId": "COL-002",
     "strength": 0.88,
-    "reason": "Shared analytics pipelines"
+    "reason": "Frequent GitHub code reviews with Beatriz"
   },
   {
-    "sourceEmployeeId": "E005",
-    "targetEmployeeId": "E007",
-    "strength": 0.58,
-    "reason": "Cloud data platform operations"
-  },
-  {
-    "sourceEmployeeId": "INT-001",
-    "targetEmployeeId": "INT-002",
-    "strength": 0.91,
-    "reason": "Shared demo intern onboarding and project work"
-  },
-  {
-    "sourceEmployeeId": "INT-001",
-    "targetEmployeeId": "INT-003",
-    "strength": 0.84,
-    "reason": "Worked together on analytics tooling setup"
-  },
-  {
-    "sourceEmployeeId": "INT-001",
-    "targetEmployeeId": "INT-005",
+    "sourceEmployeeId": "COL-001",
+    "targetEmployeeId": "COL-003",
     "strength": 0.78,
-    "reason": "Same intern cohort and recurring standups"
+    "reason": "GitHub repository handoffs through Leah"
   },
   {
-    "sourceEmployeeId": "INT-002",
-    "targetEmployeeId": "INT-004",
+    "sourceEmployeeId": "COL-002",
+    "targetEmployeeId": "COL-004",
     "strength": 0.74,
-    "reason": "Shared documentation and onboarding tasks"
-  },
-  {
-    "sourceEmployeeId": "INT-003",
-    "targetEmployeeId": "INT-006",
-    "strength": 0.8,
-    "reason": "Collaborated on GitHub and Jira workflow setup"
-  },
-  {
-    "sourceEmployeeId": "INT-004",
-    "targetEmployeeId": "INT-005",
-    "strength": 0.7,
-    "reason": "Paired on intern access checklist"
-  },
-  {
-    "sourceEmployeeId": "INT-006",
-    "targetEmployeeId": "E004",
-    "strength": 0.62,
-    "reason": "Manager review for intern technology access"
+    "reason": "GitHub release work through Abirami"
   },
   {
     "sourceEmployeeId": "INT-002",
-    "targetEmployeeId": "INT-007",
-    "strength": 0.79,
-    "reason": "Both embedded on Custom Harvest, pairing with the team on sprint work"
+    "targetEmployeeId": "COL-005",
+    "strength": 0.9,
+    "reason": "Frequent Power Apps workflow design with Beatriz"
   },
   {
-    "sourceEmployeeId": "INT-001",
-    "targetEmployeeId": "DEMO-104",
-    "strength": 0.82,
-    "reason": "Access request intake workshop"
+    "sourceEmployeeId": "COL-001",
+    "targetEmployeeId": "COL-006",
+    "strength": 0.76,
+    "reason": "Power Apps testing and intake through Leah"
+  },
+  {
+    "sourceEmployeeId": "COL-005",
+    "targetEmployeeId": "COL-004",
+    "strength": 0.73,
+    "reason": "Power Apps connector automation through Sasha"
+  },
+  {
+    "sourceEmployeeId": "COL-005",
+    "targetEmployeeId": "COL-007",
+    "strength": 0.71,
+    "reason": "Power Apps QA follow-ups through Sasha"
   },
   {
     "sourceEmployeeId": "INT-002",
-    "targetEmployeeId": "DEMO-105",
-    "strength": 0.68,
-    "reason": "QA validation for onboarding checklist"
+    "targetEmployeeId": "COL-008",
+    "strength": 0.91,
+    "reason": "Frequent Microsoft Fabric dataset work with Beatriz"
   },
   {
-    "sourceEmployeeId": "INT-003",
-    "targetEmployeeId": "DEMO-107",
-    "strength": 0.72,
-    "reason": "Data catalog walkthrough for intern project"
-  },
-  {
-    "sourceEmployeeId": "INT-006",
-    "targetEmployeeId": "DEMO-106",
+    "sourceEmployeeId": "COL-008",
+    "targetEmployeeId": "COL-009",
     "strength": 0.77,
-    "reason": "Shared environment setup troubleshooting"
-  },
-  {
-    "sourceEmployeeId": "DEMO-101",
-    "targetEmployeeId": "DEMO-104",
-    "strength": 0.86,
-    "reason": "Platform roadmap and access intake planning"
-  },
-  {
-    "sourceEmployeeId": "DEMO-101",
-    "targetEmployeeId": "DEMO-106",
-    "strength": 0.8,
-    "reason": "Release readiness and infrastructure reviews"
-  },
-  {
-    "sourceEmployeeId": "DEMO-102",
-    "targetEmployeeId": "DEMO-107",
-    "strength": 0.84,
-    "reason": "Data stewardship operating model"
-  },
-  {
-    "sourceEmployeeId": "DEMO-102",
-    "targetEmployeeId": "DEMO-108",
-    "strength": 0.79,
-    "reason": "Analytics pipeline ownership"
-  },
-  {
-    "sourceEmployeeId": "DEMO-103",
-    "targetEmployeeId": "DEMO-110",
-    "strength": 0.87,
-    "reason": "IAM exception review and access-path design"
-  },
-  {
-    "sourceEmployeeId": "DEMO-105",
-    "targetEmployeeId": "DEMO-112",
-    "strength": 0.64,
-    "reason": "Release validation and test automation"
-  },
-  {
-    "sourceEmployeeId": "DEMO-108",
-    "targetEmployeeId": "DEMO-114",
-    "strength": 0.7,
-    "reason": "Reporting documentation and dashboard handoff"
-  },
-  {
-    "sourceEmployeeId": "DEMO-109",
-    "targetEmployeeId": "DEMO-113",
-    "strength": 0.74,
-    "reason": "Security exception queue review"
-  },
-  {
-    "sourceEmployeeId": "DEMO-110",
-    "targetEmployeeId": "DEMO-113",
-    "strength": 0.81,
-    "reason": "IAM support escalation handoff"
-  },
-  {
-    "sourceEmployeeId": "DEMO-111",
-    "targetEmployeeId": "DEMO-104",
-    "strength": 0.83,
-    "reason": "Application owner approval workflow"
+    "reason": "Microsoft Fabric semantic model handoff through Srini"
   }
 ]
