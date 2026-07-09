@@ -12,7 +12,7 @@ export default function SponsorList({ sponsors }) {
             <div className="sponsor-info-top">
               <div className="sponsor-name-row">
                 {s.name}
-                {s.isStrongSponsor && (
+                {(s.isStrongSponsor || s.isTopGuide) && (
                   <span className="badge badge-primary" style={{ marginLeft: 6 }}>
                     Top Match
                   </span>
