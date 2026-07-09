@@ -111,26 +111,14 @@ def _approval_history_score(
 
 
 def _candidate_reasons(
-    access_status: GraphAccessStatus,
-    hop_distance: int,
-    breakdown: SponsorScoreBreakdown,
     candidate: User,
+    requester: User,
 ) -> List[str]:
     reasons = []
-    if access_status in {GraphAccessStatus.USES_DAILY, GraphAccessStatus.USES_WEEKLY}:
-        reasons.append(f"{access_status.value} and can explain practical setup details.")
-    elif access_status == GraphAccessStatus.HAS_ACCESS:
-        reasons.append("Already has access to the requested technology.")
-    if hop_distance <= 1:
-        reasons.append("Very close in the org or collaboration network.")
-    elif hop_distance == 2:
-        reasons.append("Reachable through one intermediary.")
-    if breakdown.approvalHistory > 0:
-        reasons.append("Has relevant approval history with this requester.")
-    if breakdown.availability >= 0.75:
-        reasons.append("Availability signal suggests a fast response.")
+    if requester.team == candidate.team:
+        reasons.append("Same team")
     if not reasons:
-        reasons.append(f"Related through {candidate.team} or nearby work patterns.")
+        reasons.append(f"Connected through {candidate.team}")
     return reasons
 
 
@@ -199,8 +187,9 @@ def rank_sponsors(
                 usageIntensity=usage_intensity,
                 relevanceScore=relevance,
                 scoreBreakdown=breakdown,
-                reasons=_candidate_reasons(access_status, hop_distance, breakdown, candidate),
+                reasons=_candidate_reasons(candidate, requester),
                 isStrongSponsor=relevance >= 70,
+                hopDistance=hop_distance,
             )
         )
 

@@ -59,6 +59,7 @@ class SponsorCandidate(BaseModel):
     scoreBreakdown: SponsorScoreBreakdown
     reasons: List[str]
     isStrongSponsor: bool
+    hopDistance: int
 
 
 class AccessGraphNodeData(BaseModel):
