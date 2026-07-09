@@ -2,61 +2,61 @@
   {
     "sourceEmployeeId": "INT-002",
     "targetEmployeeId": "COL-001",
-    "strength": 0.93,
-    "reason": "Frequent GitHub and Power Apps pairing with Beatriz"
+    "strength": 0.94,
+    "reason": "Beatriz works directly with Leah on GitHub and Power Apps delivery"
   },
   {
     "sourceEmployeeId": "INT-002",
     "targetEmployeeId": "COL-002",
-    "strength": 0.88,
-    "reason": "Frequent GitHub code reviews with Beatriz"
-  },
-  {
-    "sourceEmployeeId": "COL-001",
-    "targetEmployeeId": "COL-003",
-    "strength": 0.78,
-    "reason": "GitHub repository handoffs through Leah"
-  },
-  {
-    "sourceEmployeeId": "COL-002",
-    "targetEmployeeId": "COL-004",
-    "strength": 0.74,
-    "reason": "GitHub release work through Abirami"
+    "strength": 0.91,
+    "reason": "Beatriz works directly with Abirami on GitHub reviews and release support"
   },
   {
     "sourceEmployeeId": "INT-002",
     "targetEmployeeId": "COL-005",
-    "strength": 0.9,
-    "reason": "Frequent Power Apps workflow design with Beatriz"
-  },
-  {
-    "sourceEmployeeId": "COL-001",
-    "targetEmployeeId": "COL-006",
-    "strength": 0.76,
-    "reason": "Power Apps testing and intake through Leah"
-  },
-  {
-    "sourceEmployeeId": "COL-005",
-    "targetEmployeeId": "COL-004",
-    "strength": 0.73,
-    "reason": "Power Apps connector automation through Sasha"
-  },
-  {
-    "sourceEmployeeId": "COL-005",
-    "targetEmployeeId": "COL-007",
-    "strength": 0.71,
-    "reason": "Power Apps QA follow-ups through Sasha"
+    "strength": 0.92,
+    "reason": "Beatriz works directly with Sasha on Power Apps workflow design"
   },
   {
     "sourceEmployeeId": "INT-002",
     "targetEmployeeId": "COL-008",
-    "strength": 0.91,
-    "reason": "Frequent Microsoft Fabric dataset work with Beatriz"
+    "strength": 0.9,
+    "reason": "Beatriz works directly with Srini on Microsoft Fabric dataset work"
+  },
+  {
+    "sourceEmployeeId": "COL-001",
+    "targetEmployeeId": "COL-003",
+    "strength": 0.8,
+    "reason": "Hop 2: Miles connects to Beatriz through Leah on GitHub repository handoffs"
+  },
+  {
+    "sourceEmployeeId": "COL-002",
+    "targetEmployeeId": "COL-004",
+    "strength": 0.79,
+    "reason": "Hop 2: Liam connects to Beatriz through Abirami on release work"
+  },
+  {
+    "sourceEmployeeId": "COL-005",
+    "targetEmployeeId": "COL-004",
+    "strength": 0.78,
+    "reason": "Hop 2: Liam connects to Beatriz through Sasha on Power Apps connector automation"
+  },
+  {
+    "sourceEmployeeId": "COL-005",
+    "targetEmployeeId": "COL-007",
+    "strength": 0.76,
+    "reason": "Hop 2: Emily connects to Beatriz through Sasha on Power Apps QA follow-ups"
+  },
+  {
+    "sourceEmployeeId": "COL-001",
+    "targetEmployeeId": "COL-006",
+    "strength": 0.75,
+    "reason": "Hop 2: Andria connects to Beatriz through Leah on Power Apps intake and testing"
   },
   {
     "sourceEmployeeId": "COL-008",
     "targetEmployeeId": "COL-009",
-    "strength": 0.77,
-    "reason": "Microsoft Fabric semantic model handoff through Srini"
+    "strength": 0.79,
+    "reason": "Hop 2: Noah connects to Beatriz through Srini on Microsoft Fabric semantic model handoff"
   }
 ]

@@ -149,6 +149,7 @@ export default function MainPage() {
           error={!access ? error : null}
           platforms={platforms}
           selectedEmployee={selectedGraphEmployee}
+          users={users}
         />
 
         <div className="graph-panel">

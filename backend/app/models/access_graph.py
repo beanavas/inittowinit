@@ -69,6 +69,7 @@ class AccessGraphNodeData(BaseModel):
     role: str
     team: str
     department: str
+    manager: str
     mail: Optional[str] = None
     title: Optional[str] = None
     directoryUser: Optional[str] = None
