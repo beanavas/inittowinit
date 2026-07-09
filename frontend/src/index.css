@@ -140,6 +140,7 @@ a {
   gap: 20px;
   padding: 24px 32px;
   overflow: hidden;
+  min-height: 0;
 }
 
 .offline-banner {
@@ -631,7 +632,23 @@ a {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  overflow-y: auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.graph-panel > .card {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+}
+
+.graph-panel .card-title,
+.graph-panel .card-subtitle,
+.graph-panel .error-banner,
+.graph-panel .loading-line {
+  flex-shrink: 0;
 }
 
 /* ---------- Sponsor panel (right of graph) ---------- */
@@ -643,15 +660,15 @@ a {
 }
 
 .access-graph-wrap {
-  height: 620px;
+  flex: 1 1 auto;
+  min-height: 0;
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--border);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 248, 251, 0.96)),
     radial-gradient(circle at 50% 50%, rgba(0, 123, 195, 0.09), transparent 42%);
-  margin: 14px 0 20px;
-  flex-shrink: 0;
+  margin: 10px 0 12px;
 }
 
 .graph-toolbar {
@@ -1069,13 +1086,14 @@ a {
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
+  padding: 10px 14px;
+  margin-bottom: 0;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--surface);
   font-size: 12px;
   color: var(--text-muted);
+  flex-shrink: 0;
 }
 
 .legend-item {
