@@ -892,7 +892,7 @@ a {
   position: relative;
   width: 100%;
   height: calc(100% - 48px);
-  min-height: 520px;
+  min-height: 0;
   overflow: hidden;
   cursor: grab;
   touch-action: none;
