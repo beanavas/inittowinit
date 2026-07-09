@@ -30,6 +30,7 @@ export default function MainPage() {
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedGraphEmployee, setSelectedGraphEmployee] = useState(null);
+  const [chatDrivenGraph, setChatDrivenGraph] = useState(false);
   const chat = useCopilotChat(employeeId);
 
   const sortedUsers = useMemo(
@@ -47,16 +48,27 @@ export default function MainPage() {
     api.listPlatforms().then(setPlatforms).catch(() => {});
   }, []);
 
+  const resetToDefaultTechnology = (id) => {
+    if (!id) return;
+    setChatDrivenGraph(false);
+    setTechnology(DEFAULT_TECHNOLOGY);
+  };
+
   // Default the graph to GitHub until the console/chat points it at something
   // more specific.
   useEffect(() => {
-    if (employeeId) setTechnology(DEFAULT_TECHNOLOGY);
+    resetToDefaultTechnology(employeeId);
   }, [employeeId]);
 
   // The console drives the graph: whichever platform comes up in a chat answer
-  // becomes the focus, overriding the default above.
+  // becomes the focus, overriding the default above. Default to a tighter
+  // 1-hop view here since a chat-driven lookup is usually about one specific
+  // tool/person, not the whole network.
   useEffect(() => {
-    if (chat.focusPlatform) setTechnology(chat.focusPlatform);
+    if (chat.focusPlatform) {
+      setChatDrivenGraph(true);
+      setTechnology(chat.focusPlatform);
+    }
   }, [chat.focusPlatform]);
 
   useEffect(() => {
@@ -163,7 +175,13 @@ export default function MainPage() {
 
             {error && <div className="error-banner">{error}</div>}
             {loadingGraph && <div className="loading-line">Mapping the org network...</div>}
-            {graph && <AccessGraph graph={graph} onNodeSelect={(node) => setSelectedGraphEmployee(node.data)} />}
+            {graph && (
+              <AccessGraph
+                graph={graph}
+                onNodeSelect={(node) => setSelectedGraphEmployee(node.data)}
+                defaultHopFilter={chatDrivenGraph ? "1" : "all"}
+              />
+            )}
             {graph && <GraphLegend />}
           </div>
         </div>

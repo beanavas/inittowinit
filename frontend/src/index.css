@@ -1563,6 +1563,38 @@ a {
   border-color: var(--blue);
 }
 
+.quick-actions-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.quick-action-chip {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--navy);
+  font-size: 11.5px;
+  font-weight: 600;
+  transition: all 0.12s ease;
+}
+
+.quick-action-chip:hover:not(:disabled) {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.quick-action-chip:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .quick-prompt {
   display: flex;
   align-items: center;

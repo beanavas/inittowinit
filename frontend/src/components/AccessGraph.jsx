@@ -171,8 +171,8 @@ function calculateScreenLayout(rawNodes, sponsorById, accessPath) {
   return positioned;
 }
 
-export default function AccessGraph({ graph, onNodeSelect }) {
-  const [hopFilter, setHopFilter] = useState("all");
+export default function AccessGraph({ graph, onNodeSelect, defaultHopFilter = "all" }) {
+  const [hopFilter, setHopFilter] = useState(defaultHopFilter);
   const [selectedId, setSelectedId] = useState(graph.requesterEmployeeId);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -186,8 +186,8 @@ export default function AccessGraph({ graph, onNodeSelect }) {
     setSelectedId(graph.requesterEmployeeId);
     setZoom(1);
     setPan({ x: 0, y: 0 });
-    setHopFilter("all");
-  }, [graph.requesterEmployeeId, graph.technology]);
+    setHopFilter(defaultHopFilter);
+  }, [graph.requesterEmployeeId, graph.technology, defaultHopFilter]);
 
   useEffect(() => {
     function handleFullscreenChange() {
