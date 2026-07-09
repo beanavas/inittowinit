@@ -71,9 +71,74 @@ function groupAccessCodes(codes, accessIndex) {
   return { groups, other };
 }
 
-function SelectedEmployeeDetails({ employee, users = [], platforms = [] }) {
-  const [showAllGroups, setShowAllGroups] = useState(false);
+// Groups a flat list of raw access codes into colored per-platform bubbles.
+// Shared by the "My Access" and "Selected" tabs so both show every code an
+// employee holds, not just the catalog's base code for each platform.
+function AccessCodeGroups({ codes, platforms, statusByPlatform }) {
+  const [showAll, setShowAll] = useState(false);
 
+  if (!codes.length) return null;
+
+  const colorMap = buildPlatformColorMap(platforms);
+  const accessIndex = buildAccessIndex(platforms);
+  const { groups, other } = groupAccessCodes(codes, accessIndex);
+  const orderedPlatforms = platforms.map((p) => p.platform).filter((name) => groups.has(name));
+  const totalSections = orderedPlatforms.length + (other.length > 0 ? 1 : 0);
+  const visiblePlatforms = showAll ? orderedPlatforms : orderedPlatforms.slice(0, 5);
+  const showOther = showAll || visiblePlatforms.length === orderedPlatforms.length;
+  const hiddenCount = totalSections - visiblePlatforms.length - (showOther && other.length > 0 ? 1 : 0);
+
+  return (
+    <div className="access-groups-grouped">
+      {visiblePlatforms.map((platformName) => {
+        const items = groups.get(platformName);
+        const color = colorMap.get(platformName) || PLATFORM_PALETTE[0];
+        const status = statusByPlatform?.[platformName];
+        const statusInfo = status && (STATUS_CONFIG[status] || { cls: "badge-neutral", label: status });
+        return (
+          <div className="platform-group" key={platformName}>
+            <div className="platform-group-header">
+              <div className="platform-bubble" style={{ background: color.bg, color: color.fg }}>
+                <span className="platform-bubble-dot" style={{ background: color.dot }} />
+                {platformName}
+              </div>
+              {statusInfo && <span className={`badge ${statusInfo.cls}`}>{statusInfo.label}</span>}
+            </div>
+            <div className="platform-group-items">
+              {items.map(({ code, tier }) => (
+                <span className="badge badge-neutral platform-tier-chip" key={code} title={tier || "Base access"}>
+                  {code}
+                </span>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+      {showOther && other.length > 0 && (
+        <div className="platform-group">
+          <div className="platform-bubble platform-bubble-other">Other</div>
+          <div className="platform-group-items">
+            {other.map((code) => (
+              <span className="badge badge-neutral" key={code}>{code}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      {hiddenCount > 0 && (
+        <button className="badge badge-neutral access-groups-toggle" onClick={() => setShowAll(true)} style={{ alignSelf: "flex-start" }}>
+          +{hiddenCount} more platform{hiddenCount === 1 ? "" : "s"}
+        </button>
+      )}
+      {showAll && totalSections > 5 && (
+        <button className="badge badge-neutral access-groups-toggle" onClick={() => setShowAll(false)} style={{ alignSelf: "flex-start" }}>
+          Show less
+        </button>
+      )}
+    </div>
+  );
+}
+
+function SelectedEmployeeDetails({ employee, users = [], platforms = [] }) {
   if (!employee) {
     return (
       <div className="empty-state selected-employee-empty">
@@ -85,15 +150,6 @@ function SelectedEmployeeDetails({ employee, users = [], platforms = [] }) {
   const accessGroups = employee.memberships || [];
   const directoryEmployee = users.find((user) => user.employeeId === employee.employeeId);
   const manager = employee.manager || directoryEmployee?.manager || "Unknown";
-
-  const colorMap = buildPlatformColorMap(platforms);
-  const accessIndex = buildAccessIndex(platforms);
-  const { groups, other } = groupAccessCodes(accessGroups, accessIndex);
-  const orderedPlatforms = platforms.map((p) => p.platform).filter((name) => groups.has(name));
-  const totalSections = orderedPlatforms.length + (other.length > 0 ? 1 : 0);
-  const visiblePlatforms = showAllGroups ? orderedPlatforms : orderedPlatforms.slice(0, 5);
-  const showOther = showAllGroups || visiblePlatforms.length === orderedPlatforms.length;
-  const hiddenCount = totalSections - visiblePlatforms.length - (showOther && other.length > 0 ? 1 : 0);
   const fields = [
     { label: "Access", value: employee.accessStatus || "Not in current graph" },
     { label: "Usage", value: formatUsage(employee.usageIntensity) },
@@ -137,47 +193,7 @@ function SelectedEmployeeDetails({ employee, users = [], platforms = [] }) {
       {accessGroups.length > 0 && (
         <>
           <div className="section-label">Access Groups ({accessGroups.length})</div>
-          <div className="access-groups-grouped">
-            {visiblePlatforms.map((platformName) => {
-              const items = groups.get(platformName);
-              const color = colorMap.get(platformName) || PLATFORM_PALETTE[0];
-              return (
-                <div className="platform-group" key={platformName}>
-                  <div className="platform-bubble" style={{ background: color.bg, color: color.fg }}>
-                    <span className="platform-bubble-dot" style={{ background: color.dot }} />
-                    {platformName}
-                  </div>
-                  <div className="platform-group-items">
-                    {items.map(({ code, tier }) => (
-                      <span className="badge badge-neutral platform-tier-chip" key={code} title={tier || "Base access"}>
-                        {code}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-            {showOther && other.length > 0 && (
-              <div className="platform-group">
-                <div className="platform-bubble platform-bubble-other">Other</div>
-                <div className="platform-group-items">
-                  {other.map((code) => (
-                    <span className="badge badge-neutral" key={code}>{code}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-            {hiddenCount > 0 && (
-              <button className="badge badge-neutral access-groups-toggle" onClick={() => setShowAllGroups(true)} style={{ alignSelf: "flex-start" }}>
-                +{hiddenCount} more platform{hiddenCount === 1 ? "" : "s"}
-              </button>
-            )}
-            {showAllGroups && totalSections > 5 && (
-              <button className="badge badge-neutral access-groups-toggle" onClick={() => setShowAllGroups(false)} style={{ alignSelf: "flex-start" }}>
-                Show less
-              </button>
-            )}
-          </div>
+          <AccessCodeGroups codes={accessGroups} platforms={platforms} />
         </>
       )}
     </div>
@@ -191,7 +207,6 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
   const [teamLoading, setTeamLoading]   = useState(false);
   const [teamError, setTeamError]       = useState(null);
 
-  const platformMap = Object.fromEntries(platforms.map((p) => [p.platform, p]));
   const userTeams = user ? [...new Set([user.team, ...(user.additionalTeams || [])])] : [];
 
   // Switching the selected employee invalidates any cached team data / selection.
@@ -276,25 +291,16 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
 
           {access && (
             <div className="access-report-list">
-              <div className="section-label">Memberships ({access.access.length})</div>
-              {access.access.length === 0 && (
+              <div className="section-label">Access Groups ({(user?.memberships || []).length})</div>
+              {(user?.memberships || []).length === 0 ? (
                 <div className="empty-state">No access provisioned yet.</div>
+              ) : (
+                <AccessCodeGroups
+                  codes={user.memberships}
+                  platforms={platforms}
+                  statusByPlatform={Object.fromEntries(access.access.map((a) => [a.platform, a.status]))}
+                />
               )}
-              {access.access.map((a) => {
-                const catalog = platformMap[a.platform];
-                const { cls, label } = STATUS_CONFIG[a.status] || { cls: "badge-neutral", label: a.status };
-                return (
-                  <div className="membership-item" key={a.platform}>
-                    <div className="membership-info">
-                      <div className="membership-platform">{a.platform}</div>
-                      {catalog?.accessCode && (
-                        <div className="membership-code">{catalog.accessCode}</div>
-                      )}
-                    </div>
-                    <span className={`badge ${cls}`}>{label}</span>
-                  </div>
-                );
-              })}
             </div>
           )}
         </>
