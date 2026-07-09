@@ -119,6 +119,13 @@
     ]
   },
   {
+    "employeeId": "INT-007",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "GitHub", "status": "Pending" }
+    ]
+  },
+  {
     "employeeId": "DEMO-100",
     "access": [
       { "platform": "Confluence", "status": "Provisioned" },

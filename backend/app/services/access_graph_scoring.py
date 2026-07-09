@@ -71,7 +71,7 @@ def _relationship_score(
 ) -> float:
     if requester.manager == candidate.name or candidate.manager == requester.name:
         return 0.88
-    if requester.team == candidate.team:
+    if requester.teams() & candidate.teams():
         return 0.72
 
     direct_collab = next(
@@ -115,7 +115,7 @@ def _candidate_reasons(
     requester: User,
 ) -> List[str]:
     reasons = []
-    if requester.team == candidate.team:
+    if requester.teams() & candidate.teams():
         reasons.append("Same team")
     if not reasons:
         reasons.append(f"Connected through {candidate.team}")

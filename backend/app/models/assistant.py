@@ -19,3 +19,4 @@ class AssistantQueryResponse(BaseModel):
     answer: str
     data: Dict[str, Any] = {}
     focusPlatform: Optional[str] = None
+    source: Optional[str] = None

@@ -43,7 +43,7 @@ export function useCopilotChat(employeeId) {
         const res = await api.askAssistant({ employeeId, prompt: text, history });
         setMessages((prev) => [
           ...prev,
-          { id: crypto.randomUUID(), role: "assistant", content: res.answer, data: res.data },
+          { id: crypto.randomUUID(), role: "assistant", content: res.answer, data: res.data, source: res.source },
         ]);
         if (res.focusPlatform) setFocusPlatform(res.focusPlatform);
       } catch (err) {

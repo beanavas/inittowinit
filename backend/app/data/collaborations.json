@@ -90,6 +90,12 @@
     "reason": "Manager review for intern technology access"
   },
   {
+    "sourceEmployeeId": "INT-002",
+    "targetEmployeeId": "INT-007",
+    "strength": 0.79,
+    "reason": "Both embedded on Custom Harvest, pairing with the team on sprint work"
+  },
+  {
     "sourceEmployeeId": "INT-001",
     "targetEmployeeId": "DEMO-104",
     "strength": 0.82,

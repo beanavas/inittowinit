@@ -13,7 +13,7 @@ def get_user(employee_id: str) -> Optional[User]:
 
 
 def get_users_by_team(team: str) -> List[User]:
-    return [u for u in get_all_users() if u.team == team]
+    return [u for u in get_all_users() if team in u.teams()]
 
 
 def get_users_by_manager(manager: str) -> List[User]:

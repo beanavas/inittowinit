@@ -29,6 +29,7 @@
   { "employeeId": "INT-005", "platform": "Confluence", "intensity": "weekly", "score": 0.59 },
   { "employeeId": "INT-006", "platform": "GitHub", "intensity": "daily", "score": 0.78 },
   { "employeeId": "INT-006", "platform": "Jira", "intensity": "weekly", "score": 0.61 },
+  { "employeeId": "INT-007", "platform": "Confluence", "intensity": "weekly", "score": 0.6 },
   { "employeeId": "DEMO-100", "platform": "Confluence", "intensity": "weekly", "score": 0.7 },
   { "employeeId": "DEMO-100", "platform": "Azure", "intensity": "weekly", "score": 0.64 },
   { "employeeId": "DEMO-101", "platform": "Jira", "intensity": "daily", "score": 0.76 },
