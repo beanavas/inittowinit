@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class GraphEdgeType(str, Enum):
@@ -68,6 +68,10 @@ class AccessGraphNodeData(BaseModel):
     role: str
     team: str
     department: str
+    mail: Optional[str] = None
+    title: Optional[str] = None
+    directoryUser: Optional[str] = None
+    memberships: List[str] = Field(default_factory=list)
     accessStatus: GraphAccessStatus
     usageIntensity: str
     relevanceScore: float

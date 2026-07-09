@@ -6,6 +6,7 @@
     "DevOps Engineer": ["GitHub", "AWS", "Azure", "Terraform"],
     "Engineering Manager": ["GitHub", "Jira", "Confluence", "AWS"],
     "Product Manager": ["Jira", "Confluence", "Miro"],
-    "Designer": ["Miro", "Confluence", "Jira"]
+    "Designer": ["Miro", "Confluence", "Jira"],
+    "Intern - Technology": ["Jira", "Confluence", "GitHub"]
   }
 }
