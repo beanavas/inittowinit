@@ -100,9 +100,82 @@ function nodeSortValue(node, sponsorById) {
   return sponsorBoost - relevance;
 }
 
-function calculateScreenLayout(rawNodes, sponsorById, accessPath) {
+function normalizeAngle(angle) {
+  return ((angle % TWO_PI) + TWO_PI) % TWO_PI;
+}
+
+function minimumRingSeparation(hop, count) {
+  if (count <= 1) return 0;
+
+  const nodeFootprint = hop <= 1 ? 78 : 84;
+  const idealSeparation = nodeFootprint / ringRadius(hop);
+  const maxAvailable = (TWO_PI / count) * 0.86;
+  return Math.min(idealSeparation, maxAvailable);
+}
+
+function spaceRingItems(items, minSeparation) {
+  if (items.length <= 1 || minSeparation <= 0) return items;
+
+  const sorted = [...items]
+    .map((item) => ({ ...item, normalizedAngle: normalizeAngle(item.desiredAngle) }))
+    .sort((a, b) => a.normalizedAngle - b.normalizedAngle);
+
+  let largestGapIndex = 0;
+  let largestGap = -1;
+  sorted.forEach((item, index) => {
+    const next = sorted[(index + 1) % sorted.length];
+    const nextAngle = index === sorted.length - 1 ? next.normalizedAngle + TWO_PI : next.normalizedAngle;
+    const gap = nextAngle - item.normalizedAngle;
+    if (gap > largestGap) {
+      largestGap = gap;
+      largestGapIndex = index;
+    }
+  });
+
+  const ordered = [
+    ...sorted.slice(largestGapIndex + 1),
+    ...sorted.slice(0, largestGapIndex + 1),
+  ];
+
+  const unwrapped = ordered.map((item, index) => {
+    let desiredAngle = item.normalizedAngle;
+    if (index > 0) {
+      const previousAngle = ordered[index - 1].unwrappedDesiredAngle;
+      while (desiredAngle <= previousAngle) desiredAngle += TWO_PI;
+    }
+    item.unwrappedDesiredAngle = desiredAngle;
+    return item;
+  });
+
+  const adjusted = unwrapped.map((item, index) => {
+    const previous = index > 0 ? unwrapped[index - 1].adjustedAngle : null;
+    item.adjustedAngle = previous === null
+      ? item.unwrappedDesiredAngle
+      : Math.max(item.unwrappedDesiredAngle, previous + minSeparation);
+    return item;
+  });
+
+  const desiredCenter = adjusted.reduce((sum, item) => sum + item.unwrappedDesiredAngle, 0) / adjusted.length;
+  const adjustedCenter = adjusted.reduce((sum, item) => sum + item.adjustedAngle, 0) / adjusted.length;
+  const centerShift = desiredCenter - adjustedCenter;
+
+  return adjusted.map((item) => ({
+    ...item,
+    angle: item.adjustedAngle + centerShift,
+  }));
+}
+
+function calculateScreenLayout(rawNodes, sponsorById, accessPath, parentById = {}) {
   const current = rawNodes.find((node) => node.data.isCurrentUser);
   const topSponsorId = accessPath?.[1];
+  const positionedById = {};
+  const childrenByParent = rawNodes.reduce((groups, node) => {
+    const parentId = parentById[node.id];
+    if (!parentId) return groups;
+    if (!groups[parentId]) groups[parentId] = [];
+    groups[parentId].push(node.id);
+    return groups;
+  }, {});
   const byHop = rawNodes.reduce((groups, node) => {
     if (node.data.isCurrentUser) return groups;
     const hop = node.data.hopDistance || 1;
@@ -113,12 +186,14 @@ function calculateScreenLayout(rawNodes, sponsorById, accessPath) {
 
   const positioned = [];
   if (current) {
-    positioned.push({
+    const currentNode = {
       ...current,
       screenPosition: CENTER,
       angle: 0,
       labelPlacement: "bottom",
-    });
+    };
+    positioned.push(currentNode);
+    positionedById[current.id] = currentNode;
   }
 
   [...byHop.entries()]
@@ -138,12 +213,26 @@ function calculateScreenLayout(rawNodes, sponsorById, accessPath) {
         ? -Math.PI / 2 - (ringOffset + topSponsorIndex * step)
         : 0;
 
-      sorted.forEach((node, index) => {
-        const angle = ringOffset + sponsorRotation + index * step;
+      const ringItems = sorted.map((node, index) => {
+        const parent = positionedById[parentById[node.id]];
+        const siblings = childrenByParent[parentById[node.id]] || [];
+        const siblingIndex = siblings.indexOf(node.id);
+        const siblingSpread = Math.min(0.72, Math.max(0.24, step * 0.38));
+        const centeredSiblingOffset = siblingIndex >= 0
+          ? (siblingIndex - (siblings.length - 1) / 2) * siblingSpread
+          : 0;
+        const desiredAngle = parent && hop > 1
+          ? parent.angle + centeredSiblingOffset
+          : ringOffset + sponsorRotation + index * step;
         const crowdedRingOffset = count > 8 && index % 2 === 1 ? 14 : 0;
         const radius = ringRadius(hop) + crowdedRingOffset;
 
-        positioned.push({
+        return { node, desiredAngle, radius };
+      });
+
+      spaceRingItems(ringItems, minimumRingSeparation(hop, count)).forEach(({ node, angle, radius }) => {
+
+        const positionedNode = {
           ...node,
           screenPosition: {
             x: CENTER.x + Math.cos(angle) * radius,
@@ -151,7 +240,9 @@ function calculateScreenLayout(rawNodes, sponsorById, accessPath) {
           },
           angle,
           labelPlacement: Math.sin(angle) < -0.18 ? "top" : "bottom",
-        });
+        };
+        positioned.push(positionedNode);
+        positionedById[node.id] = positionedNode;
       });
     });
 
@@ -228,8 +319,25 @@ export default function AccessGraph({ graph, onNodeSelect, defaultHopFilter = "a
     );
 
     const visibleIds = new Set(visibleRawNodes.map((node) => node.id));
+    const hopById = Object.fromEntries(visibleRawNodes.map((node) => [node.id, node.data.hopDistance || 0]));
 
-    const positionedNodes = calculateScreenLayout(visibleRawNodes, sponsorById, graph.accessPath).map((node) => ({
+    const relationshipEdges = graph.edges
+      .filter((edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target))
+      .map((edge) => ({
+        ...edge,
+        visualType: normalizeEdgeType(edge),
+      }))
+      .filter((edge) => edge.visualType);
+
+    const parentById = relationshipEdges.reduce((parents, edge) => {
+      const sourceHop = hopById[edge.source];
+      const targetHop = hopById[edge.target];
+      if (targetHop === sourceHop + 1) parents[edge.target] = edge.source;
+      if (sourceHop === targetHop + 1) parents[edge.source] = edge.target;
+      return parents;
+    }, {});
+
+    const positionedNodes = calculateScreenLayout(visibleRawNodes, sponsorById, graph.accessPath, parentById).map((node) => ({
       ...node,
       sponsor: sponsorById[node.id],
       avatarRadius: node.data.isCurrentUser ? 27 : 20,
@@ -251,14 +359,6 @@ export default function AccessGraph({ graph, onNodeSelect, defaultHopFilter = "a
         radius: ringRadius(hop),
         label: hop === 1 ? "1 hop" : `${hop} hops`,
       }));
-
-    const relationshipEdges = graph.edges
-      .filter((edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target))
-      .map((edge) => ({
-        ...edge,
-        visualType: normalizeEdgeType(edge),
-      }))
-      .filter((edge) => edge.visualType);
 
     const directPairs = new Set(
       relationshipEdges.map((edge) => [edge.source, edge.target].sort().join("::"))
