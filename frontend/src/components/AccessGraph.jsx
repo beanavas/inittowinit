@@ -88,8 +88,72 @@ function edgeLine(edge, positionById) {
     y1: source.y + (dy / length) * sourcePad,
     x2: target.x - (dx / length) * targetPad,
     y2: target.y - (dy / length) * targetPad,
-    midX: source.x + dx * 0.5,
-    midY: source.y + dy * 0.5,
+    source,
+    target,
+  };
+}
+
+function pointOnQuadratic(x1, y1, cx, cy, x2, y2, t) {
+  const oneMinusT = 1 - t;
+  const x = oneMinusT * oneMinusT * x1 + 2 * oneMinusT * t * cx + t * t * x2;
+  const y = oneMinusT * oneMinusT * y1 + 2 * oneMinusT * t * cy + t * t * y2;
+  return { x, y };
+}
+
+function edgeTier(line, visualType) {
+  if (visualType === "access_path") return 0;
+
+  const sourceDist = Math.hypot(line.source.x - CENTER.x, line.source.y - CENTER.y);
+  const targetDist = Math.hypot(line.target.x - CENTER.x, line.target.y - CENTER.y);
+  const avgDist = (sourceDist + targetDist) * 0.5;
+
+  // Tier 1: local edges (mostly inside 1 hop ring)
+  // Tier 2: mixed/local-to-mid edges
+  // Tier 3: longer cross-ring edges
+  if (avgDist < 210) return 1;
+  if (avgDist < 275) return 2;
+  return 3;
+}
+
+function tierBend(visualType, tier) {
+  const table = {
+    reports_to: { 1: 58, 2: 86, 3: 118 },
+    collaborates_with: { 1: 38, 2: 58, 3: 84 },
+  };
+  return table[visualType]?.[tier] || 56;
+}
+
+function edgePath(line, visualType) {
+  const { x1, y1, x2, y2 } = line;
+
+  if (visualType === "access_path") {
+    return {
+      d: `M ${x1} ${y1} L ${x2} ${y2}`,
+      labelPoint: { x: (x1 + x2) * 0.5 + 10, y: (y1 + y2) * 0.5 - 8 },
+    };
+  }
+
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const length = Math.hypot(dx, dy) || 1;
+  const midX = (x1 + x2) * 0.5;
+  const midY = (y1 + y2) * 0.5;
+
+  // Perpendicular normal used to bend edges away from dense center area.
+  const nx = -dy / length;
+  const ny = dx / length;
+  const dotToCenter = (midX - CENTER.x) * nx + (midY - CENTER.y) * ny;
+  const direction = dotToCenter >= 0 ? 1 : -1;
+  const tier = edgeTier(line, visualType);
+  const bend = tierBend(visualType, tier);
+
+  const cx = midX + nx * bend * direction;
+  const cy = midY + ny * bend * direction;
+  const labelPoint = pointOnQuadratic(x1, y1, cx, cy, x2, y2, 0.5);
+
+  return {
+    d: `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`,
+    labelPoint: { x: labelPoint.x + 10, y: labelPoint.y - 8 },
   };
 }
 
@@ -165,8 +229,6 @@ export default function AccessGraph({ graph }) {
   }, [graph, sponsorById, visibleHop]);
 
   const selectedNode = nodes.find((node) => node.id === selectedId) || nodes.find((node) => node.data.isCurrentUser);
-  const selectedSponsor = selectedNode ? sponsorById[selectedNode.id] : null;
-
   function resetView() {
     setZoom(1);
     setPan({ x: 0, y: 0 });
@@ -282,18 +344,16 @@ export default function AccessGraph({ graph }) {
               const line = edgeLine(edge, positionById);
               if (!line) return null;
               const visual = edgeStyle(edge.visualType);
+              const path = edgePath(line, edge.visualType);
               return (
                 <g key={edge.id}>
-                  <line
+                  <path
                     className={visual.className}
-                    x1={line.x1}
-                    y1={line.y1}
-                    x2={line.x2}
-                    y2={line.y2}
+                    d={path.d}
                     markerEnd={visual.markerEnd}
                   />
                   {visual.label && (
-                    <text className="static-edge-label" x={line.midX + 10} y={line.midY - 8}>
+                    <text className="static-edge-label" x={path.labelPoint.x} y={path.labelPoint.y}>
                       {visual.label}
                     </text>
                   )}
@@ -325,46 +385,6 @@ export default function AccessGraph({ graph }) {
           </div>
         </div>
 
-        {selectedNode && (
-          <div className="graph-detail-panel">
-            <div className="graph-detail-kicker">
-              {selectedNode.data.isCurrentUser ? "Current requester" : "Selected employee"}
-            </div>
-            <div className="graph-detail-title">{selectedNode.data.isCurrentUser ? "You" : selectedNode.data.name}</div>
-            <div className="graph-detail-subtitle">
-              {selectedNode.data.role} · {selectedNode.data.team}
-            </div>
-            <div className="graph-detail-row">
-              <span>Status</span>
-              <strong>{selectedNode.data.accessStatus}</strong>
-            </div>
-            <div className="graph-detail-row">
-              <span>Relevance</span>
-              <strong>{selectedNode.data.relevanceScore}</strong>
-            </div>
-            <div className="graph-detail-row">
-              <span>Hop distance</span>
-              <strong>{selectedNode.data.hopDistance}</strong>
-            </div>
-            {selectedSponsor?.scoreBreakdown && (
-              <div className="score-breakdown-mini">
-                {Object.entries(selectedSponsor.scoreBreakdown).map(([key, value]) => (
-                  <div key={key}>
-                    <span>{key.replace(/([A-Z])/g, " $1")}</span>
-                    <meter min="0" max="1" value={value} />
-                  </div>
-                ))}
-              </div>
-            )}
-            {selectedSponsor?.reasons?.length > 0 && (
-              <div className="graph-detail-reasons">
-                {selectedSponsor.reasons.slice(0, 3).map((reason) => (
-                  <div key={reason}>{reason}</div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
