@@ -5,7 +5,21 @@
     "approver": "Manager",
     "description": "Required for repository access and source code collaboration",
     "requestMethod": "SailPoint",
-    "category": "Development"
+    "category": "Development",
+    "accessTiers": [
+      {
+        "name": "Genesis Dev Environment",
+        "accessCode": "GT-ACC-GENESIS-DEV",
+        "description": "Read/write access to the Genesis development repositories, on top of base GitHub access",
+        "approver": "Manager"
+      },
+      {
+        "name": "Genesis Production Deploy",
+        "accessCode": "GT-ACC-GENESIS-PROD",
+        "description": "Production deployment and release permissions for Genesis repositories",
+        "approver": "Security Team"
+      }
+    ]
   },
   {
     "platform": "Jira",
@@ -29,7 +43,21 @@
     "approver": "Security Team",
     "description": "Amazon Web Services cloud platform access",
     "requestMethod": "SailPoint",
-    "category": "Cloud"
+    "category": "Cloud",
+    "accessTiers": [
+      {
+        "name": "AWS Dev Sandbox",
+        "accessCode": "AWS-ACC_DEV_SANDBOX",
+        "description": "Full read/write access to the AWS development sandbox account, on top of base read-only access",
+        "approver": "Manager"
+      },
+      {
+        "name": "AWS Production Operator",
+        "accessCode": "AWS-ACC_PROD_OPERATOR",
+        "description": "Elevated access to production AWS resources for deployment and operations",
+        "approver": "Security Team"
+      }
+    ]
   },
   {
     "platform": "Azure",
@@ -78,6 +106,20 @@
     "description": "AI pair-programming assistant for development workflows",
     "requestMethod": "DevConnect Portal",
     "category": "AI Tools",
-    "prerequisites": ["AI Working Group Intake Form", "Secure Use Training"]
+    "prerequisites": ["AI Working Group Intake Form", "Secure Use Training"],
+    "accessTiers": [
+      {
+        "name": "Claude Code Dev Workspace",
+        "accessCode": "AI-ACC_CLAUDE_DEV",
+        "description": "Standard development workspace access for AI pair-programming, on top of base Claude Code access",
+        "approver": "Manager"
+      },
+      {
+        "name": "Claude Code Production Integration",
+        "accessCode": "AI-ACC_CLAUDE_PROD",
+        "description": "Access to integrate Claude Code into production CI/CD pipelines",
+        "approver": "Security Team"
+      }
+    ]
   }
 ]
