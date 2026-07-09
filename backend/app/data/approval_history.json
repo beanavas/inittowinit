@@ -19,5 +19,40 @@
     "platform": "Databricks",
     "outcome": "Approved",
     "recencyDays": 12
+  },
+  {
+    "requesterEmployeeId": "INT-001",
+    "sponsorEmployeeId": "INT-002",
+    "platform": "Confluence",
+    "outcome": "Approved",
+    "recencyDays": 18
+  },
+  {
+    "requesterEmployeeId": "INT-001",
+    "sponsorEmployeeId": "DEMO-104",
+    "platform": "Jira",
+    "outcome": "Approved",
+    "recencyDays": 32
+  },
+  {
+    "requesterEmployeeId": "INT-001",
+    "sponsorEmployeeId": "DEMO-111",
+    "platform": "GitHub",
+    "outcome": "Approved",
+    "recencyDays": 9
+  },
+  {
+    "requesterEmployeeId": "INT-003",
+    "sponsorEmployeeId": "DEMO-107",
+    "platform": "Databricks",
+    "outcome": "Approved",
+    "recencyDays": 27
+  },
+  {
+    "requesterEmployeeId": "INT-006",
+    "sponsorEmployeeId": "DEMO-106",
+    "platform": "Terraform",
+    "outcome": "Approved",
+    "recencyDays": 41
   }
 ]
