@@ -137,6 +137,7 @@ a {
 .main-body {
   flex: 1;
   display: flex;
+  align-items: stretch;
   gap: 20px;
   padding: 24px 32px;
   overflow: hidden;
@@ -698,7 +699,15 @@ a {
 .sponsor-panel {
   width: 340px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   overflow-y: auto;
+}
+
+.sponsor-panel > .card {
+  height: 100%;
+  min-height: 0;
 }
 
 .access-graph-wrap {
@@ -1309,49 +1318,6 @@ a {
 
 .view-all-sponsors-link:hover {
   color: var(--blue-hover);
-}
-
-.how-scored-link {
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--blue);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  cursor: help;
-}
-
-.factor-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  margin: 16px 0;
-}
-
-.factor-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 12px;
-}
-
-.factor-card-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: 4px;
-}
-
-.factor-card p {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin: 4px 0 6px;
-  line-height: 1.4;
-}
-
-.factor-impact {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--blue);
 }
 
 /* ---------- Chat / Claude assistant ---------- */

@@ -8,14 +8,6 @@ import AccessGraph from "../components/AccessGraph";
 import GraphLegend from "../components/GraphLegend";
 import SponsorList from "../components/SponsorList";
 
-const FACTORS = [
-  { key: "orgProximity", title: "Org Proximity", impact: "22% impact", desc: "Closer people in the org/collaboration graph can help faster." },
-  { key: "technologyExpertise", title: "Tool Usage & Expertise", impact: "36% impact", desc: "They use this tool regularly and can explain practical setup details." },
-  { key: "relationship", title: "Relationship", impact: "18% impact", desc: "Manager, teammate, or frequent collaborator." },
-  { key: "approvalHistory", title: "Approval History", impact: "14% impact", desc: "Has approved similar requests for you before." },
-  { key: "availability", title: "Availability", impact: "10% impact", desc: "Likely to respond quickly right now." },
-];
-
 const DEFAULT_TECHNOLOGY = "GitHub";
 
 export default function MainPage() {
@@ -190,26 +182,9 @@ export default function MainPage() {
         {graph && (
           <div className="sponsor-panel">
             <div className="card">
-              <div className="card-title">
-                Top Access Guides
-                <span
-                  className="how-scored-link"
-                  title="Ranked using org proximity, tool usage, relationship, approval history, and availability — see the breakdown below."
-                >
-                  How scored? ⓘ
-                </span>
-              </div>
+              <div className="card-title">Top Access Guides</div>
               <p className="card-subtitle">Ranked by relevance to your {technology} request.</p>
               <SponsorList sponsors={graph.sponsorRanking} onAskForHelp={askSponsorForHelp} />
-              <div className="factor-grid">
-                {FACTORS.map((f) => (
-                  <div className="factor-card" key={f.key}>
-                    <div className="factor-card-title">{f.title}</div>
-                    <p>{f.desc}</p>
-                    <div className="factor-impact">{f.impact}</div>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         )}
