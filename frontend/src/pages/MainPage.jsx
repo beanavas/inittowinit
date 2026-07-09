@@ -16,10 +16,12 @@ const FACTORS = [
   { key: "availability", title: "Availability", impact: "10% impact", desc: "Likely to respond quickly right now." },
 ];
 
+const DEFAULT_TECHNOLOGY = "GitHub";
+
 export default function MainPage() {
   const { employeeId, setEmployeeId, users, currentUser, backendOnline } = useApp();
   const [platforms, setPlatforms] = useState([]);
-  const [technology, setTechnology] = useState("");
+  const [technology, setTechnology] = useState(DEFAULT_TECHNOLOGY);
   const [access, setAccess] = useState(null);
   const [graph, setGraph] = useState(null);
   const [loadingAccess, setLoadingAccess] = useState(true);
@@ -45,24 +47,10 @@ export default function MainPage() {
     api.listPlatforms().then(setPlatforms).catch(() => {});
   }, []);
 
-  const resetToDefaultTechnology = (id) => {
-    if (!id) return;
-    api
-      .getRecommendations(id, false)
-      .then((r) => {
-        if (r.recommendations[0]) {
-          setTechnology(r.recommendations[0].platform);
-        } else {
-          return api.listPlatforms().then((list) => setTechnology(list[0]?.platform || ""));
-        }
-      })
-      .catch(() => {});
-  };
-
-  // Default the graph to this person's top recommendation until the console
-  // (chat/search) points it at something more specific.
+  // Default the graph to GitHub until the console/chat points it at something
+  // more specific.
   useEffect(() => {
-    resetToDefaultTechnology(employeeId);
+    if (employeeId) setTechnology(DEFAULT_TECHNOLOGY);
   }, [employeeId]);
 
   // The console drives the graph: whichever platform comes up in a chat answer

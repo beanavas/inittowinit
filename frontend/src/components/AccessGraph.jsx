@@ -42,7 +42,7 @@ function edgeStyle(edgeType) {
   }
   return {
     className: "static-edge static-edge-collaborates",
-    markerEnd: null,
+    markerEnd: "url(#collaborates-arrow)",
     label: null,
   };
 }
@@ -74,8 +74,8 @@ function edgeLine(edge, layoutById) {
   const dx = target.x - source.x;
   const dy = target.y - source.y;
   const length = Math.hypot(dx, dy) || 1;
-  const sourcePad = sourceNode.avatarRadius + (edge.data?.edgeType === "access_path" ? 11 : 8);
-  const targetPad = targetNode.avatarRadius + (edge.data?.edgeType === "access_path" ? 11 : 8);
+  const sourcePad = sourceNode.avatarRadius + (edge.data?.edgeType === "access_path" ? 5 : 3);
+  const targetPad = targetNode.avatarRadius + (edge.data?.edgeType === "access_path" ? 5 : 3);
 
   return {
     x1: source.x + (dx / length) * sourcePad,
@@ -89,70 +89,12 @@ function edgeLine(edge, layoutById) {
   };
 }
 
-function pointOnQuadratic(x1, y1, cx, cy, x2, y2, t) {
-  const oneMinusT = 1 - t;
-  const x = oneMinusT * oneMinusT * x1 + 2 * oneMinusT * t * cx + t * t * x2;
-  const y = oneMinusT * oneMinusT * y1 + 2 * oneMinusT * t * cy + t * t * y2;
-  return { x, y };
-}
-
-function edgeTier(line, visualType) {
-  if (visualType === "access_path") return 0;
-
-  const hopMax = Math.max(line.sourceHop || 0, line.targetHop || 0);
-  if (hopMax <= 1) return 1;
-  if (hopMax === 2) return 2;
-  return 3;
-}
-
-function tierBend(visualType, tier) {
-  const table = {
-    reports_to: { 1: 58, 2: 86, 3: 118 },
-    collaborates_with: { 1: 38, 2: 58, 3: 84 },
-  };
-  return table[visualType]?.[tier] || 56;
-}
-
-function edgePath(line, visualType) {
+function edgePath(line) {
   const { x1, y1, x2, y2 } = line;
 
-  if (visualType === "access_path") {
-    return {
-      d: `M ${x1} ${y1} L ${x2} ${y2}`,
-      labelPoint: { x: (x1 + x2) * 0.5 + 10, y: (y1 + y2) * 0.5 - 8 },
-    };
-  }
-
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const length = Math.hypot(dx, dy) || 1;
-  const midX = (x1 + x2) * 0.5;
-  const midY = (y1 + y2) * 0.5;
-
-  // Perpendicular normal used to bend edges away from dense center area.
-  const nx = -dy / length;
-  const ny = dx / length;
-  const dotToCenter = (midX - CENTER.x) * nx + (midY - CENTER.y) * ny;
-  const direction = dotToCenter >= 0 ? 1 : -1;
-  const tier = edgeTier(line, visualType);
-
-  // Keep 1-hop non-access edges straight; start bundling bends at 2+ hops.
-  if (tier === 1) {
-    return {
-      d: `M ${x1} ${y1} L ${x2} ${y2}`,
-      labelPoint: { x: (x1 + x2) * 0.5 + 10, y: (y1 + y2) * 0.5 - 8 },
-    };
-  }
-
-  const bend = tierBend(visualType, tier);
-
-  const cx = midX + nx * bend * direction;
-  const cy = midY + ny * bend * direction;
-  const labelPoint = pointOnQuadratic(x1, y1, cx, cy, x2, y2, 0.5);
-
   return {
-    d: `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`,
-    labelPoint: { x: labelPoint.x + 10, y: labelPoint.y - 8 },
+    d: `M ${x1} ${y1} L ${x2} ${y2}`,
+    labelPoint: { x: (x1 + x2) * 0.5 + 10, y: (y1 + y2) * 0.5 - 8 },
   };
 }
 
@@ -405,6 +347,9 @@ export default function AccessGraph({ graph, onNodeSelect }) {
               <marker id="reports-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" />
               </marker>
+              <marker id="collaborates-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
               <marker id="access-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" />
               </marker>
@@ -427,7 +372,7 @@ export default function AccessGraph({ graph, onNodeSelect }) {
               const line = edgeLine(edge, layoutById);
               if (!line) return null;
               const visual = edgeStyle(edge.visualType);
-              const path = edgePath(line, edge.visualType);
+              const path = edgePath(line);
               return (
                 <g key={edge.id}>
                   <path
