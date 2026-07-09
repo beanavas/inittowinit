@@ -24,6 +24,12 @@ export default function GraphLegend() {
           <small>High relevance</small>
         </span>
       </div>
+      <div className="legend-divider" />
+      <div className="legend-hop-guide">
+        <strong>Hop Distance</strong>
+        <small>1 hop: direct teammate/manager connection</small>
+        <small>2 hops: connected through one intermediary</small>
+      </div>
     </div>
   );
 }
