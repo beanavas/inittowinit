@@ -6,10 +6,20 @@ const CENTER = { x: VIEWBOX.width / 2, y: VIEWBOX.height / 2 };
 const MIN_ZOOM = 0.7;
 const MAX_ZOOM = 2.2;
 
-function ringRadius(hop) {
+// Minimum arc length to reserve per node (~ node width + a small gap) so that
+// crowded rings push outward instead of letting adjacent nodes overlap and
+// steal each other's clicks.
+const MIN_NODE_ARC = 120;
+
+function baseRingRadius(hop) {
   if (hop <= 1) return 175;
   if (hop === 2) return 290;
   return 310;
+}
+
+function ringRadiusForCount(hop, count) {
+  const needed = (count * MIN_NODE_ARC) / (2 * Math.PI);
+  return Math.max(baseRingRadius(hop), needed);
 }
 
 function normalizeEdgeType(edge) {
@@ -48,11 +58,10 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-function nodeScreenPosition(node) {
+function nodeScreenPosition(node, radius) {
   if (node.data.isCurrentUser) return CENTER;
 
   const angle = Math.atan2(node.position.y, node.position.x || 0.001);
-  const radius = ringRadius(node.data.hopDistance || 1);
 
   return {
     x: CENTER.x + Math.cos(angle) * radius,
@@ -198,14 +207,29 @@ export default function AccessGraph({ graph, onNodeSelect }) {
 
     const visibleIds = new Set(visibleRawNodes.map((node) => node.id));
 
-    const positionedNodes = visibleRawNodes.map((node) => ({
-      ...node,
-      screenPosition: nodeScreenPosition(node),
-      sponsor: sponsorById[node.id],
-      avatarRadius: node.data.isCurrentUser ? 29 : 22,
-      hopDistance: node.data.hopDistance || 0,
-      labelPlacement: nodeScreenPosition(node).y < CENTER.y - 30 ? "top" : "bottom",
-    }));
+    const hopCounts = {};
+    visibleRawNodes.forEach((node) => {
+      if (node.data.isCurrentUser) return;
+      const hop = node.data.hopDistance || 1;
+      hopCounts[hop] = (hopCounts[hop] || 0) + 1;
+    });
+    const radiusByHop = {};
+    Object.keys(hopCounts).forEach((hop) => {
+      radiusByHop[hop] = ringRadiusForCount(Number(hop), hopCounts[hop]);
+    });
+
+    const positionedNodes = visibleRawNodes.map((node) => {
+      const radius = radiusByHop[node.data.hopDistance] ?? baseRingRadius(node.data.hopDistance || 1);
+      const screenPosition = nodeScreenPosition(node, radius);
+      return {
+        ...node,
+        screenPosition,
+        sponsor: sponsorById[node.id],
+        avatarRadius: node.data.isCurrentUser ? 29 : 22,
+        hopDistance: node.data.hopDistance || 0,
+        labelPlacement: screenPosition.y < CENTER.y - 30 ? "top" : "bottom",
+      };
+    });
 
     const byId = Object.fromEntries(
       positionedNodes.map((node) => [node.id, {
@@ -219,7 +243,7 @@ export default function AccessGraph({ graph, onNodeSelect }) {
       .sort((a, b) => a - b)
       .map((hop) => ({
         hop,
-        radius: ringRadius(hop),
+        radius: radiusByHop[hop] ?? baseRingRadius(hop),
         label: hop === 1 ? "1 hop" : `${hop} hops`,
       }));
 

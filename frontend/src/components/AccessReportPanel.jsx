@@ -16,6 +16,10 @@ const PROFILE_FIELDS = [
   { label: "Team",       key: "team" },
 ];
 
+function initials(name) {
+  return name.split(" ").map((p) => p[0]).slice(0, 2).join("").toUpperCase();
+}
+
 function formatUsage(value) {
   if (!value) return "Unknown";
   return value.charAt(0).toUpperCase() + value.slice(1);
@@ -31,51 +35,53 @@ function SelectedEmployeeDetails({ employee }) {
   }
 
   const accessGroups = employee.memberships || [];
+  const fields = [
+    { label: "Access", value: employee.accessStatus },
+    { label: "Usage", value: formatUsage(employee.usageIntensity) },
+    { label: "Match", value: employee.isCurrentUser ? "Requester" : `${employee.relevanceScore}%` },
+    {
+      label: "Hop Distance",
+      value: employee.hopDistance === 0 ? "You" : `${employee.hopDistance} hop${employee.hopDistance === 1 ? "" : "s"}`,
+    },
+    { label: "Department", value: employee.department },
+  ];
+  if (employee.mail) fields.push({ label: "Email", value: employee.mail });
 
   return (
     <div className="selected-employee-detail">
-      <div className="graph-detail-kicker">
-        {employee.isCurrentUser ? "Requester" : "Selected employee"}
-      </div>
-      <div className="graph-detail-title">{employee.name}</div>
-      <div className="graph-detail-subtitle">
-        {employee.title || employee.role} | {employee.team}
-      </div>
-
-      <div className="graph-detail-row">
-        <span>Access</span>
-        <strong>{employee.accessStatus}</strong>
-      </div>
-      <div className="graph-detail-row">
-        <span>Usage</span>
-        <strong>{formatUsage(employee.usageIntensity)}</strong>
-      </div>
-      <div className="graph-detail-row">
-        <span>Match</span>
-        <strong>{employee.isCurrentUser ? "Requester" : `${employee.relevanceScore}%`}</strong>
-      </div>
-      <div className="graph-detail-row">
-        <span>Hop distance</span>
-        <strong>{employee.hopDistance === 0 ? "You" : `${employee.hopDistance} hop${employee.hopDistance === 1 ? "" : "s"}`}</strong>
-      </div>
-      <div className="graph-detail-row">
-        <span>Department</span>
-        <strong>{employee.department}</strong>
-      </div>
-      {employee.mail && (
-        <div className="graph-detail-row">
-          <span>Email</span>
-          <strong>{employee.mail}</strong>
+      <div className="team-member-header" style={{ marginBottom: 10 }}>
+        <div className="user-avatar" style={{ width: 34, height: 34, fontSize: 12, flexShrink: 0 }}>
+          {initials(employee.name)}
         </div>
-      )}
-
-      {accessGroups.length > 0 && (
-        <div className="graph-detail-reasons selected-access-groups">
-          <div>
-            Access groups: {accessGroups.slice(0, 4).join(", ")}
-            {accessGroups.length > 4 ? `, +${accessGroups.length - 4} more` : ""}
+        <div>
+          <div className="team-member-name">{employee.isCurrentUser ? "You" : employee.name}</div>
+          <div className="access-report-meta">
+            {employee.title || employee.role} · {employee.team}
           </div>
         </div>
+      </div>
+
+      <div className="profile-fields">
+        {fields.map(({ label, value }) => (
+          <div className="profile-field-row" key={label}>
+            <span className="profile-field-label">{label}</span>
+            <span className="profile-field-value">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {accessGroups.length > 0 && (
+        <>
+          <div className="section-label">Access Groups ({accessGroups.length})</div>
+          <div className="access-groups-wrap">
+            {accessGroups.slice(0, 6).map((g) => (
+              <span className="badge badge-neutral" key={g}>{g}</span>
+            ))}
+            {accessGroups.length > 6 && (
+              <span className="badge badge-neutral">+{accessGroups.length - 6} more</span>
+            )}
+          </div>
+        </>
       )}
     </div>
   );
@@ -130,31 +136,29 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
     <div className="card access-report-panel">
 
       {/* Header + toggle */}
-      <div className="card-title" style={{ marginBottom: 4 }}>
-        Access Report
-        {user && (
-          <div className="view-toggle">
-            <button
-              className={`view-toggle-btn${view === "mine" ? " active" : ""}`}
-              onClick={() => setView("mine")}
-            >
-              My Access
-            </button>
-            <button
-              className={`view-toggle-btn${view === "team" ? " active" : ""}`}
-              onClick={handleTeamClick}
-            >
-              Team Access
-            </button>
-            <button
-              className={`view-toggle-btn${view === "selected" ? " active" : ""}`}
-              onClick={() => setView("selected")}
-            >
-              Selected Employee
-            </button>
-          </div>
-        )}
-      </div>
+      <div className="card-title">Access Report</div>
+      {user && (
+        <div className="view-toggle view-toggle-full">
+          <button
+            className={`view-toggle-btn${view === "mine" ? " active" : ""}`}
+            onClick={() => setView("mine")}
+          >
+            My Access
+          </button>
+          <button
+            className={`view-toggle-btn${view === "team" ? " active" : ""}`}
+            onClick={handleTeamClick}
+          >
+            Team Access
+          </button>
+          <button
+            className={`view-toggle-btn${view === "selected" ? " active" : ""}`}
+            onClick={() => setView("selected")}
+          >
+            Selected
+          </button>
+        </div>
+      )}
 
       {error && <div className="error-banner">{error}</div>}
       {loading && <div className="loading-line">Loading...</div>}
@@ -241,7 +245,7 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
                 <div className="team-member-row" key={member.employeeId}>
                   <div className="team-member-header">
                     <div className="user-avatar" style={{ width: 30, height: 30, fontSize: 11, flexShrink: 0 }}>
-                      {member.name.split(" ").map((p) => p[0]).slice(0, 2).join("").toUpperCase()}
+                      {initials(member.name)}
                     </div>
                     <div>
                       <div className="team-member-name">{member.name}</div>
