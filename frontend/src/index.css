@@ -956,7 +956,7 @@ a {
   align-items: center;
   width: 108px;
   text-align: center;
-  gap: 3px;
+  gap: 4px;
   pointer-events: none;
 }
 
@@ -967,10 +967,6 @@ a {
 .employee-node.label-top .employee-avatar {
   margin-top: 3px;
   margin-bottom: 0;
-}
-
-.employee-node.label-top .employee-node-chip {
-  margin-bottom: 1px;
 }
 
 .employee-node.current {
@@ -1009,38 +1005,11 @@ a {
 
 .employee-node-name {
   max-width: 102px;
-  font-size: 10.5px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 800;
   color: var(--navy);
   line-height: 1.12;
   overflow-wrap: anywhere;
-}
-
-.employee-node-role {
-  max-width: 102px;
-  font-size: 9px;
-  color: var(--text-muted);
-  line-height: 1.1;
-  overflow-wrap: anywhere;
-}
-
-.employee-node-score {
-  font-size: 9px;
-  font-weight: 700;
-  line-height: 1.1;
-}
-
-.employee-node-chip {
-  max-width: 96px;
-  border: 1px solid;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.86);
-  padding: 1px 6px;
-  font-size: 8.5px;
-  margin-top: 2px;
-  font-weight: 700;
-  line-height: 1.15;
-  white-space: normal;
 }
 
 .strong-sponsor-star {
