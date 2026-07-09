@@ -929,8 +929,21 @@ a {
   align-items: center;
   width: 108px;
   text-align: center;
-  gap: 2px;
+  gap: 3px;
   pointer-events: none;
+}
+
+.employee-node.label-top {
+  flex-direction: column-reverse;
+}
+
+.employee-node.label-top .employee-avatar {
+  margin-top: 3px;
+  margin-bottom: 0;
+}
+
+.employee-node.label-top .employee-node-chip {
+  margin-bottom: 1px;
 }
 
 .employee-node.current {
@@ -997,7 +1010,7 @@ a {
   background: rgba(255, 255, 255, 0.86);
   padding: 1px 6px;
   font-size: 8.5px;
-  margin-top: 1px;
+  margin-top: 2px;
   font-weight: 700;
   line-height: 1.15;
   white-space: normal;

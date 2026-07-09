@@ -7,14 +7,16 @@ function initials(name) {
     .toUpperCase();
 }
 
-export default function EmployeeNode({ data }) {
+export default function EmployeeNode({ data, labelPlacement = "bottom" }) {
   const ringColor = data.isCurrentUser ? "#007bc3" : data.visual?.ringColor || "#94a3b3";
   const heatColor = data.visual?.heatColor || "#94a3b3";
   const score = Number(data.relevanceScore || 0);
   const scoreOpacity = data.isCurrentUser ? 1 : Math.max(0.18, Math.min(score / 100, 0.95));
 
   return (
-    <div className={`employee-node${data.isCurrentUser ? " current" : ""}${data.isStrongSponsor ? " strong" : ""}`}>
+    <div
+      className={`employee-node${data.isCurrentUser ? " current" : ""}${data.isStrongSponsor ? " strong" : ""}${labelPlacement === "top" ? " label-top" : ""}`}
+    >
       <div
         className={`employee-avatar${data.isCurrentUser ? " current" : ""}${data.isStrongSponsor ? " strong" : ""}`}
         style={{

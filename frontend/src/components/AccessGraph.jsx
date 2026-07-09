@@ -72,16 +72,19 @@ function accessPathEdges(graph) {
   }));
 }
 
-function edgeLine(edge, positionById) {
-  const source = positionById[edge.source];
-  const target = positionById[edge.target];
-  if (!source || !target) return null;
+function edgeLine(edge, layoutById) {
+  const sourceNode = layoutById[edge.source];
+  const targetNode = layoutById[edge.target];
+  if (!sourceNode || !targetNode) return null;
+
+  const source = sourceNode.screenPosition;
+  const target = targetNode.screenPosition;
 
   const dx = target.x - source.x;
   const dy = target.y - source.y;
   const length = Math.hypot(dx, dy) || 1;
-  const sourcePad = edge.data?.edgeType === "access_path" ? 38 : 30;
-  const targetPad = edge.data?.edgeType === "access_path" ? 38 : 30;
+  const sourcePad = sourceNode.avatarRadius + (edge.data?.edgeType === "access_path" ? 11 : 8);
+  const targetPad = targetNode.avatarRadius + (edge.data?.edgeType === "access_path" ? 11 : 8);
 
   return {
     x1: source.x + (dx / length) * sourcePad,
@@ -90,6 +93,8 @@ function edgeLine(edge, positionById) {
     y2: target.y - (dy / length) * targetPad,
     source,
     target,
+    sourceHop: sourceNode.hopDistance,
+    targetHop: targetNode.hopDistance,
   };
 }
 
@@ -103,15 +108,9 @@ function pointOnQuadratic(x1, y1, cx, cy, x2, y2, t) {
 function edgeTier(line, visualType) {
   if (visualType === "access_path") return 0;
 
-  const sourceDist = Math.hypot(line.source.x - CENTER.x, line.source.y - CENTER.y);
-  const targetDist = Math.hypot(line.target.x - CENTER.x, line.target.y - CENTER.y);
-  const avgDist = (sourceDist + targetDist) * 0.5;
-
-  // Tier 1: local edges (mostly inside 1 hop ring)
-  // Tier 2: mixed/local-to-mid edges
-  // Tier 3: longer cross-ring edges
-  if (avgDist < 210) return 1;
-  if (avgDist < 275) return 2;
+  const hopMax = Math.max(line.sourceHop || 0, line.targetHop || 0);
+  if (hopMax <= 1) return 1;
+  if (hopMax === 2) return 2;
   return 3;
 }
 
@@ -145,6 +144,15 @@ function edgePath(line, visualType) {
   const dotToCenter = (midX - CENTER.x) * nx + (midY - CENTER.y) * ny;
   const direction = dotToCenter >= 0 ? 1 : -1;
   const tier = edgeTier(line, visualType);
+
+  // Keep 1-hop non-access edges straight; start bundling bends at 2+ hops.
+  if (tier === 1) {
+    return {
+      d: `M ${x1} ${y1} L ${x2} ${y2}`,
+      labelPoint: { x: (x1 + x2) * 0.5 + 10, y: (y1 + y2) * 0.5 - 8 },
+    };
+  }
+
   const bend = tierBend(visualType, tier);
 
   const cx = midX + nx * bend * direction;
@@ -183,7 +191,7 @@ export default function AccessGraph({ graph }) {
 
   const visibleHop = hopFilter === "all" ? maxHop : Number(hopFilter);
 
-  const { nodes, edges, rings, positionById, hiddenCount } = useMemo(() => {
+  const { nodes, edges, rings, layoutById, hiddenCount } = useMemo(() => {
     const visibleRawNodes = graph.nodes.filter(
       (node) => node.data.isCurrentUser || node.data.hopDistance <= visibleHop
     );
@@ -194,10 +202,17 @@ export default function AccessGraph({ graph }) {
       ...node,
       screenPosition: nodeScreenPosition(node),
       sponsor: sponsorById[node.id],
+      avatarRadius: node.data.isCurrentUser ? 29 : 22,
+      hopDistance: node.data.hopDistance || 0,
+      labelPlacement: nodeScreenPosition(node).y < CENTER.y - 30 ? "top" : "bottom",
     }));
 
-    const positions = Object.fromEntries(
-      positionedNodes.map((node) => [node.id, node.screenPosition])
+    const byId = Object.fromEntries(
+      positionedNodes.map((node) => [node.id, {
+        screenPosition: node.screenPosition,
+        avatarRadius: node.avatarRadius,
+        hopDistance: node.hopDistance,
+      }])
     );
 
     const hopRings = [...new Set(visibleRawNodes.map((node) => node.data.hopDistance).filter(Boolean))]
@@ -223,7 +238,7 @@ export default function AccessGraph({ graph }) {
       nodes: positionedNodes,
       edges: allEdges,
       rings: hopRings,
-      positionById: positions,
+      layoutById: byId,
       hiddenCount: graph.nodes.length - visibleRawNodes.length,
     };
   }, [graph, sponsorById, visibleHop]);
@@ -341,7 +356,7 @@ export default function AccessGraph({ graph }) {
             ))}
 
             {edges.map((edge) => {
-              const line = edgeLine(edge, positionById);
+              const line = edgeLine(edge, layoutById);
               if (!line) return null;
               const visual = edgeStyle(edge.visualType);
               const path = edgePath(line, edge.visualType);
@@ -379,7 +394,7 @@ export default function AccessGraph({ graph }) {
                   setSelectedId(node.id);
                 }}
               >
-                <EmployeeNode data={node.data} />
+                <EmployeeNode data={node.data} labelPlacement={node.labelPlacement} />
               </button>
             ))}
           </div>
