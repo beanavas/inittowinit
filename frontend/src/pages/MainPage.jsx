@@ -12,7 +12,7 @@ const FACTORS = [
   { key: "orgProximity", title: "Org Proximity", impact: "22% impact", desc: "Closer people in the org/collaboration graph can help faster." },
   { key: "technologyExpertise", title: "Tool Usage & Expertise", impact: "36% impact", desc: "They use this tool regularly and can explain practical setup details." },
   { key: "relationship", title: "Relationship", impact: "18% impact", desc: "Manager, teammate, or frequent collaborator." },
-  { key: "approvalHistory", title: "Approval History", impact: "14% impact", desc: "Has sponsored similar requests for you before." },
+  { key: "approvalHistory", title: "Approval History", impact: "14% impact", desc: "Has approved similar requests for you before." },
   { key: "availability", title: "Availability", impact: "10% impact", desc: "Likely to respond quickly right now." },
 ];
 
@@ -116,7 +116,7 @@ export default function MainPage() {
 
         <div className="copilot-search">
           <input
-            placeholder={'Ask Claude anything — e.g. "who can sponsor my Claude Code request?"'}
+            placeholder={'Ask Claude anything — e.g. "who can help with my Claude Code request?"'}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && submitQuery()}
@@ -153,7 +153,7 @@ export default function MainPage() {
         <div className="graph-panel">
           <div className="card">
             <div className="card-title">
-              Access &amp; Sponsor Network{technology ? ` — ${technology}` : ""}
+              Access &amp; Support Network{technology ? ` — ${technology}` : ""}
             </div>
             <p className="card-subtitle">
               Who's connected to {currentUser?.name || "the selected person"} and how they relate to{" "}
@@ -171,7 +171,7 @@ export default function MainPage() {
           <div className="sponsor-panel">
             <div className="card">
               <div className="card-title">
-                Top Sponsor Suggestions
+                Top Access Guides
                 <span
                   className="how-scored-link"
                   title="Ranked using org proximity, tool usage, relationship, approval history, and availability — see the breakdown below."

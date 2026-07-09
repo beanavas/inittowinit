@@ -72,7 +72,7 @@ export default function SponsorList({ sponsors, onAskForHelp }) {
               <div className="sponsor-info-top">
                 <div className="sponsor-name-row">
                   {s.name}
-                  {s.isStrongSponsor && (
+                  {(s.isStrongSponsor || s.isTopGuide) && (
                     <span className="best-match-tag">
                       <span className="best-match-star">★</span> Best match
                     </span>

@@ -20,9 +20,15 @@ export default function GraphLegend() {
       <div className="legend-item">
         <span className="legend-dot strong">★</span>
         <span>
-          <strong>Strong Sponsor</strong>
+          <strong>Top Access Guide</strong>
           <small>High relevance</small>
         </span>
+      </div>
+      <div className="legend-divider" />
+      <div className="legend-hop-guide">
+        <strong>Hop Distance</strong>
+        <small>1 hop: direct teammate/manager connection</small>
+        <small>2 hops: connected through one intermediary</small>
       </div>
     </div>
   );
