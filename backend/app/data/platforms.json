@@ -9,13 +9,13 @@
     "accessTiers": [
       {
         "name": "Genesis Dev Environment",
-        "accessCode": "GT-ACC-GENESIS-DEV",
+        "accessCode": "GT-ACC_GITHUB_GENESIS_DEV",
         "description": "Read/write access to the Genesis development repositories, on top of base GitHub access",
         "approver": "Manager"
       },
       {
         "name": "Genesis Production Deploy",
-        "accessCode": "GT-ACC-GENESIS-PROD",
+        "accessCode": "GT-ACC_GITHUB_GENESIS_PROD",
         "description": "Production deployment and release permissions for Genesis repositories",
         "approver": "Security Team"
       }
