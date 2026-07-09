@@ -9,6 +9,7 @@ export function useCopilotChat(employeeId) {
   const [messages, setMessages] = useState([]);
   const [sending, setSending] = useState(false);
   const [focusPlatform, setFocusPlatform] = useState(null);
+  const [focusEmployeeId, setFocusEmployeeId] = useState(null);
 
   useEffect(() => {
     if (!employeeId) return;
@@ -46,6 +47,7 @@ export function useCopilotChat(employeeId) {
           { id: crypto.randomUUID(), role: "assistant", content: res.answer, data: res.data, source: res.source },
         ]);
         if (res.focusPlatform) setFocusPlatform(res.focusPlatform);
+        if (res.focusEmployeeId) setFocusEmployeeId(res.focusEmployeeId);
       } catch (err) {
         setMessages((prev) => [
           ...prev,
@@ -60,5 +62,5 @@ export function useCopilotChat(employeeId) {
 
   const clear = useCallback(() => setMessages([]), []);
 
-  return { messages, sending, sendMessage, clear, focusPlatform };
+  return { messages, sending, sendMessage, clear, focusPlatform, focusEmployeeId };
 }

@@ -25,7 +25,53 @@ function formatUsage(value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function SelectedEmployeeDetails({ employee, users = [] }) {
+// Fixed hue order — a platform's color never depends on any one employee's
+// membership list, so the same platform always gets the same bubble color.
+const PLATFORM_PALETTE = [
+  { bg: "#e6f2fa", fg: "#0d5c96", dot: "#2a78d6" }, // blue
+  { bg: "#e3f7f0", fg: "#0f7a58", dot: "#1baf7a" }, // aqua
+  { bg: "#fdf3dc", fg: "#8a6300", dot: "#eda100" }, // yellow
+  { bg: "#e3f3e3", fg: "#146214", dot: "#008300" }, // green
+  { bg: "#ece9f9", fg: "#3c2f86", dot: "#4a3aa7" }, // violet
+  { bg: "#fbe9e9", fg: "#a83231", dot: "#e34948" }, // red
+  { bg: "#fbebf1", fg: "#a8446a", dot: "#e87ba4" }, // magenta
+  { bg: "#fdecdf", fg: "#a8461a", dot: "#eb6834" }, // orange
+];
+
+function buildPlatformColorMap(platforms) {
+  const map = new Map();
+  platforms.forEach((p, i) => map.set(p.platform, PLATFORM_PALETTE[i % PLATFORM_PALETTE.length]));
+  return map;
+}
+
+// Maps every access code (base or tier) back to the platform + tier label it belongs to.
+function buildAccessIndex(platforms) {
+  const map = new Map();
+  platforms.forEach((p) => {
+    if (p.accessCode) map.set(p.accessCode, { platform: p.platform, tier: null });
+    (p.accessTiers || []).forEach((t) => {
+      map.set(t.accessCode, { platform: p.platform, tier: t.name });
+    });
+  });
+  return map;
+}
+
+function groupAccessCodes(codes, accessIndex) {
+  const groups = new Map();
+  const other = [];
+  codes.forEach((code) => {
+    const entry = accessIndex.get(code);
+    if (!entry) {
+      other.push(code);
+      return;
+    }
+    if (!groups.has(entry.platform)) groups.set(entry.platform, []);
+    groups.get(entry.platform).push({ code, tier: entry.tier });
+  });
+  return { groups, other };
+}
+
+function SelectedEmployeeDetails({ employee, users = [], platforms = [] }) {
   const [showAllGroups, setShowAllGroups] = useState(false);
 
   if (!employee) {
@@ -39,16 +85,27 @@ function SelectedEmployeeDetails({ employee, users = [] }) {
   const accessGroups = employee.memberships || [];
   const directoryEmployee = users.find((user) => user.employeeId === employee.employeeId);
   const manager = employee.manager || directoryEmployee?.manager || "Unknown";
-  const visibleGroups = showAllGroups ? accessGroups : accessGroups.slice(0, 6);
-  const hiddenCount = accessGroups.length - visibleGroups.length;
+
+  const colorMap = buildPlatformColorMap(platforms);
+  const accessIndex = buildAccessIndex(platforms);
+  const { groups, other } = groupAccessCodes(accessGroups, accessIndex);
+  const orderedPlatforms = platforms.map((p) => p.platform).filter((name) => groups.has(name));
+  const totalSections = orderedPlatforms.length + (other.length > 0 ? 1 : 0);
+  const visiblePlatforms = showAllGroups ? orderedPlatforms : orderedPlatforms.slice(0, 5);
+  const showOther = showAllGroups || visiblePlatforms.length === orderedPlatforms.length;
+  const hiddenCount = totalSections - visiblePlatforms.length - (showOther && other.length > 0 ? 1 : 0);
   const fields = [
-    { label: "Access", value: employee.accessStatus },
+    { label: "Access", value: employee.accessStatus || "Not in current graph" },
     { label: "Usage", value: formatUsage(employee.usageIntensity) },
-    { label: "Match", value: employee.isCurrentUser ? "Requester" : `${employee.relevanceScore}%` },
-    {
-      label: "Hop Distance",
-      value: employee.hopDistance === 0 ? "You" : `${employee.hopDistance} hop${employee.hopDistance === 1 ? "" : "s"}`,
-    },
+    ...(employee.relevanceScore != null
+      ? [{ label: "Match", value: employee.isCurrentUser ? "Requester" : `${employee.relevanceScore}%` }]
+      : []),
+    ...(employee.hopDistance != null
+      ? [{
+          label: "Hop Distance",
+          value: employee.hopDistance === 0 ? "You" : `${employee.hopDistance} hop${employee.hopDistance === 1 ? "" : "s"}`,
+        }]
+      : []),
     { label: "Department", value: employee.department },
     { label: "Manager", value: manager },
   ];
@@ -80,17 +137,43 @@ function SelectedEmployeeDetails({ employee, users = [] }) {
       {accessGroups.length > 0 && (
         <>
           <div className="section-label">Access Groups ({accessGroups.length})</div>
-          <div className="access-groups-wrap">
-            {visibleGroups.map((g) => (
-              <span className="badge badge-neutral" key={g}>{g}</span>
-            ))}
+          <div className="access-groups-grouped">
+            {visiblePlatforms.map((platformName) => {
+              const items = groups.get(platformName);
+              const color = colorMap.get(platformName) || PLATFORM_PALETTE[0];
+              return (
+                <div className="platform-group" key={platformName}>
+                  <div className="platform-bubble" style={{ background: color.bg, color: color.fg }}>
+                    <span className="platform-bubble-dot" style={{ background: color.dot }} />
+                    {platformName}
+                  </div>
+                  <div className="platform-group-items">
+                    {items.map(({ code, tier }) => (
+                      <span className="badge badge-neutral platform-tier-chip" key={code} title={tier || "Base access"}>
+                        {code}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+            {showOther && other.length > 0 && (
+              <div className="platform-group">
+                <div className="platform-bubble platform-bubble-other">Other</div>
+                <div className="platform-group-items">
+                  {other.map((code) => (
+                    <span className="badge badge-neutral" key={code}>{code}</span>
+                  ))}
+                </div>
+              </div>
+            )}
             {hiddenCount > 0 && (
-              <button className="badge badge-neutral access-groups-toggle" onClick={() => setShowAllGroups(true)}>
-                +{hiddenCount} more
+              <button className="badge badge-neutral access-groups-toggle" onClick={() => setShowAllGroups(true)} style={{ alignSelf: "flex-start" }}>
+                +{hiddenCount} more platform{hiddenCount === 1 ? "" : "s"}
               </button>
             )}
-            {showAllGroups && accessGroups.length > 6 && (
-              <button className="badge badge-neutral access-groups-toggle" onClick={() => setShowAllGroups(false)}>
+            {showAllGroups && totalSections > 5 && (
+              <button className="badge badge-neutral access-groups-toggle" onClick={() => setShowAllGroups(false)} style={{ alignSelf: "flex-start" }}>
                 Show less
               </button>
             )}
@@ -284,7 +367,7 @@ export default function AccessReportPanel({ user, access, loading, error, platfo
 
       {/* SELECTED EMPLOYEE */}
       {view === "selected" && (
-        <SelectedEmployeeDetails employee={selectedEmployee} key={selectedEmployee?.employeeId} users={users} />
+        <SelectedEmployeeDetails employee={selectedEmployee} key={selectedEmployee?.employeeId} users={users} platforms={platforms} />
       )}
     </div>
   );

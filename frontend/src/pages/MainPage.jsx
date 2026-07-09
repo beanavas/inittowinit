@@ -23,7 +23,6 @@ export default function MainPage() {
   const [query, setQuery] = useState("");
   const [selectedGraphEmployee, setSelectedGraphEmployee] = useState(null);
   const [chatDrivenGraph, setChatDrivenGraph] = useState(false);
-  const [showScoreFormula, setShowScoreFormula] = useState(false);
   const chat = useCopilotChat(employeeId);
 
   const sortedUsers = useMemo(
@@ -63,6 +62,38 @@ export default function MainPage() {
       setTechnology(chat.focusPlatform);
     }
   }, [chat.focusPlatform]);
+
+  // The console can also point the "Selected" tab at whoever a question named
+  // (e.g. "What access does Leah have?"), reusing the same node-select flow as
+  // clicking her in the graph. Prefer the richer graph node if she's in view;
+  // otherwise fall back to her plain directory profile + memberships.
+  useEffect(() => {
+    if (!chat.focusEmployeeId) return;
+    const graphNode = graph?.nodes?.find((n) => n.data.employeeId === chat.focusEmployeeId)?.data;
+    if (graphNode) {
+      setSelectedGraphEmployee(graphNode);
+      return;
+    }
+    const user = users.find((u) => u.employeeId === chat.focusEmployeeId);
+    if (user) {
+      setSelectedGraphEmployee({
+        employeeId: user.employeeId,
+        name: user.name,
+        role: user.role,
+        title: user.title,
+        team: user.team,
+        department: user.department,
+        manager: user.manager,
+        mail: user.mail,
+        memberships: user.memberships || [],
+        accessStatus: null,
+        usageIntensity: null,
+        relevanceScore: null,
+        hopDistance: null,
+        isCurrentUser: user.employeeId === employeeId,
+      });
+    }
+  }, [chat.focusEmployeeId]);
 
   useEffect(() => {
     if (!employeeId) return;
@@ -184,66 +215,7 @@ export default function MainPage() {
           <div className="sponsor-panel">
             <div className="card">
               <div className="card-title">Top Access Guides</div>
-              <p className="card-subtitle">
-                Ranked by relevance to your {technology} request.{" "}
-                <a
-                  className="score-formula-link"
-                  href="#access-guide-score-formula"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    setShowScoreFormula((current) => !current);
-                  }}
-                >
-                  {showScoreFormula ? "Hide scoring formula" : "See scoring formula"}
-                </a>
-              </p>
-              {showScoreFormula && (
-                <div className="score-formula-panel" id="access-guide-score-formula">
-                  <code className="score-formula-code">
-                    relevanceScore = 100 * weightedScore * accessPenalty
-                  </code>
-                  <div className="score-formula-text">
-                    weightedScore = 0.22 orgProximity + 0.36 technologyExpertise + 0.18 relationship + 0.14 approvalHistory + 0.10 availability.
-                  </div>
-                  <div className="score-formula-text">
-                    accessPenalty is 1.00 for active access, 0.55 for pending access, and 0.35 for no access.
-                  </div>
-                  <dl className="score-formula-definitions">
-                    <div>
-                      <dt>relevanceScore</dt>
-                      <dd>The final guide score shown in the list, converted to a 0-100 scale.</dd>
-                    </div>
-                    <div>
-                      <dt>weightedScore</dt>
-                      <dd>The blended signal score before access status is applied.</dd>
-                    </div>
-                    <div>
-                      <dt>orgProximity</dt>
-                      <dd>How close the person is to Beatriz in the org and collaboration graph.</dd>
-                    </div>
-                    <div>
-                      <dt>technologyExpertise</dt>
-                      <dd>How strongly the person uses the selected technology.</dd>
-                    </div>
-                    <div>
-                      <dt>relationship</dt>
-                      <dd>How directly the person is connected to Beatriz as a manager, teammate, or collaborator.</dd>
-                    </div>
-                    <div>
-                      <dt>approvalHistory</dt>
-                      <dd>Whether the person recently approved similar access requests for Beatriz.</dd>
-                    </div>
-                    <div>
-                      <dt>availability</dt>
-                      <dd>How likely the person is to respond quickly right now.</dd>
-                    </div>
-                    <div>
-                      <dt>accessPenalty</dt>
-                      <dd>A multiplier that favors people who already have active access to the selected technology.</dd>
-                    </div>
-                  </dl>
-                </div>
-              )}
+              <p className="card-subtitle">Ranked by relevance to your {technology} request.</p>
               <SponsorList sponsors={graph.sponsorRanking} onAskForHelp={askSponsorForHelp} />
             </div>
           </div>

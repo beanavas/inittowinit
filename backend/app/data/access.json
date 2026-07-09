@@ -2,81 +2,364 @@
   {
     "employeeId": "INT-002",
     "access": [
-      { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Power Apps", "status": "Provisioned" },
-      { "platform": "Microsoft Fabric", "status": "Provisioned" }
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Power Apps",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Microsoft Fabric",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Jira",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Confluence",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "AWS",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Azure",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Databricks",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Tableau",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Terraform",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Miro",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Claude Code",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "MGR-001",
     "access": [
-      { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Power Apps", "status": "Provisioned" },
-      { "platform": "Microsoft Fabric", "status": "Provisioned" }
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Power Apps",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Microsoft Fabric",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Jira",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Confluence",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "AWS",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "DIR-001",
     "access": [
-      { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Power Apps", "status": "Provisioned" },
-      { "platform": "Microsoft Fabric", "status": "Provisioned" }
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Power Apps",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Microsoft Fabric",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Jira",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Confluence",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "COL-001",
     "access": [
-      { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Power Apps", "status": "Provisioned" }
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Power Apps",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Jira",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Confluence",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Azure",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Terraform",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Miro",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Claude Code",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "COL-002",
     "access": [
-      { "platform": "GitHub", "status": "Provisioned" }
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Jira",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "AWS",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Terraform",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Claude Code",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Miro",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "COL-003",
     "access": [
-      { "platform": "GitHub", "status": "Provisioned" }
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Jira",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Azure",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Terraform",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Claude Code",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "COL-004",
     "access": [
-      { "platform": "GitHub", "status": "Provisioned" },
-      { "platform": "Power Apps", "status": "Provisioned" }
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Power Apps",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Jira",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "AWS",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Terraform",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Claude Code",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "COL-005",
     "access": [
-      { "platform": "Power Apps", "status": "Provisioned" }
+      {
+        "platform": "Power Apps",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "AWS",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Tableau",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Miro",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "COL-006",
     "access": [
-      { "platform": "Power Apps", "status": "Provisioned" }
+      {
+        "platform": "Power Apps",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Confluence",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Miro",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "COL-007",
     "access": [
-      { "platform": "Power Apps", "status": "Provisioned" }
+      {
+        "platform": "Power Apps",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Tableau",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "COL-008",
     "access": [
-      { "platform": "Microsoft Fabric", "status": "Provisioned" }
+      {
+        "platform": "Microsoft Fabric",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Confluence",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Azure",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Databricks",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Tableau",
+        "status": "Provisioned"
+      }
     ]
   },
   {
     "employeeId": "COL-009",
     "access": [
-      { "platform": "Microsoft Fabric", "status": "Provisioned" }
+      {
+        "platform": "Microsoft Fabric",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Confluence",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Azure",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Databricks",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Tableau",
+        "status": "Provisioned"
+      }
+    ]
+  },
+  {
+    "employeeId": "COL-010",
+    "access": [
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Power Apps",
+        "status": "Provisioned"
+      }
+    ]
+  },
+  {
+    "employeeId": "COL-011",
+    "access": [
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      }
+    ]
+  },
+  {
+    "employeeId": "COL-012",
+    "access": [
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Microsoft Fabric",
+        "status": "Provisioned"
+      }
     ]
   }
 ]

@@ -31,6 +31,12 @@ SYSTEM_PROMPT = (
     "to a platform from earlier messages or from the employee's existing pending/provisioned "
     "access unless the current question is actually about that platform. "
     "Keep answers short and specific; reference platform names and numbers from the tool results.\n\n"
+    "If a question names a specific person by name rather than employee ID (e.g. 'What access "
+    "does Leah have?'), call find_user first to resolve their employee ID, then call "
+    "get_user_access with that ID. When the question is about someone else's access (not the "
+    "employee asking), keep the answer to one short sentence naming them and the count of "
+    "platforms they have access to — the app already renders their full access-code breakdown "
+    "in the side panel, so do not re-list every platform or code yourself.\n\n"
     "When the question is about getting or requesting access to a specific platform, call "
     "list_platforms and structure your answer exactly like this:\n"
     "1. One short sentence of context.\n"
@@ -50,6 +56,7 @@ SYSTEM_PROMPT = (
 )
 
 TOOL_SOURCE_LABELS = {
+    "find_user": "Employee directory",
     "get_user_profile": "Employee directory",
     "get_user_access": "Access records",
     "get_recommendations": "Recommendation engine",
@@ -70,6 +77,20 @@ def _source_citation(tool_names: List[str]) -> Optional[str]:
     return ", ".join(seen) if seen else None
 
 TOOLS = [
+    {
+        "name": "find_user",
+        "description": (
+            "Find an employee by name (first name, last name, or partial match) to get their "
+            "employee ID and basic profile. Call this first whenever a question names a person "
+            "by name rather than by employee ID, then use the returned employeeId with "
+            "get_user_access or get_user_profile."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {"name": {"type": "string", "description": "Full or partial name to search for, e.g. 'Leah'"}},
+            "required": ["name"],
+        },
+    },
     {
         "name": "get_user_profile",
         "description": "Look up an employee's profile: name, role, department, manager, team.",
@@ -144,6 +165,18 @@ TOOLS = [
 def _execute_tool(name: str, tool_input: Dict[str, Any], default_employee_id: str) -> Any:
     employee_id = tool_input.get("employee_id") or default_employee_id
 
+    if name == "find_user":
+        query = (tool_input.get("name") or "").strip().lower()
+        if not query:
+            return {"error": "Provide a name to search for"}
+        matches = [u for u in user_service.get_all_users() if query in u.name.lower()]
+        if not matches:
+            return {"error": f"No employee found matching '{tool_input['name']}'"}
+        return [
+            {"employeeId": u.employeeId, "name": u.name, "role": u.role, "team": u.team, "department": u.department}
+            for u in matches[:5]
+        ]
+
     if name == "get_user_profile":
         user = user_service.get_user(employee_id)
         if not user:
@@ -210,6 +243,7 @@ def run_nl_query(
     ]
     messages.append({"role": "user", "content": prompt})
     collected_data: Dict[str, Any] = {}
+    focus_employee_id: Optional[str] = None
 
     for _ in range(MAX_TOOL_ITERATIONS):
         response = _client.messages.create(
@@ -228,6 +262,7 @@ def run_nl_query(
                 "answer": answer,
                 "data": collected_data,
                 "focusPlatform": focus_platform,
+                "focusEmployeeId": focus_employee_id,
                 "source": _source_citation(list(collected_data.keys())),
             }
 
@@ -240,6 +275,12 @@ def run_nl_query(
             try:
                 result = _execute_tool(block.name, block.input, employee_id)
                 collected_data[block.name] = result
+                if block.name == "find_user" and isinstance(result, list) and len(result) == 1:
+                    focus_employee_id = result[0]["employeeId"]
+                elif block.name in ("get_user_access", "get_user_profile") and block.input.get("employee_id"):
+                    target_id = block.input["employee_id"]
+                    if target_id != employee_id:
+                        focus_employee_id = target_id
                 tool_results.append(
                     {
                         "type": "tool_result",
@@ -262,6 +303,7 @@ def run_nl_query(
         "answer": "I wasn't able to finish looking that up — try a more specific question.",
         "data": collected_data,
         "focusPlatform": _detect_platform(prompt),
+        "focusEmployeeId": focus_employee_id,
         "source": _source_citation(list(collected_data.keys())),
     }
 
