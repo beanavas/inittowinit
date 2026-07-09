@@ -1,22 +1,398 @@
 [
-  { "employeeId": "INT-002", "platform": "GitHub", "intensity": "daily", "score": 0.82 },
-  { "employeeId": "INT-002", "platform": "Power Apps", "intensity": "weekly", "score": 0.72 },
-  { "employeeId": "INT-002", "platform": "Microsoft Fabric", "intensity": "weekly", "score": 0.68 },
-  { "employeeId": "MGR-001", "platform": "GitHub", "intensity": "daily", "score": 0.88 },
-  { "employeeId": "MGR-001", "platform": "Power Apps", "intensity": "daily", "score": 0.86 },
-  { "employeeId": "MGR-001", "platform": "Microsoft Fabric", "intensity": "weekly", "score": 0.8 },
-  { "employeeId": "DIR-001", "platform": "GitHub", "intensity": "weekly", "score": 0.78 },
-  { "employeeId": "DIR-001", "platform": "Power Apps", "intensity": "weekly", "score": 0.76 },
-  { "employeeId": "DIR-001", "platform": "Microsoft Fabric", "intensity": "weekly", "score": 0.82 },
-  { "employeeId": "COL-001", "platform": "GitHub", "intensity": "daily", "score": 0.91 },
-  { "employeeId": "COL-001", "platform": "Power Apps", "intensity": "weekly", "score": 0.78 },
-  { "employeeId": "COL-002", "platform": "GitHub", "intensity": "daily", "score": 0.89 },
-  { "employeeId": "COL-003", "platform": "GitHub", "intensity": "weekly", "score": 0.74 },
-  { "employeeId": "COL-004", "platform": "GitHub", "intensity": "weekly", "score": 0.72 },
-  { "employeeId": "COL-004", "platform": "Power Apps", "intensity": "weekly", "score": 0.75 },
-  { "employeeId": "COL-005", "platform": "Power Apps", "intensity": "daily", "score": 0.87 },
-  { "employeeId": "COL-006", "platform": "Power Apps", "intensity": "weekly", "score": 0.73 },
-  { "employeeId": "COL-007", "platform": "Power Apps", "intensity": "weekly", "score": 0.7 },
-  { "employeeId": "COL-008", "platform": "Microsoft Fabric", "intensity": "daily", "score": 0.92 },
-  { "employeeId": "COL-009", "platform": "Microsoft Fabric", "intensity": "weekly", "score": 0.76 }
+  {
+    "employeeId": "INT-002",
+    "platform": "GitHub",
+    "intensity": "daily",
+    "score": 0.82
+  },
+  {
+    "employeeId": "INT-002",
+    "platform": "Power Apps",
+    "intensity": "weekly",
+    "score": 0.72
+  },
+  {
+    "employeeId": "INT-002",
+    "platform": "Microsoft Fabric",
+    "intensity": "weekly",
+    "score": 0.68
+  },
+  {
+    "employeeId": "MGR-001",
+    "platform": "GitHub",
+    "intensity": "daily",
+    "score": 0.88
+  },
+  {
+    "employeeId": "MGR-001",
+    "platform": "Power Apps",
+    "intensity": "daily",
+    "score": 0.86
+  },
+  {
+    "employeeId": "MGR-001",
+    "platform": "Microsoft Fabric",
+    "intensity": "weekly",
+    "score": 0.8
+  },
+  {
+    "employeeId": "DIR-001",
+    "platform": "GitHub",
+    "intensity": "weekly",
+    "score": 0.78
+  },
+  {
+    "employeeId": "DIR-001",
+    "platform": "Power Apps",
+    "intensity": "weekly",
+    "score": 0.76
+  },
+  {
+    "employeeId": "DIR-001",
+    "platform": "Microsoft Fabric",
+    "intensity": "weekly",
+    "score": 0.82
+  },
+  {
+    "employeeId": "COL-001",
+    "platform": "GitHub",
+    "intensity": "daily",
+    "score": 0.91
+  },
+  {
+    "employeeId": "COL-001",
+    "platform": "Power Apps",
+    "intensity": "weekly",
+    "score": 0.78
+  },
+  {
+    "employeeId": "COL-002",
+    "platform": "GitHub",
+    "intensity": "daily",
+    "score": 0.89
+  },
+  {
+    "employeeId": "COL-003",
+    "platform": "GitHub",
+    "intensity": "weekly",
+    "score": 0.74
+  },
+  {
+    "employeeId": "COL-004",
+    "platform": "GitHub",
+    "intensity": "weekly",
+    "score": 0.72
+  },
+  {
+    "employeeId": "COL-004",
+    "platform": "Power Apps",
+    "intensity": "weekly",
+    "score": 0.75
+  },
+  {
+    "employeeId": "COL-005",
+    "platform": "Power Apps",
+    "intensity": "daily",
+    "score": 0.87
+  },
+  {
+    "employeeId": "COL-006",
+    "platform": "Power Apps",
+    "intensity": "weekly",
+    "score": 0.73
+  },
+  {
+    "employeeId": "COL-007",
+    "platform": "Power Apps",
+    "intensity": "weekly",
+    "score": 0.7
+  },
+  {
+    "employeeId": "COL-008",
+    "platform": "Microsoft Fabric",
+    "intensity": "daily",
+    "score": 0.92
+  },
+  {
+    "employeeId": "COL-009",
+    "platform": "Microsoft Fabric",
+    "intensity": "weekly",
+    "score": 0.76
+  },
+  {
+    "employeeId": "INT-002",
+    "platform": "Jira",
+    "intensity": "daily",
+    "score": 0.61
+  },
+  {
+    "employeeId": "INT-002",
+    "platform": "Confluence",
+    "intensity": "weekly",
+    "score": 0.68
+  },
+  {
+    "employeeId": "INT-002",
+    "platform": "AWS",
+    "intensity": "weekly",
+    "score": 0.84
+  },
+  {
+    "employeeId": "INT-002",
+    "platform": "Azure",
+    "intensity": "daily",
+    "score": 0.79
+  },
+  {
+    "employeeId": "INT-002",
+    "platform": "Databricks",
+    "intensity": "daily",
+    "score": 0.61
+  },
+  {
+    "employeeId": "INT-002",
+    "platform": "Tableau",
+    "intensity": "weekly",
+    "score": 0.68
+  },
+  {
+    "employeeId": "INT-002",
+    "platform": "Terraform",
+    "intensity": "daily",
+    "score": 0.79
+  },
+  {
+    "employeeId": "INT-002",
+    "platform": "Miro",
+    "intensity": "daily",
+    "score": 0.67
+  },
+  {
+    "employeeId": "MGR-001",
+    "platform": "Jira",
+    "intensity": "weekly",
+    "score": 0.87
+  },
+  {
+    "employeeId": "MGR-001",
+    "platform": "Confluence",
+    "intensity": "daily",
+    "score": 0.85
+  },
+  {
+    "employeeId": "MGR-001",
+    "platform": "AWS",
+    "intensity": "weekly",
+    "score": 0.83
+  },
+  {
+    "employeeId": "DIR-001",
+    "platform": "Jira",
+    "intensity": "weekly",
+    "score": 0.69
+  },
+  {
+    "employeeId": "DIR-001",
+    "platform": "Confluence",
+    "intensity": "weekly",
+    "score": 0.92
+  },
+  {
+    "employeeId": "COL-001",
+    "platform": "Jira",
+    "intensity": "weekly",
+    "score": 0.63
+  },
+  {
+    "employeeId": "COL-001",
+    "platform": "Confluence",
+    "intensity": "daily",
+    "score": 0.63
+  },
+  {
+    "employeeId": "COL-001",
+    "platform": "Azure",
+    "intensity": "weekly",
+    "score": 0.8
+  },
+  {
+    "employeeId": "COL-001",
+    "platform": "Terraform",
+    "intensity": "daily",
+    "score": 0.84
+  },
+  {
+    "employeeId": "COL-001",
+    "platform": "Miro",
+    "intensity": "daily",
+    "score": 0.92
+  },
+  {
+    "employeeId": "COL-001",
+    "platform": "Claude Code",
+    "intensity": "daily",
+    "score": 0.63
+  },
+  {
+    "employeeId": "COL-002",
+    "platform": "Jira",
+    "intensity": "weekly",
+    "score": 0.87
+  },
+  {
+    "employeeId": "COL-002",
+    "platform": "AWS",
+    "intensity": "weekly",
+    "score": 0.79
+  },
+  {
+    "employeeId": "COL-002",
+    "platform": "Terraform",
+    "intensity": "daily",
+    "score": 0.62
+  },
+  {
+    "employeeId": "COL-002",
+    "platform": "Claude Code",
+    "intensity": "weekly",
+    "score": 0.86
+  },
+  {
+    "employeeId": "COL-002",
+    "platform": "Miro",
+    "intensity": "daily",
+    "score": 0.88
+  },
+  {
+    "employeeId": "COL-003",
+    "platform": "Jira",
+    "intensity": "daily",
+    "score": 0.73
+  },
+  {
+    "employeeId": "COL-003",
+    "platform": "Azure",
+    "intensity": "daily",
+    "score": 0.81
+  },
+  {
+    "employeeId": "COL-003",
+    "platform": "Terraform",
+    "intensity": "weekly",
+    "score": 0.65
+  },
+  {
+    "employeeId": "COL-003",
+    "platform": "Claude Code",
+    "intensity": "weekly",
+    "score": 0.67
+  },
+  {
+    "employeeId": "COL-004",
+    "platform": "Jira",
+    "intensity": "weekly",
+    "score": 0.83
+  },
+  {
+    "employeeId": "COL-004",
+    "platform": "AWS",
+    "intensity": "daily",
+    "score": 0.8
+  },
+  {
+    "employeeId": "COL-004",
+    "platform": "Terraform",
+    "intensity": "weekly",
+    "score": 0.78
+  },
+  {
+    "employeeId": "COL-004",
+    "platform": "Claude Code",
+    "intensity": "weekly",
+    "score": 0.65
+  },
+  {
+    "employeeId": "COL-005",
+    "platform": "AWS",
+    "intensity": "daily",
+    "score": 0.69
+  },
+  {
+    "employeeId": "COL-005",
+    "platform": "Tableau",
+    "intensity": "weekly",
+    "score": 0.83
+  },
+  {
+    "employeeId": "COL-005",
+    "platform": "Miro",
+    "intensity": "daily",
+    "score": 0.68
+  },
+  {
+    "employeeId": "COL-006",
+    "platform": "Confluence",
+    "intensity": "daily",
+    "score": 0.87
+  },
+  {
+    "employeeId": "COL-006",
+    "platform": "Miro",
+    "intensity": "daily",
+    "score": 0.69
+  },
+  {
+    "employeeId": "COL-007",
+    "platform": "Tableau",
+    "intensity": "weekly",
+    "score": 0.9
+  },
+  {
+    "employeeId": "COL-008",
+    "platform": "Confluence",
+    "intensity": "weekly",
+    "score": 0.67
+  },
+  {
+    "employeeId": "COL-008",
+    "platform": "Azure",
+    "intensity": "daily",
+    "score": 0.73
+  },
+  {
+    "employeeId": "COL-008",
+    "platform": "Databricks",
+    "intensity": "daily",
+    "score": 0.65
+  },
+  {
+    "employeeId": "COL-008",
+    "platform": "Tableau",
+    "intensity": "weekly",
+    "score": 0.68
+  },
+  {
+    "employeeId": "COL-009",
+    "platform": "Confluence",
+    "intensity": "weekly",
+    "score": 0.85
+  },
+  {
+    "employeeId": "COL-009",
+    "platform": "Azure",
+    "intensity": "daily",
+    "score": 0.9
+  },
+  {
+    "employeeId": "COL-009",
+    "platform": "Databricks",
+    "intensity": "daily",
+    "score": 0.72
+  },
+  {
+    "employeeId": "COL-009",
+    "platform": "Tableau",
+    "intensity": "weekly",
+    "score": 0.77
+  }
 ]
