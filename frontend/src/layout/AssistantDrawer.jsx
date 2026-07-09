@@ -142,7 +142,7 @@ function AssistantMessageContent({ content }) {
                     <tr key={r}>
                       {row.map((cell, c) => {
                         const badge = statusBadge(cell);
-                        const isCode = /(ACC|GT-|AAD-|PIM-|RAS-|CTS-|GBTS-|PRU-)/i.test(cell);
+                        const isCode = /(DEMO-ACC|ACC|GT-|AAD-|PIM-|RAS-|CTS-|GBTS-)/i.test(cell);
                         return (
                           <td key={c}>
                             {badge || (isCode ? <code>{cell}</code> : renderInline(cell))}

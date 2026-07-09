@@ -46,5 +46,47 @@
     "targetEmployeeId": "E007",
     "strength": 0.58,
     "reason": "Cloud data platform operations"
+  },
+  {
+    "sourceEmployeeId": "INT-001",
+    "targetEmployeeId": "INT-002",
+    "strength": 0.91,
+    "reason": "Shared demo intern onboarding and project work"
+  },
+  {
+    "sourceEmployeeId": "INT-001",
+    "targetEmployeeId": "INT-003",
+    "strength": 0.84,
+    "reason": "Worked together on analytics tooling setup"
+  },
+  {
+    "sourceEmployeeId": "INT-001",
+    "targetEmployeeId": "INT-005",
+    "strength": 0.78,
+    "reason": "Same intern cohort and recurring standups"
+  },
+  {
+    "sourceEmployeeId": "INT-002",
+    "targetEmployeeId": "INT-004",
+    "strength": 0.74,
+    "reason": "Shared documentation and onboarding tasks"
+  },
+  {
+    "sourceEmployeeId": "INT-003",
+    "targetEmployeeId": "INT-006",
+    "strength": 0.8,
+    "reason": "Collaborated on GitHub and Jira workflow setup"
+  },
+  {
+    "sourceEmployeeId": "INT-004",
+    "targetEmployeeId": "INT-005",
+    "strength": 0.7,
+    "reason": "Paired on intern access checklist"
+  },
+  {
+    "sourceEmployeeId": "INT-006",
+    "targetEmployeeId": "E004",
+    "strength": 0.62,
+    "reason": "Manager review for intern technology access"
   }
 ]

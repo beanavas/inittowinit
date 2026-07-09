@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { api } from "../api";
 import { useApp } from "../context/AppContext";
 import { useCopilotChat } from "../hooks/useCopilotChat";
@@ -28,6 +28,17 @@ export default function MainPage() {
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [query, setQuery] = useState("");
   const chat = useCopilotChat(employeeId);
+
+  const sortedUsers = useMemo(
+    () =>
+      [...users].sort((a, b) => {
+        const aIsIntern = a.employeeId.startsWith("INT-");
+        const bIsIntern = b.employeeId.startsWith("INT-");
+        if (aIsIntern !== bIsIntern) return aIsIntern ? -1 : 1;
+        return a.name.localeCompare(b.name);
+      }),
+    [users]
+  );
 
   useEffect(() => {
     api
@@ -105,7 +116,7 @@ export default function MainPage() {
             value={employeeId || ""}
             onChange={(e) => setEmployeeId(e.target.value)}
           >
-            {users.map((u) => (
+            {sortedUsers.map((u) => (
               <option key={u.employeeId} value={u.employeeId}>
                 {u.name}
               </option>

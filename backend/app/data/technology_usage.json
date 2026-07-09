@@ -17,5 +17,16 @@
   { "employeeId": "E009", "platform": "Jira", "intensity": "weekly", "score": 0.63 },
   { "employeeId": "E002", "platform": "Confluence", "intensity": "weekly", "score": 0.61 },
   { "employeeId": "E003", "platform": "Confluence", "intensity": "weekly", "score": 0.66 },
-  { "employeeId": "E004", "platform": "Confluence", "intensity": "daily", "score": 0.81 }
+  { "employeeId": "E004", "platform": "Confluence", "intensity": "daily", "score": 0.81 },
+  { "employeeId": "INT-001", "platform": "Jira", "intensity": "weekly", "score": 0.58 },
+  { "employeeId": "INT-001", "platform": "Confluence", "intensity": "weekly", "score": 0.62 },
+  { "employeeId": "INT-002", "platform": "GitHub", "intensity": "daily", "score": 0.82 },
+  { "employeeId": "INT-002", "platform": "Confluence", "intensity": "weekly", "score": 0.65 },
+  { "employeeId": "INT-003", "platform": "GitHub", "intensity": "weekly", "score": 0.7 },
+  { "employeeId": "INT-003", "platform": "Jira", "intensity": "daily", "score": 0.72 },
+  { "employeeId": "INT-004", "platform": "Confluence", "intensity": "weekly", "score": 0.6 },
+  { "employeeId": "INT-004", "platform": "Jira", "intensity": "weekly", "score": 0.56 },
+  { "employeeId": "INT-005", "platform": "Confluence", "intensity": "weekly", "score": 0.59 },
+  { "employeeId": "INT-006", "platform": "GitHub", "intensity": "daily", "score": 0.78 },
+  { "employeeId": "INT-006", "platform": "Jira", "intensity": "weekly", "score": 0.61 }
 ]
