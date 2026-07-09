@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 const QUICK_PROMPTS = [
   { title: "What should I request?", subtitle: "Get personalized platform recommendations" },
+  { title: "I need help getting access to Claude Code", subtitle: "See the access code, steps, and who can sponsor it" },
+  { title: "Who can sponsor my request?", subtitle: "Find the best person to ask for help" },
   { title: "What's the status of my requests?", subtitle: "Check other in-flight requests" },
   { title: "Explain why I need this access", subtitle: "Help me write a justification" },
 ];
@@ -256,6 +258,15 @@ export default function AssistantDrawer({ open, onClose, messages, sending, onSe
           </div>
         </div>
         <div className="copilot-drawer-body" style={{ flex: "0 0 auto", paddingTop: 0 }}>
+          {messages.length > 0 && (
+            <div className="quick-actions-row">
+              {QUICK_PROMPTS.map((q) => (
+                <button key={q.title} className="quick-action-chip" onClick={() => submit(q.title)} disabled={sending}>
+                  {q.title}
+                </button>
+              ))}
+            </div>
+          )}
           <div className="chat-composer">
             <input
               placeholder="Ask Claude anything about your access..."
