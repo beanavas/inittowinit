@@ -73,5 +73,50 @@
     "access": [
       { "platform": "Jira", "status": "Provisioned" }
     ]
+  },
+  {
+    "employeeId": "INT-001",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" },
+      { "platform": "GitHub", "status": "Pending" }
+    ]
+  },
+  {
+    "employeeId": "INT-002",
+    "access": [
+      { "platform": "GitHub", "status": "Provisioned" },
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "INT-003",
+    "access": [
+      { "platform": "GitHub", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "INT-004",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" }
+    ]
+  },
+  {
+    "employeeId": "INT-005",
+    "access": [
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "GitHub", "status": "Pending" }
+    ]
+  },
+  {
+    "employeeId": "INT-006",
+    "access": [
+      { "platform": "GitHub", "status": "Provisioned" },
+      { "platform": "Confluence", "status": "Provisioned" },
+      { "platform": "Jira", "status": "Provisioned" }
+    ]
   }
 ]

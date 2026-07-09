@@ -875,10 +875,14 @@ a {
 
 .graph-detail-row span {
   color: var(--text-muted);
+  flex-shrink: 0;
 }
 
 .graph-detail-row strong {
   color: var(--navy);
+  min-width: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
 }
 
 .score-breakdown-mini {
