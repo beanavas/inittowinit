@@ -283,7 +283,11 @@ export default function AccessGraph({ graph, onNodeSelect, defaultHopFilter = "a
     function fitWorld() {
       const { width, height } = viewport.getBoundingClientRect();
       if (!width || !height) return;
-      const scale = Math.min(width / VIEWBOX.width, height / VIEWBOX.height);
+      const widthScale = width / VIEWBOX.width;
+      const heightScale = height / VIEWBOX.height;
+      const scale = isFullscreen
+        ? Math.min(widthScale, heightScale)
+        : Math.min(widthScale, heightScale * 1.28);
       setWorldSize({
         width: VIEWBOX.width * scale,
         height: VIEWBOX.height * scale,
@@ -294,7 +298,7 @@ export default function AccessGraph({ graph, onNodeSelect, defaultHopFilter = "a
     const resizeObserver = new ResizeObserver(fitWorld);
     resizeObserver.observe(viewport);
     return () => resizeObserver.disconnect();
-  }, []);
+  }, [isFullscreen]);
 
   const sponsorById = useMemo(
     () => Object.fromEntries(graph.sponsorRanking.map((sponsor) => [sponsor.employeeId, sponsor])),
