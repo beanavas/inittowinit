@@ -13,21 +13,25 @@ from app.models.user import User
 from app.services.access_graph_scoring import get_access_status
 
 REPORTS_TO_VISUAL = {"stroke": "#7b8794", "strokeWidth": "2", "lineStyle": "solid", "markerEnd": "arrow"}
+TEAM_VISUAL = {"stroke": "#007bc3", "strokeWidth": "2", "lineStyle": "solid"}
 WORKS_WITH_VISUAL = {"stroke": "#94a3b3", "strokeWidth": "1.5", "lineStyle": "dashed"}
 COLLABORATION_STRENGTH_THRESHOLD = 0.7
 
 EDGE_LABELS = {
     GraphEdgeType.REPORTS_TO: "Reports to",
+    GraphEdgeType.TEAM: "Team",
     GraphEdgeType.WORKS_WITH: "Works with",
 }
 
 EDGE_VISUALS = {
     GraphEdgeType.REPORTS_TO: REPORTS_TO_VISUAL,
+    GraphEdgeType.TEAM: TEAM_VISUAL,
     GraphEdgeType.WORKS_WITH: WORKS_WITH_VISUAL,
 }
 
 EDGE_REASONS = {
     GraphEdgeType.REPORTS_TO: "Formal manager/reporting relationship in the org chart.",
+    GraphEdgeType.TEAM: "Same team or immediate working group.",
     GraphEdgeType.WORKS_WITH: "Direct collaboration signal from shared projects, meetings, or files.",
 }
 
@@ -61,13 +65,17 @@ def classify_edge(
     allowed_report_pairs: Optional[Set[frozenset[str]]] = None,
 ) -> Optional[GraphEdgeType]:
     """
-    Classify the relationship between two people into one drawable relation:
-    the requester's explicit org chain, or a direct collaboration where both
-    people use the selected technology.
+    Classify the relationship between two people into one drawable relation, by
+    priority: the requester's explicit org chain, shared team membership, or a
+    direct collaboration where both people use the selected technology. Team
+    membership is checked before ad-hoc collaboration so two teammates are
+    shown as teammates rather than via a manufactured "works with" story.
     """
     report_pair = frozenset({a.employeeId, b.employeeId})
     if _reports_to(a, b) and (allowed_report_pairs is None or report_pair in allowed_report_pairs):
         return GraphEdgeType.REPORTS_TO
+    if a.teams() & b.teams():
+        return GraphEdgeType.TEAM
     if (
         _collaborates(a.employeeId, b.employeeId, collaborations)
         and _uses_technology(a.employeeId, technology, usage)
@@ -109,7 +117,8 @@ def calculate_hop_distances(requester_id: str, graph: Dict[str, Set[str]]) -> Di
 
 _EDGE_PRIORITY = {
     GraphEdgeType.REPORTS_TO: 0,
-    GraphEdgeType.WORKS_WITH: 1,
+    GraphEdgeType.TEAM: 1,
+    GraphEdgeType.WORKS_WITH: 2,
 }
 
 

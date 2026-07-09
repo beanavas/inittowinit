@@ -394,5 +394,35 @@
     "platform": "Tableau",
     "intensity": "weekly",
     "score": 0.77
+  },
+  {
+    "employeeId": "COL-010",
+    "platform": "GitHub",
+    "intensity": "daily",
+    "score": 0.75
+  },
+  {
+    "employeeId": "COL-010",
+    "platform": "Power Apps",
+    "intensity": "weekly",
+    "score": 0.66
+  },
+  {
+    "employeeId": "COL-011",
+    "platform": "GitHub",
+    "intensity": "weekly",
+    "score": 0.69
+  },
+  {
+    "employeeId": "COL-012",
+    "platform": "GitHub",
+    "intensity": "daily",
+    "score": 0.71
+  },
+  {
+    "employeeId": "COL-012",
+    "platform": "Microsoft Fabric",
+    "intensity": "weekly",
+    "score": 0.64
   }
 ]

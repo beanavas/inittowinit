@@ -326,5 +326,40 @@
         "status": "Provisioned"
       }
     ]
+  },
+  {
+    "employeeId": "COL-010",
+    "access": [
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Power Apps",
+        "status": "Provisioned"
+      }
+    ]
+  },
+  {
+    "employeeId": "COL-011",
+    "access": [
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      }
+    ]
+  },
+  {
+    "employeeId": "COL-012",
+    "access": [
+      {
+        "platform": "GitHub",
+        "status": "Provisioned"
+      },
+      {
+        "platform": "Microsoft Fabric",
+        "status": "Provisioned"
+      }
+    ]
   }
 ]

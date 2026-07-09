@@ -6,9 +6,16 @@
     "department": "Technology Enablement",
     "manager": "Sundar",
     "team": "Demo Access Program",
-    "additionalTeams": ["Custom Harvest"],
+    "additionalTeams": [
+      "Custom Harvest",
+      "Technology Interns"
+    ],
     "Mail": "beatriz@example.test",
-    "Memberships": ["DEMO-ACC_GITHUB_USERS", "DEMO-ACC_POWER_APPS_USERS", "DEMO-ACC_FABRIC_USERS"],
+    "Memberships": [
+      "DEMO-ACC_GITHUB_USERS",
+      "DEMO-ACC_POWER_APPS_USERS",
+      "DEMO-ACC_FABRIC_USERS"
+    ],
     "Title": "Intern - Technology",
     "User": "beatriz"
   },
@@ -20,9 +27,16 @@
     "manager": "Raj",
     "team": "Demo Access Program",
     "Mail": "sundar@example.test",
-    "Memberships": ["DEMO-ACC_GITHUB_APPROVERS", "DEMO-ACC_POWER_APPS_MAKERS", "DEMO-ACC_FABRIC_USERS"],
+    "Memberships": [
+      "DEMO-ACC_GITHUB_APPROVERS",
+      "DEMO-ACC_POWER_APPS_MAKERS",
+      "DEMO-ACC_FABRIC_USERS"
+    ],
     "Title": "Engineering Manager",
-    "User": "sundar"
+    "User": "sundar",
+    "additionalTeams": [
+      "Custom Harvest"
+    ]
   },
   {
     "employeeId": "DIR-001",
@@ -32,7 +46,11 @@
     "manager": "Aparna",
     "team": "Technology Leadership",
     "Mail": "raj@example.test",
-    "Memberships": ["DEMO-ACC_GITHUB_APPROVERS", "DEMO-ACC_POWER_APPS_ADMINS", "DEMO-ACC_FABRIC_ADMINS"],
+    "Memberships": [
+      "DEMO-ACC_GITHUB_APPROVERS",
+      "DEMO-ACC_POWER_APPS_ADMINS",
+      "DEMO-ACC_FABRIC_ADMINS"
+    ],
     "Title": "Director - Technology",
     "User": "raj"
   },
@@ -67,9 +85,15 @@
     "department": "Technology Enablement",
     "manager": "Sundar",
     "team": "App Modernization",
-    "additionalTeams": ["Custom Harvest"],
+    "additionalTeams": [
+      "Custom Harvest",
+      "Technology Interns"
+    ],
     "Mail": "leah@example.test",
-    "Memberships": ["DEMO-ACC_GITHUB_USERS", "DEMO-ACC_POWER_APPS_USERS"],
+    "Memberships": [
+      "DEMO-ACC_GITHUB_USERS",
+      "DEMO-ACC_POWER_APPS_USERS"
+    ],
     "Title": "Intern - Technology",
     "User": "leah"
   },
@@ -81,9 +105,14 @@
     "manager": "Taylor",
     "team": "App Modernization",
     "Mail": "abirami@example.test",
-    "Memberships": ["DEMO-ACC_GITHUB_USERS"],
+    "Memberships": [
+      "DEMO-ACC_GITHUB_USERS"
+    ],
     "Title": "Software Engineer",
-    "User": "abirami"
+    "User": "abirami",
+    "additionalTeams": [
+      "Custom Harvest"
+    ]
   },
   {
     "employeeId": "COL-003",
@@ -93,7 +122,9 @@
     "manager": "Taylor",
     "team": "Developer Platforms",
     "Mail": "miles@example.test",
-    "Memberships": ["DEMO-ACC_GITHUB_USERS"],
+    "Memberships": [
+      "DEMO-ACC_GITHUB_USERS"
+    ],
     "Title": "Intern - Technology",
     "User": "miles"
   },
@@ -105,9 +136,15 @@
     "manager": "Taylor",
     "team": "Automation Studio",
     "Mail": "liam@example.test",
-    "Memberships": ["DEMO-ACC_GITHUB_USERS", "DEMO-ACC_POWER_APPS_USERS"],
+    "Memberships": [
+      "DEMO-ACC_GITHUB_USERS",
+      "DEMO-ACC_POWER_APPS_USERS"
+    ],
     "Title": "Intern - Technology",
-    "User": "liam"
+    "User": "liam",
+    "additionalTeams": [
+      "Technology Interns"
+    ]
   },
   {
     "employeeId": "COL-005",
@@ -117,7 +154,9 @@
     "manager": "Taylor",
     "team": "Automation Studio",
     "Mail": "sasha@example.test",
-    "Memberships": ["DEMO-ACC_POWER_APPS_USERS"],
+    "Memberships": [
+      "DEMO-ACC_POWER_APPS_USERS"
+    ],
     "Title": "Business Systems Analyst",
     "User": "sasha"
   },
@@ -129,7 +168,9 @@
     "manager": "Taylor",
     "team": "Automation Studio",
     "Mail": "andria@example.test",
-    "Memberships": ["DEMO-ACC_POWER_APPS_USERS"],
+    "Memberships": [
+      "DEMO-ACC_POWER_APPS_USERS"
+    ],
     "Title": "Intern - Technology",
     "User": "andria"
   },
@@ -141,7 +182,9 @@
     "manager": "Taylor",
     "team": "Automation Studio",
     "Mail": "emily@example.test",
-    "Memberships": ["DEMO-ACC_POWER_APPS_USERS"],
+    "Memberships": [
+      "DEMO-ACC_POWER_APPS_USERS"
+    ],
     "Title": "QA Analyst",
     "User": "emily"
   },
@@ -153,7 +196,9 @@
     "manager": "Taylor",
     "team": "Analytics Enablement",
     "Mail": "srini@example.test",
-    "Memberships": ["DEMO-ACC_FABRIC_USERS"],
+    "Memberships": [
+      "DEMO-ACC_FABRIC_USERS"
+    ],
     "Title": "Data Engineer",
     "User": "srini"
   },
@@ -165,8 +210,54 @@
     "manager": "Taylor",
     "team": "Analytics Enablement",
     "Mail": "noah@example.test",
-    "Memberships": ["DEMO-ACC_FABRIC_USERS"],
+    "Memberships": [
+      "DEMO-ACC_FABRIC_USERS"
+    ],
     "Title": "Intern - Technology",
     "User": "noah"
+  },
+  {
+    "employeeId": "COL-010",
+    "name": "Elizabeth",
+    "role": "Intern - Technology",
+    "department": "Technology Enablement",
+    "manager": "Taylor",
+    "team": "Technology Interns",
+    "Mail": "elizabeth@example.test",
+    "Memberships": [
+      "DEMO-ACC_GITHUB_USERS",
+      "DEMO-ACC_POWER_APPS_USERS"
+    ],
+    "Title": "Intern - Technology",
+    "User": "elizabeth"
+  },
+  {
+    "employeeId": "COL-011",
+    "name": "Isabella",
+    "role": "Intern - Technology",
+    "department": "Technology Enablement",
+    "manager": "Taylor",
+    "team": "Technology Interns",
+    "Mail": "isabella@example.test",
+    "Memberships": [
+      "DEMO-ACC_GITHUB_USERS"
+    ],
+    "Title": "Intern - Technology",
+    "User": "isabella"
+  },
+  {
+    "employeeId": "COL-012",
+    "name": "Rafael",
+    "role": "Intern - Technology",
+    "department": "Technology Enablement",
+    "manager": "Taylor",
+    "team": "Technology Interns",
+    "Mail": "rafael@example.test",
+    "Memberships": [
+      "DEMO-ACC_GITHUB_USERS",
+      "DEMO-ACC_FABRIC_USERS"
+    ],
+    "Title": "Intern - Technology",
+    "User": "rafael"
   }
 ]
