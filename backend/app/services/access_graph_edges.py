@@ -13,29 +13,21 @@ from app.models.user import User
 from app.services.access_graph_scoring import get_access_status
 
 REPORTS_TO_VISUAL = {"stroke": "#7b8794", "strokeWidth": "2", "lineStyle": "solid", "markerEnd": "arrow"}
-TEAM_VISUAL = {"stroke": "#007bc3", "strokeWidth": "2", "lineStyle": "solid"}
-TOOL_VISUAL = {"stroke": "#001f45", "strokeWidth": "2", "lineStyle": "dashed", "markerEnd": "arrow"}
 WORKS_WITH_VISUAL = {"stroke": "#94a3b3", "strokeWidth": "1.5", "lineStyle": "dashed"}
 COLLABORATION_STRENGTH_THRESHOLD = 0.7
 
 EDGE_LABELS = {
     GraphEdgeType.REPORTS_TO: "Reports to",
-    GraphEdgeType.TEAM: "Team",
-    GraphEdgeType.TOOL: "Common tool",
     GraphEdgeType.WORKS_WITH: "Works with",
 }
 
 EDGE_VISUALS = {
     GraphEdgeType.REPORTS_TO: REPORTS_TO_VISUAL,
-    GraphEdgeType.TEAM: TEAM_VISUAL,
-    GraphEdgeType.TOOL: TOOL_VISUAL,
     GraphEdgeType.WORKS_WITH: WORKS_WITH_VISUAL,
 }
 
 EDGE_REASONS = {
     GraphEdgeType.REPORTS_TO: "Formal manager/reporting relationship in the org chart.",
-    GraphEdgeType.TEAM: "Same team or immediate working group.",
-    GraphEdgeType.TOOL: "Both people have access to, pending access for, or usage history with the requested technology.",
     GraphEdgeType.WORKS_WITH: "Direct collaboration signal from shared projects, meetings, or files.",
 }
 
@@ -55,7 +47,9 @@ def _collaborates(a_id: str, b_id: str, collaborations: List[CollaborationSignal
 
 
 def _reports_to(a: User, b: User) -> bool:
-    return a.manager == b.name or b.manager == a.name
+    a_reports_to_b = a.manager == b.name and "intern" not in b.role.lower()
+    b_reports_to_a = b.manager == a.name and "intern" not in a.role.lower()
+    return a_reports_to_b or b_reports_to_a
 
 
 def classify_edge(
@@ -64,14 +58,15 @@ def classify_edge(
     technology: str,
     usage: List[UsageSignal],
     collaborations: List[CollaborationSignal],
+    allowed_report_pairs: Optional[Set[frozenset[str]]] = None,
 ) -> Optional[GraphEdgeType]:
     """
-    Classify the relationship between two people into exactly one of the three
-    relation types we draw, by priority: shared use of the requested tool (most
-    relevant to "who can help me get this"), then shared team, then direct
-    collaboration history.
+    Classify the relationship between two people into one drawable relation:
+    the requester's explicit org chain, or a direct collaboration where both
+    people use the selected technology.
     """
-    if _reports_to(a, b):
+    report_pair = frozenset({a.employeeId, b.employeeId})
+    if _reports_to(a, b) and (allowed_report_pairs is None or report_pair in allowed_report_pairs):
         return GraphEdgeType.REPORTS_TO
     if (
         _collaborates(a.employeeId, b.employeeId, collaborations)
@@ -87,12 +82,13 @@ def build_relationship_graph(
     technology: str,
     usage: List[UsageSignal],
     collaborations: List[CollaborationSignal],
+    allowed_report_pairs: Optional[Set[frozenset[str]]] = None,
 ) -> Dict[str, Set[str]]:
-    """Undirected adjacency built purely from the three relation types above."""
+    """Undirected adjacency built from scoped org edges and qualified collaboration edges."""
     graph: Dict[str, Set[str]] = {u.employeeId: set() for u in users}
     for i, a in enumerate(users):
         for b in users[i + 1 :]:
-            if classify_edge(a, b, technology, usage, collaborations):
+            if classify_edge(a, b, technology, usage, collaborations, allowed_report_pairs):
                 graph[a.employeeId].add(b.employeeId)
                 graph[b.employeeId].add(a.employeeId)
     return graph
@@ -114,8 +110,6 @@ def calculate_hop_distances(requester_id: str, graph: Dict[str, Set[str]]) -> Di
 _EDGE_PRIORITY = {
     GraphEdgeType.REPORTS_TO: 0,
     GraphEdgeType.WORKS_WITH: 1,
-    GraphEdgeType.TOOL: 2,
-    GraphEdgeType.TEAM: 3,
 }
 
 
@@ -127,14 +121,13 @@ def build_relationship_edges(
     requester_id: str,
     hop_distances: Dict[str, int],
     graph: Dict[str, Set[str]],
+    allowed_report_pairs: Optional[Set[frozenset[str]]] = None,
 ) -> List[AccessGraphEdge]:
     """
     Draw a single shortest-path tree rooted at the requester instead of every
-    qualifying pairwise relation — a shared team or a popular tool would otherwise
-    turn into a dense clique. Each person gets exactly one edge, to whichever
-    already-closer connection is the most relevant reason they're reachable
-    (tool usage > team > collaboration), so the graph reads as "how do I get to
-    this person" rather than "everyone who is related to everyone."
+    qualifying pairwise relation. Each person gets exactly one edge to an
+    already-closer org or collaboration connection, so the graph reads as "how
+    do I get to this person" rather than "everyone related to everyone."
     """
     by_id = {u.employeeId: u for u in users}
     edges: List[AccessGraphEdge] = []
@@ -151,7 +144,7 @@ def build_relationship_edges(
             neighbor = by_id.get(neighbor_id)
             if not neighbor or hop_distances.get(neighbor_id) != distance - 1:
                 continue
-            edge_type = classify_edge(user, neighbor, technology, usage, collaborations)
+            edge_type = classify_edge(user, neighbor, technology, usage, collaborations, allowed_report_pairs)
             if edge_type:
                 candidates.append((edge_type, neighbor))
         if not candidates:

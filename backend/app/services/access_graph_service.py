@@ -23,6 +23,7 @@ from app.services.access_graph_scoring import (
 # Only show people reachable within this many hops via team/tool/collaboration —
 # "aggregate the closest connections" rather than the whole company.
 NODE_HOP_LIMIT = 5
+ORG_CHART_MANAGER_HOP_LIMIT = 2
 
 
 def _heat_color(score: float) -> str:
@@ -47,6 +48,24 @@ def _ring_color(status: GraphAccessStatus) -> str:
     }[status]
 
 
+def _requester_org_pairs(employee_id: str, users: List[object]) -> set[frozenset[str]]:
+    by_id = {user.employeeId: user for user in users}
+    by_name = {user.name: user for user in users}
+    pairs: set[frozenset[str]] = set()
+    current = by_id.get(employee_id)
+
+    for _ in range(ORG_CHART_MANAGER_HOP_LIMIT):
+        if not current:
+            break
+        manager = by_name.get(current.manager)
+        if not manager:
+            break
+        pairs.add(frozenset({current.employeeId, manager.employeeId}))
+        current = manager
+
+    return pairs
+
+
 def build_access_graph(employee_id: str, technology: str) -> AccessGraphResponse:
     requester = user_service.get_user(employee_id)
     if not requester:
@@ -56,7 +75,10 @@ def build_access_graph(employee_id: str, technology: str) -> AccessGraphResponse
     collaborations = load_collaborations()
     usage = load_usage_signals()
 
-    relationship_graph = build_relationship_graph(all_users, technology, usage, collaborations)
+    allowed_report_pairs = _requester_org_pairs(employee_id, all_users)
+    relationship_graph = build_relationship_graph(
+        all_users, technology, usage, collaborations, allowed_report_pairs
+    )
     hop_distances = calculate_hop_distances(employee_id, relationship_graph)
     max_hop = max(hop_distances.values(), default=0)
     hidden_node_count_by_hop: Dict[int, int] = {}
@@ -88,6 +110,7 @@ def build_access_graph(employee_id: str, technology: str) -> AccessGraphResponse
                     role=user.role,
                     team=user.team,
                     department=user.department,
+                    manager=user.manager,
                     mail=user.mail,
                     title=user.title,
                     directoryUser=user.user,
@@ -109,7 +132,14 @@ def build_access_graph(employee_id: str, technology: str) -> AccessGraphResponse
         )
 
     edges = build_relationship_edges(
-        users, technology, usage, collaborations, employee_id, hop_distances, relationship_graph
+        users,
+        technology,
+        usage,
+        collaborations,
+        employee_id,
+        hop_distances,
+        relationship_graph,
+        allowed_report_pairs,
     )
     top_sponsor = sponsor_ranking[0] if sponsor_ranking else None
     access_path = [employee_id, top_sponsor.employeeId] if top_sponsor else [employee_id]

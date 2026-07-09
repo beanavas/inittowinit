@@ -906,17 +906,15 @@ a {
 
 .static-edge-collaborates {
   stroke: #7f8a97;
-  stroke-width: 1.55;
+  stroke-width: 2;
   stroke-dasharray: 8 7;
-  opacity: 0.62;
+  opacity: 0.9;
 }
 
-.static-edge-access-path {
+.static-edge-best-match {
   stroke: #d99700;
-  stroke-width: 3.5;
-  filter: drop-shadow(0 3px 5px rgba(217, 151, 0, 0.22));
-  stroke-dasharray: 12 6;
-  animation: accessPathPulse 1.25s linear infinite;
+  stroke-width: 1.65;
+  opacity: 0.95;
 }
 
 .static-edge-label {
@@ -932,18 +930,8 @@ a {
   fill: #7b8794;
 }
 
-#collaborates-arrow path {
-  fill: #7f8a97;
-}
-
-#access-arrow path {
+#best-match-arrow path {
   fill: #d99700;
-}
-
-@keyframes accessPathPulse {
-  to {
-    stroke-dashoffset: -18;
-  }
 }
 
 .employee-node {
@@ -1162,7 +1150,7 @@ a {
 .legend-line.access-path {
   color: #d99700;
   border-color: #d99700;
-  border-top-width: 4px;
+  border-top-width: 2px;
 }
 
 .legend-dot {
